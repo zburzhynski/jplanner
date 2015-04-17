@@ -214,7 +214,7 @@ databases {
 
 changelogs {
     main {
-        file = file('src/main/resources/liquibase/mainChanges.groovy')
+        file = file('src/main/resources/liquibase/main.groovy')
     }
 }
 
