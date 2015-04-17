@@ -222,7 +222,7 @@ task init << {
     databases.postgre.url = "${postgreBaseUrl}"
     databases.postgre.username = "${postgreRootUserName}"
     databases.postgre.password = "${postgreRootUserPassword}"
-    changelogs.main.file = file('src/main/resources/liquibase/tablespaceChanges.groovy')
+    changelogs.main.file = file('src/main/resources/liquibase/tablespace.groovy')
 }
 
 task dbInit(dependsOn: ['init', 'update'])
