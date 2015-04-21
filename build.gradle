@@ -78,7 +78,6 @@ dependencies {
     compile('commons-logging:commons-logging:1.1.1')
 
     compile('taglibs:standard:1.0.6')
-    compile('jstl:jstl:1.2')
 
     compile('commons-lang:commons-lang:2.3')
     compile('commons-io:commons-io:2.4')
@@ -88,10 +87,12 @@ dependencies {
     compile('commons-codec:commons-codec:1.8')
 
     /* ---------------- jsf dependencies ---------------- */
-    compile('com.sun.faces:jsf-api:2.1.12')
-    compile('com.sun.faces:jsf-impl:2.1.12')
+    compile('com.sun.faces:jsf-api:2.2.9')
+    compile('com.sun.faces:jsf-impl:2.2.9')
+    compile('org.primefaces:primefaces:5.2')
+    compile('javax.enterprise:cdi-api:1.2')
+    compile('javax.servlet.jsp:javax.servlet.jsp-api:2.3.1')
     compile('com.sun.el:el-ri:1.0')
-    compile('org.glassfish.web:el-impl:2.2')
 
     /* ------------- jasper reports dependencies ------------- */
     compile('net.sf.jasperreports:jasperreports:5.0.4')
