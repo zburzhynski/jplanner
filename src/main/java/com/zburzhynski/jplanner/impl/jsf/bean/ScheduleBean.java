@@ -1,13 +1,15 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static org.apache.commons.lang3.StringUtils.EMPTY;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import com.zburzhynski.jplanner.api.View;
-import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 import javax.faces.application.NavigationHandler;
@@ -26,6 +28,8 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class ScheduleBean {
 
+    private static final int MIN_EVENT_LENGTH = 30;
+
     private ScheduleModel eventModel = new DefaultScheduleModel();
 
     private ScheduleEvent event = new DefaultScheduleEvent();
@@ -36,7 +40,7 @@ public class ScheduleBean {
      * @param selectEvent {@link SelectEvent}
      */
     public void createEvent(SelectEvent selectEvent) {
-        event = new DefaultScheduleEvent("", (Date) selectEvent.getObject(), (Date) selectEvent.getObject());
+        event = buildScheduleEvent(selectEvent);
         FacesContext fc = FacesContext.getCurrentInstance();
         NavigationHandler nav = fc.getApplication().getNavigationHandler();
         nav.handleNavigation(fc, null, View.SCHEDULE_EVENT.getPath());
@@ -62,7 +66,7 @@ public class ScheduleBean {
      * @return path for navigating
      */
     public String saveEvent() {
-        if (StringUtils.isBlank(event.getId())) {
+        if (isBlank(event.getId())) {
             eventModel.addEvent(event);
         } else {
             eventModel.updateEvent(event);
@@ -97,6 +101,16 @@ public class ScheduleBean {
 
     public void setEvent(ScheduleEvent event) {
         this.event = event;
+    }
+
+    private ScheduleEvent buildScheduleEvent(SelectEvent selectEvent) {
+        Date startDate = (Date) selectEvent.getObject();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+        calendar.add(Calendar.MINUTE, MIN_EVENT_LENGTH);
+        Date endDate = calendar.getTime();
+        ScheduleEvent scheduleEvent = new DefaultScheduleEvent(EMPTY, startDate, endDate);
+        return scheduleEvent;
     }
 
 }
