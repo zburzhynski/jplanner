@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form>
+                <p:schedule value="#{scheduleBean.eventModel}"
+                            slotMinutes="15"
+                            locale="ru"
+                            axisFormat="H:mm"
+                            timeFormat="H:mm"
+                            showWeekends="true"
+                            firstHour="8"
+                            timeZone="#{scheduleBean.timeZone}">
+                    <p:ajax event="dateSelect" listener="#{scheduleBean.createEvent}" />
+                    <p:ajax event="eventSelect" listener="#{scheduleBean.editEvent}" />
+                </p:schedule>
+                <ui:include src="/pages/localization/scheduler_localization.xhtml" />
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

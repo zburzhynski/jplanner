@@ -16,7 +16,7 @@
 
     <!-- Welcome page -->
     <welcome-file-list>
-        <welcome-file>pages/schedule.xhtml</welcome-file>
+        <welcome-file>pages/event/schedule-events.xhtml</welcome-file>
     </welcome-file-list>
 
     <!-- Spring context -->
