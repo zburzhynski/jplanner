@@ -12,7 +12,8 @@ import java.util.Map;
  *
  * @author Vladimir Zburzhynski
  */
-public class ScheduleRepository extends AbstractBaseRepository<String, Schedule> implements IScheduleRepository {
+public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
+    implements IScheduleRepository<String, Schedule> {
 
     @Override
     protected Class<? extends Schedule> getDomainClass() {
