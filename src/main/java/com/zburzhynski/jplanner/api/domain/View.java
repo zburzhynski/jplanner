@@ -1,4 +1,4 @@
-package com.zburzhynski.jplanner.api;
+package com.zburzhynski.jplanner.api.domain;
 
 /**
  * Contains view pages.

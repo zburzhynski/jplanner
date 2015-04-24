@@ -2,13 +2,14 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import com.zburzhynski.jplanner.api.View;
+import com.zburzhynski.jplanner.api.domain.View;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
+import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -26,7 +27,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @SessionScoped
-public class ScheduleBean {
+public class ScheduleBean implements Serializable {
 
     private static final int MIN_EVENT_LENGTH = 30;
 
