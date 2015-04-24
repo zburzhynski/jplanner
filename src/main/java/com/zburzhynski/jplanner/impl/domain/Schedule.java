@@ -1,6 +1,11 @@
 package com.zburzhynski.jplanner.impl.domain;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,15 +17,19 @@ import javax.persistence.Table;
  * @author Vladimir Zburzhynski
  */
 @Entity
-@Table(name = "schedule")
+@Table(schema = "jplanner", name = "schedule")
 public class Schedule extends Domain {
 
+    @Column(name = "start_date")
     private Date startDate;
 
+    @Column(name = "end_date")
     private Date endDate;
 
+    @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
     private String description;
 
     public Date getStartDate() {
@@ -53,6 +62,48 @@ public class Schedule extends Domain {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+
+        if (!(o instanceof Schedule)) {
+            return false;
+        }
+
+        Schedule that = (Schedule) o;
+        return new EqualsBuilder()
+            .appendSuper(super.equals(o))
+            .append(startDate, that.startDate)
+            .append(endDate, that.endDate)
+            .append(title, that.title)
+            .append(description, that.description)
+            .isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder()
+            .appendSuper(super.hashCode())
+            .append(startDate)
+            .append(endDate)
+            .append(title)
+            .append(description)
+            .toHashCode();
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+            .appendSuper(super.toString())
+            .append("startDate", startDate)
+            .append("endDate", endDate)
+            .append("title", title)
+            .append("description", description)
+            .toString();
     }
 
 }

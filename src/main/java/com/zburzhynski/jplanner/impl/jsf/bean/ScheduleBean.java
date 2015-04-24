@@ -3,6 +3,9 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import com.zburzhynski.jplanner.api.domain.View;
+import com.zburzhynski.jplanner.api.service.IScheduleService;
+import com.zburzhynski.jplanner.impl.converter.ScheduleConverter;
+import com.zburzhynski.jplanner.impl.domain.Schedule;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -12,9 +15,12 @@ import org.primefaces.model.ScheduleModel;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
+import javax.annotation.PostConstruct;
 import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -34,6 +40,22 @@ public class ScheduleBean implements Serializable {
     private ScheduleModel eventModel = new DefaultScheduleModel();
 
     private ScheduleEvent event = new DefaultScheduleEvent();
+
+    @ManagedProperty(value = "#{scheduleService}")
+    private IScheduleService scheduleService;
+
+    /**
+     * Inits bean state.
+     */
+    @PostConstruct
+    public void init() {
+        eventModel = new DefaultScheduleModel();
+        List<Schedule> events = scheduleService.getAll();
+        for (Schedule schedule : events) {
+            ScheduleEvent scheduleEvent = ScheduleConverter.convert(schedule);
+            eventModel.getEvents().add(scheduleEvent);
+        }
+    }
 
     /**
      * Creates schedule event.
@@ -72,6 +94,9 @@ public class ScheduleBean implements Serializable {
         } else {
             eventModel.updateEvent(event);
         }
+        Schedule schedule = ScheduleConverter.convert(event);
+        scheduleService.saveOrUpdate(schedule);
+        init();
         return View.SCHEDULE_EVENTS.getPath();
     }
 
@@ -102,6 +127,10 @@ public class ScheduleBean implements Serializable {
 
     public void setEvent(ScheduleEvent event) {
         this.event = event;
+    }
+
+    public void setScheduleService(IScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
     }
 
     private ScheduleEvent buildScheduleEvent(SelectEvent selectEvent) {

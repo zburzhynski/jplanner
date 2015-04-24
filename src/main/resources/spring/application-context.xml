@@ -10,9 +10,8 @@
 
     <import resource="hibernate-config.xml" />
 
-    <!--<context:component-scan base-package="com.zburzhynski.jdent.impl.service,-->
-    <!--com.zburzhynski.jdent.impl.repository, com.zburzhynski.jdent.impl.security,-->
-    <!--com.zburzhynski.jdent.impl.util, com.zburzhynski.jdent.impl.jsf.validator" />-->
+    <context:component-scan base-package="com.zburzhynski.jplanner.impl.service,
+    com.zburzhynski.jplanner.impl.repository" />
 
     <bean id="log4jInitializer"
           class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
