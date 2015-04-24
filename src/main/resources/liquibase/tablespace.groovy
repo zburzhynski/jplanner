@@ -3,7 +3,6 @@ package liquibase
 databaseChangeLog {
 
     props = new java.util.Properties();
-    props = new java.util.Properties();
     props.load(new FileInputStream("gradle.properties"))
 
     changeSet(id: '2012-10-21', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>', runInTransaction: false) {
