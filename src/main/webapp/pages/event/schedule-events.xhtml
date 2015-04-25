@@ -10,6 +10,7 @@
     <ui:define name="content">
         <p:panel>
             <h:form id="eventsForm">
+                <p:growl id="messages" showDetail="true" />
                 <p:schedule value="#{scheduleBean.eventModel}"
                             slotMinutes="15"
                             locale="ru"
@@ -17,11 +18,13 @@
                             timeFormat="H:mm"
                             showWeekends="true"
                             firstHour="8"
-                            timeZone="#{scheduleBean.timeZone}">
+                            timeZone="#{scheduleBean.timeZone}"
+                            view="#{scheduleBean.scheduleView}"
+                            tooltip="true">
                     <p:ajax event="dateSelect" listener="#{scheduleBean.createEvent}" />
                     <p:ajax event="eventSelect" listener="#{scheduleBean.editEvent}" />
-                    <p:ajax event="eventMove" listener="#{scheduleBean.moveEvent}" />
-                    <p:ajax event="eventResize" listener="#{scheduleBean.resizeEvent}" />
+                    <p:ajax event="eventMove" listener="#{scheduleBean.moveEvent}" update="messages" />
+                    <p:ajax event="eventResize" listener="#{scheduleBean.resizeEvent}" update="messages" />
                 </p:schedule>
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
             </h:form>

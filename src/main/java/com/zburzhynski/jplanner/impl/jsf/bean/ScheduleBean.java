@@ -20,6 +20,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -42,6 +43,8 @@ public class ScheduleBean implements Serializable {
     private ScheduleModel eventModel = new DefaultScheduleModel();
 
     private ScheduleEvent event = new DefaultScheduleEvent();
+
+    private String scheduleView = "agendaWeek";
 
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
@@ -94,6 +97,9 @@ public class ScheduleBean implements Serializable {
         ScheduleEvent scheduleEvent = moveEvent.getScheduleEvent();
         Schedule schedule = ScheduleConverter.convert(scheduleEvent);
         scheduleService.saveOrUpdate(schedule);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:"
+            + moveEvent.getDayDelta() + ", Minute delta:" + moveEvent.getMinuteDelta());
+        addMessage(message);
     }
 
     /**
@@ -105,6 +111,9 @@ public class ScheduleBean implements Serializable {
         ScheduleEvent scheduleEvent = resizeEvent.getScheduleEvent();
         Schedule schedule = ScheduleConverter.convert(scheduleEvent);
         scheduleService.saveOrUpdate(schedule);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:"
+            + resizeEvent.getDayDelta() + ", Minute delta:" + resizeEvent.getMinuteDelta());
+        addMessage(message);
     }
 
     /**
@@ -153,6 +162,14 @@ public class ScheduleBean implements Serializable {
         this.event = event;
     }
 
+    public String getScheduleView() {
+        return scheduleView;
+    }
+
+    public void setScheduleView(String scheduleView) {
+        this.scheduleView = scheduleView;
+    }
+
     public void setScheduleService(IScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
@@ -165,6 +182,10 @@ public class ScheduleBean implements Serializable {
         Date endDate = calendar.getTime();
         ScheduleEvent scheduleEvent = new DefaultScheduleEvent(EMPTY, startDate, endDate);
         return scheduleEvent;
+    }
+
+    private void addMessage(FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
 }
