@@ -6,6 +6,8 @@ import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.converter.ScheduleConverter;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -81,6 +83,28 @@ public class ScheduleBean implements Serializable {
         NavigationHandler nav = fc.getApplication().getNavigationHandler();
         nav.handleNavigation(fc, null, View.SCHEDULE_EVENT.getPath());
         fc.renderResponse();
+    }
+
+    /**
+     * Moves schedule event.
+     *
+     * @param moveEvent {@link ScheduleEntryMoveEvent}
+     */
+    public void moveEvent(ScheduleEntryMoveEvent moveEvent) {
+        ScheduleEvent scheduleEvent = moveEvent.getScheduleEvent();
+        Schedule schedule = ScheduleConverter.convert(scheduleEvent);
+        scheduleService.saveOrUpdate(schedule);
+    }
+
+    /**
+     * Resize schedule event.
+     *
+     * @param resizeEvent {@link ScheduleEntryResizeEvent}
+     */
+    public void resizeEvent(ScheduleEntryResizeEvent resizeEvent) {
+        ScheduleEvent scheduleEvent = resizeEvent.getScheduleEvent();
+        Schedule schedule = ScheduleConverter.convert(scheduleEvent);
+        scheduleService.saveOrUpdate(schedule);
     }
 
     /**

@@ -40,7 +40,9 @@ public final class ScheduleConverter {
      * @return {@link ScheduleEvent}
      */
     public static ScheduleEvent convert(Schedule event) {
-        return new DefaultScheduleEvent(event.getTitle(), event.getStartDate(), event.getEndDate());
+        DefaultScheduleEvent scheduleEvent = new DefaultScheduleEvent(event.getTitle(), event.getStartDate(), event.getEndDate());
+        scheduleEvent.setId(event.getId());
+        return scheduleEvent;
     }
 
 }
