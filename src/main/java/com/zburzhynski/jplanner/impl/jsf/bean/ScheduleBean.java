@@ -44,6 +44,8 @@ public class ScheduleBean implements Serializable {
 
     private String scheduleView = "agendaWeek";
 
+    private Date initialDate = new Date();
+
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
 
@@ -67,6 +69,7 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent {@link SelectEvent}
      */
     public void createEvent(SelectEvent selectEvent) {
+        initialDate = (Date) selectEvent.getObject();
         event = buildScheduleEvent(selectEvent);
         FacesContext fc = FacesContext.getCurrentInstance();
         NavigationHandler nav = fc.getApplication().getNavigationHandler();
@@ -81,6 +84,7 @@ public class ScheduleBean implements Serializable {
      */
     public void editEvent(SelectEvent selectEvent) {
         ScheduleEvent scheduleEvent = (ScheduleEvent) selectEvent.getObject();
+        initialDate = scheduleEvent.getStartDate();
         event = (Schedule) scheduleService.getById(scheduleEvent.getId());
         FacesContext fc = FacesContext.getCurrentInstance();
         NavigationHandler nav = fc.getApplication().getNavigationHandler();
@@ -170,6 +174,14 @@ public class ScheduleBean implements Serializable {
 
     public void setScheduleView(String scheduleView) {
         this.scheduleView = scheduleView;
+    }
+
+    public Date getInitialDate() {
+        return initialDate;
+    }
+
+    public void setInitialDate(Date initialDate) {
+        this.initialDate = initialDate;
     }
 
     public void setScheduleService(IScheduleService scheduleService) {
