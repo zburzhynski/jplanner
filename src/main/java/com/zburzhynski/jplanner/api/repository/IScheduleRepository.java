@@ -1,6 +1,9 @@
 package com.zburzhynski.jplanner.api.repository;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
+import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
+
+import java.util.List;
 
 /**
  * Schedule event repository interface.
@@ -13,5 +16,13 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
  *
  */
 public interface IScheduleRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
+
+    /**
+     * Finds schedule events by search criteria.
+     *
+     * @param searchCriteria {@link ScheduleSearchCriteria} to find
+     * @return schedule events
+     */
+    List<T> findByCriteria(ScheduleSearchCriteria searchCriteria);
 
 }

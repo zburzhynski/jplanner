@@ -2,12 +2,14 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.repository.IScheduleRepository;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
+import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -54,6 +56,11 @@ public class ScheduleService implements IScheduleService<String, Schedule> {
             deleted = true;
         }
         return deleted;
+    }
+
+    @Override
+    public List<Schedule> getByCriteria(ScheduleSearchCriteria searchCriteria) {
+        return new ArrayList<>();
     }
 
     @Override
