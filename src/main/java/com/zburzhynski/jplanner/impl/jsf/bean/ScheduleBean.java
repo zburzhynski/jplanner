@@ -1,10 +1,12 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.View.*;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import com.zburzhynski.jplanner.impl.utils.JsfUtils;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -19,7 +21,6 @@ import java.util.List;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.faces.application.FacesMessage;
-import javax.faces.application.NavigationHandler;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -71,10 +72,7 @@ public class ScheduleBean implements Serializable {
     public void createEvent(SelectEvent selectEvent) {
         initialDate = (Date) selectEvent.getObject();
         event = buildScheduleEvent(selectEvent);
-        FacesContext fc = FacesContext.getCurrentInstance();
-        NavigationHandler nav = fc.getApplication().getNavigationHandler();
-        nav.handleNavigation(fc, null, View.SCHEDULE_EVENT.getPath());
-        fc.renderResponse();
+        JsfUtils.redirect(SCHEDULE_EVENT.getPath());
     }
 
     /**
@@ -86,10 +84,7 @@ public class ScheduleBean implements Serializable {
         ScheduleEvent scheduleEvent = (ScheduleEvent) selectEvent.getObject();
         initialDate = scheduleEvent.getStartDate();
         event = (Schedule) scheduleService.getById(scheduleEvent.getId());
-        FacesContext fc = FacesContext.getCurrentInstance();
-        NavigationHandler nav = fc.getApplication().getNavigationHandler();
-        nav.handleNavigation(fc, null, View.SCHEDULE_EVENT.getPath());
-        fc.renderResponse();
+        JsfUtils.redirect(SCHEDULE_EVENT.getPath());
     }
 
     /**
@@ -136,7 +131,7 @@ public class ScheduleBean implements Serializable {
         }
         scheduleService.saveOrUpdate(event);
         init();
-        return View.SCHEDULE_EVENTS.getPath();
+        return SCHEDULE_EVENTS.getPath();
     }
 
     /**
@@ -145,7 +140,7 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String cancelUpdateEvent() {
-        return View.SCHEDULE_EVENTS.getPath();
+        return SCHEDULE_EVENTS.getPath();
     }
 
     public String getTimeZone() {
