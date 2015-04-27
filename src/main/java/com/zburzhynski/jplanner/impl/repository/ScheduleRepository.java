@@ -3,9 +3,10 @@ package com.zburzhynski.jplanner.impl.repository;
 import com.zburzhynski.jplanner.api.repository.IScheduleRepository;
 import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,14 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
 
     @Override
     public List<Schedule> findByCriteria(ScheduleSearchCriteria searchCriteria) {
-        return new ArrayList<>();
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        if (searchCriteria.getStartDate() != null) {
+            criteria.add(Restrictions.ge(Schedule.P_START_DATE, searchCriteria.getStartDate()));
+        }
+        if (searchCriteria.getEndDate() != null) {
+            criteria.add(Restrictions.le(Schedule.P_END_DATE, searchCriteria.getEndDate()));
+        }
+        return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
     @Override

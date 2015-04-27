@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -60,7 +59,7 @@ public class ScheduleService implements IScheduleService<String, Schedule> {
 
     @Override
     public List<Schedule> getByCriteria(ScheduleSearchCriteria searchCriteria) {
-        return new ArrayList<>();
+        return scheduleRepository.findByCriteria(searchCriteria);
     }
 
     @Override

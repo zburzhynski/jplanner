@@ -22,6 +22,9 @@ import javax.persistence.Transient;
 @Table(schema = "jplanner", name = "schedule")
 public class Schedule extends Domain implements ScheduleEvent {
 
+    public static final String P_START_DATE = "startDate";
+    public static final String P_END_DATE = "endDate";
+
     @Column(name = "start_date")
     private Date startDate;
 

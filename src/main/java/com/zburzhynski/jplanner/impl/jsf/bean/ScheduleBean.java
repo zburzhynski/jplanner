@@ -1,11 +1,13 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import static com.zburzhynski.jplanner.api.domain.View.*;
+import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
+import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
+import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import com.zburzhynski.jplanner.impl.utils.DateUtils;
 import com.zburzhynski.jplanner.impl.utils.JsfUtils;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
@@ -15,7 +17,6 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
@@ -58,7 +59,8 @@ public class ScheduleBean implements Serializable {
         eventModel = new LazyScheduleModel() {
             @Override
             public void loadEvents(Date start, Date end) {
-                List<Schedule> events = scheduleService.getAll();
+                ScheduleSearchCriteria searchCriteria = buildScheduleSearchCriteria(start, end);
+                List<Schedule> events = scheduleService.getByCriteria(searchCriteria);
                 eventModel.getEvents().addAll(events);
             }
         };
@@ -185,12 +187,18 @@ public class ScheduleBean implements Serializable {
 
     private Schedule buildScheduleEvent(SelectEvent selectEvent) {
         Date startDate = (Date) selectEvent.getObject();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        calendar.add(Calendar.MINUTE, MIN_EVENT_LENGTH);
-        Date endDate = calendar.getTime();
+        Date endDate = DateUtils.addMinuteToDate(startDate, MIN_EVENT_LENGTH);
         Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
         return scheduleEvent;
+    }
+
+    private ScheduleSearchCriteria buildScheduleSearchCriteria(Date start, Date end) {
+        ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
+        Date startDate = DateUtils.setInitialTime(DateUtils.addDayToDate(start, 1));
+        Date endDate = DateUtils.setFinalTime(end);
+        searchCriteria.setStartDate(startDate);
+        searchCriteria.setEndDate(endDate);
+        return searchCriteria;
     }
 
     private void addMessage(FacesMessage message) {
