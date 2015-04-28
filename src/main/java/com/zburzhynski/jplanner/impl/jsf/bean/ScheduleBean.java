@@ -1,20 +1,29 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
+import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import com.zburzhynski.jplanner.api.domain.View;
+import com.zburzhynski.jplanner.api.service.IScheduleService;
+import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
+import com.zburzhynski.jplanner.impl.domain.Schedule;
+import com.zburzhynski.jplanner.impl.utils.DateUtils;
+import com.zburzhynski.jplanner.impl.utils.JsfUtils;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultScheduleEvent;
-import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
-import javax.faces.application.NavigationHandler;
+import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 
@@ -31,9 +40,31 @@ public class ScheduleBean implements Serializable {
 
     private static final int MIN_EVENT_LENGTH = 30;
 
-    private ScheduleModel eventModel = new DefaultScheduleModel();
+    private ScheduleModel eventModel;
 
-    private ScheduleEvent event = new DefaultScheduleEvent();
+    private Schedule event;
+
+    private String scheduleView = "agendaWeek";
+
+    private Date initialDate = new Date();
+
+    @ManagedProperty(value = "#{scheduleService}")
+    private IScheduleService scheduleService;
+
+    /**
+     * Inits bean state.
+     */
+    @PostConstruct
+    public void init() {
+        eventModel = new LazyScheduleModel() {
+            @Override
+            public void loadEvents(Date start, Date end) {
+                ScheduleSearchCriteria searchCriteria = buildScheduleSearchCriteria(start, end);
+                List<Schedule> events = scheduleService.getByCriteria(searchCriteria);
+                eventModel.getEvents().addAll(events);
+            }
+        };
+    }
 
     /**
      * Creates schedule event.
@@ -41,11 +72,9 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent {@link SelectEvent}
      */
     public void createEvent(SelectEvent selectEvent) {
+        initialDate = (Date) selectEvent.getObject();
         event = buildScheduleEvent(selectEvent);
-        FacesContext fc = FacesContext.getCurrentInstance();
-        NavigationHandler nav = fc.getApplication().getNavigationHandler();
-        nav.handleNavigation(fc, null, View.SCHEDULE_EVENT.getPath());
-        fc.renderResponse();
+        JsfUtils.redirect(SCHEDULE_EVENT.getPath());
     }
 
     /**
@@ -54,11 +83,41 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent {@link SelectEvent}
      */
     public void editEvent(SelectEvent selectEvent) {
-        event = (ScheduleEvent) selectEvent.getObject();
-        FacesContext fc = FacesContext.getCurrentInstance();
-        NavigationHandler nav = fc.getApplication().getNavigationHandler();
-        nav.handleNavigation(fc, null, View.SCHEDULE_EVENT.getPath());
-        fc.renderResponse();
+        ScheduleEvent scheduleEvent = (ScheduleEvent) selectEvent.getObject();
+        initialDate = scheduleEvent.getStartDate();
+        event = (Schedule) scheduleService.getById(scheduleEvent.getId());
+        JsfUtils.redirect(SCHEDULE_EVENT.getPath());
+    }
+
+    /**
+     * Moves schedule event.
+     *
+     * @param moveEvent {@link ScheduleEntryMoveEvent}
+     */
+    public void moveEvent(ScheduleEntryMoveEvent moveEvent) {
+        ScheduleEvent scheduleEvent = moveEvent.getScheduleEvent();
+        Schedule schedule = (Schedule) scheduleService.getById(scheduleEvent.getId());
+        schedule.setStartDate(scheduleEvent.getStartDate());
+        schedule.setEndDate(scheduleEvent.getEndDate());
+        scheduleService.saveOrUpdate(schedule);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:"
+            + moveEvent.getDayDelta() + ", Minute delta:" + moveEvent.getMinuteDelta());
+        addMessage(message);
+    }
+
+    /**
+     * Resize schedule event.
+     *
+     * @param resizeEvent {@link ScheduleEntryResizeEvent}
+     */
+    public void resizeEvent(ScheduleEntryResizeEvent resizeEvent) {
+        ScheduleEvent scheduleEvent = resizeEvent.getScheduleEvent();
+        Schedule schedule = (Schedule) scheduleService.getById(scheduleEvent.getId());
+        schedule.setEndDate(scheduleEvent.getEndDate());
+        scheduleService.saveOrUpdate(schedule);
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:"
+            + resizeEvent.getDayDelta() + ", Minute delta:" + resizeEvent.getMinuteDelta());
+        addMessage(message);
     }
 
     /**
@@ -72,7 +131,9 @@ public class ScheduleBean implements Serializable {
         } else {
             eventModel.updateEvent(event);
         }
-        return View.SCHEDULE_EVENTS.getPath();
+        scheduleService.saveOrUpdate(event);
+        init();
+        return SCHEDULE_EVENTS.getPath();
     }
 
     /**
@@ -81,7 +142,7 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String cancelUpdateEvent() {
-        return View.SCHEDULE_EVENTS.getPath();
+        return SCHEDULE_EVENTS.getPath();
     }
 
     public String getTimeZone() {
@@ -96,22 +157,52 @@ public class ScheduleBean implements Serializable {
         this.eventModel = eventModel;
     }
 
-    public ScheduleEvent getEvent() {
+    public Schedule getEvent() {
         return event;
     }
 
-    public void setEvent(ScheduleEvent event) {
+    public void setEvent(Schedule event) {
         this.event = event;
     }
 
-    private ScheduleEvent buildScheduleEvent(SelectEvent selectEvent) {
+    public String getScheduleView() {
+        return scheduleView;
+    }
+
+    public void setScheduleView(String scheduleView) {
+        this.scheduleView = scheduleView;
+    }
+
+    public Date getInitialDate() {
+        return initialDate;
+    }
+
+    public void setInitialDate(Date initialDate) {
+        this.initialDate = initialDate;
+    }
+
+    public void setScheduleService(IScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
+
+    private Schedule buildScheduleEvent(SelectEvent selectEvent) {
         Date startDate = (Date) selectEvent.getObject();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(startDate);
-        calendar.add(Calendar.MINUTE, MIN_EVENT_LENGTH);
-        Date endDate = calendar.getTime();
-        ScheduleEvent scheduleEvent = new DefaultScheduleEvent(EMPTY, startDate, endDate);
+        Date endDate = DateUtils.addMinuteToDate(startDate, MIN_EVENT_LENGTH);
+        Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
         return scheduleEvent;
+    }
+
+    private ScheduleSearchCriteria buildScheduleSearchCriteria(Date start, Date end) {
+        ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
+        Date startDate = DateUtils.setInitialTime(DateUtils.addDayToDate(start, 1));
+        Date endDate = DateUtils.setFinalTime(end);
+        searchCriteria.setStartDate(startDate);
+        searchCriteria.setEndDate(endDate);
+        return searchCriteria;
+    }
+
+    private void addMessage(FacesMessage message) {
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
 }

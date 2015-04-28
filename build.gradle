@@ -200,36 +200,39 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.augusttechgroup:gradle-liquibase-plugin:0.6.1'
+        classpath group:'net.saliman', name: 'gradle-liquibase-plugin', version: '1.0.2'
         classpath 'postgresql:postgresql:9.1-901.jdbc4'
     }
 }
 
-databases {
-    postgre {
-        url = "${postgreBaseUrl}" + "${postgreDB}"
-        username = "${postgreUserName}"
-        password = "${postgreUserPassword}"
-    }
-}
-
-changelogs {
-    main {
-        file = file('src/main/resources/liquibase/main.groovy')
+liquibase {
+    activities {
+        dbInit {
+            changeLogFile 'src/main/resources/liquibase/tablespace.groovy'
+            url postgreBaseUrl
+            username postgreRootUserName
+            password postgreRootUserPassword
+        }
+        dbUpdate {
+            changeLogFile 'src/main/resources/liquibase/main.groovy'
+            url postgreBaseUrl
+            username postgreUserName
+            password postgreUserPassword
+        }
     }
 }
 
 task init << {
-    databases.postgre.url = "${postgreBaseUrl}"
-    databases.postgre.username = "${postgreRootUserName}"
-    databases.postgre.password = "${postgreRootUserPassword}"
-    changelogs.main.file = file('src/main/resources/liquibase/tablespace.groovy')
+    liquibase.runList = 'dbInit'
+}
+
+task upd << {
+    liquibase.runList = 'dbUpdate'
 }
 
 task dbInit(dependsOn: ['init', 'update'])
 
-defaultDatabase = databases.postgre
-defaultChangeLogs = changelogs.main
+task dbUpdate(dependsOn: ['upd', 'update'])
 
 /* ---------------- exclude resources from war ---------------- */
 war.rootSpec.exclude "liquibase"

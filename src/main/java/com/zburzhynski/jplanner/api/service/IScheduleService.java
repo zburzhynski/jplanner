@@ -1,4 +1,4 @@
-package com.zburzhynski.jplanner.api.repository;
+package com.zburzhynski.jplanner.api.service;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
@@ -6,23 +6,22 @@ import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import java.util.List;
 
 /**
- * Schedule event repository interface.
+ * Schedule service interface.
  * <p/>
- * Date: 23.04.15
+ * Date: 24.04.15
  *
  * @param <ID> The type of unique identifier.
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
- *
  */
-public interface IScheduleRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
+public interface IScheduleService<ID, T extends IDomain> extends IBaseService<ID, T> {
 
     /**
-     * Finds schedule events by search criteria.
+     * Gets schedule events by search criteria.
      *
      * @param searchCriteria {@link ScheduleSearchCriteria} to find
      * @return schedule events
      */
-    List<T> findByCriteria(ScheduleSearchCriteria searchCriteria);
+    List<T> getByCriteria(ScheduleSearchCriteria searchCriteria);
 
 }
