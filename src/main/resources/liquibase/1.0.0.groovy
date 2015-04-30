@@ -46,10 +46,10 @@ databaseChangeLog {
             column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of schedule event') {
                 constraints(nullable: false)
             }
-            column(name: 'title', type: 'VARCHAR(600)', defaultValue: '', remarks: 'Title of schedule event') {
+            column(name: 'title', type: 'VARCHAR(1100)', defaultValue: '', remarks: 'Title of schedule event') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'Description of schedule event')
+            column(name: 'description', type: 'VARCHAR(1000)', defaultValue: '', remarks: 'Description of schedule event')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'schedule', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_schedule')
