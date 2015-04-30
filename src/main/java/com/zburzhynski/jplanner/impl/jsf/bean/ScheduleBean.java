@@ -131,6 +131,7 @@ public class ScheduleBean implements Serializable {
         } else {
             eventModel.updateEvent(event);
         }
+        prepareScheduleTitle(event);
         scheduleService.saveOrUpdate(event);
         init();
         return SCHEDULE_EVENTS.getPath();
@@ -183,6 +184,18 @@ public class ScheduleBean implements Serializable {
 
     public void setScheduleService(IScheduleService scheduleService) {
         this.scheduleService = scheduleService;
+    }
+
+    private void prepareScheduleTitle(Schedule schedule) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Пациент: ");
+        builder.append(schedule.getPerson().getFullName());
+        builder.append("\n");
+        builder.append("Врач: Сидорский Петр Станиславович");
+        builder.append("\n");
+        builder.append("Жалоба: ");
+        builder.append(schedule.getDescription());
+        schedule.setTitle(builder.toString());
     }
 
     private Schedule buildScheduleEvent(SelectEvent selectEvent) {

@@ -6,8 +6,12 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.primefaces.model.ScheduleEvent;
 
 import java.util.Date;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -22,8 +26,13 @@ import javax.persistence.Transient;
 @Table(schema = "jplanner", name = "schedule")
 public class Schedule extends Domain implements ScheduleEvent {
 
+    public static final String P_PERSON = "person";
     public static final String P_START_DATE = "startDate";
     public static final String P_END_DATE = "endDate";
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "person_id")
+    private Person person = new Person();
 
     @Column(name = "start_date")
     private Date startDate;
@@ -66,6 +75,14 @@ public class Schedule extends Domain implements ScheduleEvent {
         this.startDate = startDate;
         this.endDate = endDate;
         this.title = title;
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 
     @Override
@@ -153,6 +170,7 @@ public class Schedule extends Domain implements ScheduleEvent {
         Schedule that = (Schedule) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
+            .append(person, that.person)
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
             .append(title, that.title)
@@ -168,6 +186,7 @@ public class Schedule extends Domain implements ScheduleEvent {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
+            .append(person)
             .append(startDate)
             .append(endDate)
             .append(title)
@@ -183,6 +202,7 @@ public class Schedule extends Domain implements ScheduleEvent {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
+            .append("person", person)
             .append("startDate", startDate)
             .append("endDate", endDate)
             .append("title", title)
