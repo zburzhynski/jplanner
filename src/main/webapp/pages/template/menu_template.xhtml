@@ -11,7 +11,7 @@
         <ui:composition>
             <h:form id="mainMenuForm">
                 <p:menubar>
-                    <p:menuitem id="mSchedule" value="#{msgs['mainMenu.schedule']}"/>
+                    <p:menuitem id="mSchedules" value="#{msgs['mainMenu.schedule']}" action="#{mainMenuBean.schedules}" />
                     <p:menuitem id="mReports" value="#{msgs['mainMenu.reports']}" icon="ui-icon ui-icon-copy" />
                     <p:submenu id="mSettings" label="#{msgs['mainMenu.settings']}" icon="ui-icon ui-icon-gear">
                         <p:menuitem id="smSettings" value="#{msgs['mainMenu.settings']}" />
