@@ -26,4 +26,13 @@ public class MainMenuBean implements Serializable {
         return View.SCHEDULE_EVENTS.getPath();
     }
 
+    /**
+     * Redirects to about.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String about() {
+        return View.ABOUT.getPath();
+    }
+
 }
