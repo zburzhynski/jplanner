@@ -32,8 +32,8 @@
                                 value="#{scheduleBean.event.person.birthday}"
                                 label="#{msgs['person.birthday']}"
                                 pattern="dd/MM/yyyy"
-                                locale="ru" navigator="true"
-                                mindate="01.01.1900"
+                                navigator="true"
+                                locale="ru"
                                 required="true">
                     </p:calendar>
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
@@ -47,13 +47,15 @@
                                 value="#{scheduleBean.event.startDate}"
                                 label="#{msgs['schedule.from']}"
                                 pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
                                 locale="ru"
-                                required="true" />
+                                required="true"/>
                     <h:outputLabel for="to" value="#{msgs['schedule.to']}:" />
                     <p:calendar id="to"
                                 value="#{scheduleBean.event.endDate}"
                                 label="#{msgs['schedule.to']}"
                                 pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
                                 locale="ru"
                                 required="true" />
                     <h:outputLabel for="description" value="#{msgs['schedule.complaint']}:" />
