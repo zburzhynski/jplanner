@@ -1,5 +1,8 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.COLON;
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.NEWLINE;
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
@@ -7,8 +10,10 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
-import com.zburzhynski.jplanner.impl.utils.DateUtils;
-import com.zburzhynski.jplanner.impl.utils.JsfUtils;
+import com.zburzhynski.jplanner.impl.util.DateUtils;
+import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import com.zburzhynski.jplanner.impl.util.PropertyReader;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -40,6 +45,12 @@ public class ScheduleBean implements Serializable {
 
     private static final int MIN_EVENT_LENGTH = 30;
 
+    private static final String PATIENT = "schedule.patient";
+
+    private static final String DOCTOR = "schedule.doctor";
+
+    private static final String COMPLAINT = "schedule.complaint";
+
     private ScheduleModel eventModel;
 
     private Schedule event;
@@ -50,6 +61,9 @@ public class ScheduleBean implements Serializable {
 
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
+
+    @ManagedProperty(value = "#{propertyReader}")
+    private PropertyReader propertyReader;
 
     /**
      * Inits bean state.
@@ -186,15 +200,21 @@ public class ScheduleBean implements Serializable {
         this.scheduleService = scheduleService;
     }
 
+    public void setPropertyReader(PropertyReader propertyReader) {
+        this.propertyReader = propertyReader;
+    }
+
     private void prepareScheduleTitle(Schedule schedule) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Пациент: ");
+        builder.append(propertyReader.readProperty(PATIENT));
+        builder.append(COLON + SPACE);
         builder.append(schedule.getPerson().getFullName());
-        builder.append("\n");
-        builder.append("Врач: Сидорский Петр Станиславович");
-        builder.append("\n");
-        builder.append("Жалоба: ");
-        builder.append(schedule.getDescription());
+        if (StringUtils.isNotBlank(schedule.getDescription())) {
+            builder.append(NEWLINE);
+            builder.append(propertyReader.readProperty(COMPLAINT));
+            builder.append(COLON + SPACE);
+            builder.append(schedule.getDescription());
+        }
         schedule.setTitle(builder.toString());
     }
 

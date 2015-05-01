@@ -11,7 +11,7 @@
     <import resource="hibernate-config.xml" />
 
     <context:component-scan base-package="com.zburzhynski.jplanner.impl.service,
-    com.zburzhynski.jplanner.impl.repository" />
+    com.zburzhynski.jplanner.impl.repository, com.zburzhynski.jplanner.impl.util" />
 
     <bean id="log4jInitializer"
           class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

@@ -34,8 +34,7 @@
                                 pattern="dd/MM/yyyy"
                                 locale="ru" navigator="true"
                                 mindate="01.01.1900"
-                                required="true"
-                                converterMessage="#{msgs['validator.invalidDate']}">
+                                required="true">
                     </p:calendar>
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
                     <p:selectOneRadio id="gender"
@@ -57,7 +56,7 @@
                                 pattern="dd/MM/yyyy HH:mm"
                                 locale="ru"
                                 required="true" />
-                    <h:outputLabel for="description" value="#{msgs['schedule.description']}:" />
+                    <h:outputLabel for="description" value="#{msgs['schedule.complaint']}:" />
                     <p:inputTextarea id="description" value="#{scheduleBean.event.description}" />
                     <h:outputLabel for="allDay" value="#{msgs['schedule.allDay']}:" />
                     <h:selectBooleanCheckbox id="allDay" value="#{scheduleBean.event.allDay}" />

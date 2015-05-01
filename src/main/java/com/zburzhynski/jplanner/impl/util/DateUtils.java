@@ -1,4 +1,4 @@
-package com.zburzhynski.jplanner.impl.utils;
+package com.zburzhynski.jplanner.impl.util;
 
 import java.util.Calendar;
 import java.util.Date;
