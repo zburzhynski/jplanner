@@ -10,25 +10,68 @@
     <ui:define name="content">
         <p:panel>
             <h:form>
-                <h:panelGrid id="eventDetails" columns="2">
-                    <h:outputLabel for="title" value="Title:" />
-                    <p:inputText id="title" value="#{scheduleBean.event.title}" required="true" />
-
-                    <h:outputLabel for="from" value="From:" />
-
-                    <p:calendar id="from" value="#{scheduleBean.event.startDate}" pattern="dd/MM/yyyy HH:mm" />
-
-
-                    <h:outputLabel for="to" value="To:" />
-                    <p:calendar id="to" value="#{scheduleBean.event.endDate}" pattern="dd/MM/yyyy HH:mm" />
-
-
-                    <h:outputLabel for="allDay" value="All Day:" />
+                <p:messages id="messages" autoUpdate="true" closable="true" />
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
+                    <p:inputText id="surname"
+                                 value="#{scheduleBean.event.person.surname}"
+                                 label="#{msgs['person.surname']}"
+                                 required="true" />
+                    <h:outputLabel for="name" value="#{msgs['person.name']}:" />
+                    <p:inputText id="name"
+                                 value="#{scheduleBean.event.person.name}"
+                                 label="#{msgs['person.name']}"
+                                 required="true" />
+                    <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
+                    <p:inputText id="patronymic"
+                                 value="#{scheduleBean.event.person.patronymic}"
+                                 label="#{msgs['person.patronymic']}"
+                                 required="true" />
+                    <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
+                    <p:calendar id="birthday"
+                                value="#{scheduleBean.event.person.birthday}"
+                                label="#{msgs['person.birthday']}"
+                                pattern="dd/MM/yyyy"
+                                locale="ru" navigator="true"
+                                mindate="01.01.1900"
+                                required="true"
+                                converterMessage="#{msgs['validator.invalidDate']}">
+                    </p:calendar>
+                    <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
+                    <p:selectOneRadio id="gender"
+                                      value="#{scheduleBean.event.person.gender}">
+                        <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
+                                       itemLabel="#{msgs[g.value]}" />
+                    </p:selectOneRadio>
+                    <h:outputLabel for="from" value="#{msgs['schedule.from']}:" />
+                    <p:calendar id="from"
+                                value="#{scheduleBean.event.startDate}"
+                                label="#{msgs['schedule.from']}"
+                                pattern="dd/MM/yyyy HH:mm"
+                                locale="ru"
+                                required="true" />
+                    <h:outputLabel for="to" value="#{msgs['schedule.to']}:" />
+                    <p:calendar id="to"
+                                value="#{scheduleBean.event.endDate}"
+                                label="#{msgs['schedule.to']}"
+                                pattern="dd/MM/yyyy HH:mm"
+                                locale="ru"
+                                required="true" />
+                    <h:outputLabel for="description" value="#{msgs['schedule.description']}:" />
+                    <p:inputTextarea id="description" value="#{scheduleBean.event.description}" />
+                    <h:outputLabel for="allDay" value="#{msgs['schedule.allDay']}:" />
                     <h:selectBooleanCheckbox id="allDay" value="#{scheduleBean.event.allDay}" />
-
-                    <p:commandButton id="save" value="save" action="#{scheduleBean.saveEvent}"  />
-                    <p:commandButton type="cancel" value="cancel" action="#{scheduleBean.cancelUpdateEvent}" immediate="true" />
                 </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="save"
+                                     value="#{msgs['button.save']}"
+                                     action="#{scheduleBean.saveEvent}"  />
+                    <p:commandButton type="cancel"
+                                     value="#{msgs['button.cancel']}"
+                                     action="#{scheduleBean.cancelUpdateEvent}"
+                                     immediate="true" />
+                </h:panelGrid>
+                <ui:include src="/pages/localization/scheduler_localization.xhtml" />
             </h:form>
         </p:panel>
     </ui:define>
