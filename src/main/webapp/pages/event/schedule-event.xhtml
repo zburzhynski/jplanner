@@ -16,16 +16,19 @@
                     <p:inputText id="surname"
                                  value="#{scheduleBean.event.person.surname}"
                                  label="#{msgs['person.surname']}"
+                                 maxlength="50"
                                  required="true" />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
                     <p:inputText id="name"
                                  value="#{scheduleBean.event.person.name}"
                                  label="#{msgs['person.name']}"
+                                 maxlength="50"
                                  required="true" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
                                  value="#{scheduleBean.event.person.patronymic}"
                                  label="#{msgs['person.patronymic']}"
+                                 maxlength="50"
                                  required="true" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
@@ -60,7 +63,9 @@
                                 locale="ru"
                                 required="true" />
                     <h:outputLabel for="description" value="#{msgs['schedule.complaint']}:" />
-                    <p:inputTextarea id="description" value="#{scheduleBean.event.description}" />
+                    <p:inputTextarea id="description"
+                                     value="#{scheduleBean.event.description}"
+                                     maxlength="1000"/>
                     <h:outputLabel for="allDay" value="#{msgs['schedule.allDay']}:" />
                     <h:selectBooleanCheckbox id="allDay" value="#{scheduleBean.event.allDay}" />
                 </h:panelGrid>
