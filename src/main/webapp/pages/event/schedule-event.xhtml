@@ -8,28 +8,46 @@
                 template="/pages/template/layout_template.xhtml">
 
     <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 20%;
+            }
+            .input {
+                width: 80%;
+            }
+            .mw {
+                width: 100%;
+            }
+            .cal .ui-inputfield {
+                width: 100%;
+            }
+        </style>
         <p:panel>
             <h:form>
                 <p:messages id="messages" autoUpdate="true" closable="true" />
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="2" columnClasses="name, input" width="40%">
                     <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
                     <p:inputText id="surname"
                                  value="#{scheduleBean.event.person.surname}"
                                  label="#{msgs['person.surname']}"
                                  maxlength="50"
-                                 required="true" />
+                                 required="true"
+                                 styleClass="mw" />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
                     <p:inputText id="name"
                                  value="#{scheduleBean.event.person.name}"
                                  label="#{msgs['person.name']}"
                                  maxlength="50"
-                                 required="true" />
+                                 required="true"
+                                 styleClass="mw" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
                                  value="#{scheduleBean.event.person.patronymic}"
                                  label="#{msgs['person.patronymic']}"
                                  maxlength="50"
-                                 required="true" />
+                                 required="true"
+                                 styleClass="mw" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
                                 value="#{scheduleBean.event.person.birthday}"
@@ -38,7 +56,8 @@
                                 yearRange="1900:c"
                                 navigator="true"
                                 locale="ru"
-                                required="true">
+                                required="true"
+                                styleClass="cal">
                     </p:calendar>
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
                     <p:selectOneRadio id="gender"
@@ -52,7 +71,7 @@
                                      label="#{msgs['schedule.doctor']}"
                                      converter="entityConverter"
                                      required="true"
-                                     style="width: 95%">
+                                     style="width: 100%">
                         <f:selectItem itemLabel="" noSelectionOption="true" />
                         <f:selectItems value="#{employeeListBean.doctors}" var="doctor"
                                        itemValue="#{doctor}"
@@ -65,7 +84,8 @@
                                 pattern="dd/MM/yyyy HH:mm"
                                 navigator="true"
                                 locale="ru"
-                                required="true"/>
+                                required="true"
+                                styleClass="cal" />
                     <h:outputLabel for="to" value="#{msgs['schedule.to']}:" />
                     <p:calendar id="to"
                                 value="#{scheduleBean.event.endDate}"
@@ -73,17 +93,18 @@
                                 pattern="dd/MM/yyyy HH:mm"
                                 navigator="true"
                                 locale="ru"
-                                required="true" />
+                                required="true"
+                                styleClass="cal" />
                     <h:outputLabel for="complaint" value="#{msgs['schedule.complaint']}:" />
                     <p:inputTextarea id="complaint"
                                      value="#{scheduleBean.event.complaint}"
-                                     maxlength="1000"/>
+                                     maxlength="1000"
+                                     styleClass="mw" />
                     <h:outputLabel for="additionalInfo" value="#{msgs['schedule.additionalInfo']}:" />
                     <p:inputTextarea id="additionalInfo"
                                      value="#{scheduleBean.event.additionalInfo}"
-                                     maxlength="1000"/>
-                    <h:outputLabel for="allDay" value="#{msgs['schedule.allDay']}:" />
-                    <h:selectBooleanCheckbox id="allDay" value="#{scheduleBean.event.allDay}" />
+                                     maxlength="1000"
+                                     styleClass="mw" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <p:commandButton id="save"
