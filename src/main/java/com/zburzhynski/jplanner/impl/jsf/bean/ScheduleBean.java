@@ -209,11 +209,15 @@ public class ScheduleBean implements Serializable {
         builder.append(propertyReader.readProperty(PATIENT));
         builder.append(COLON + SPACE);
         builder.append(schedule.getPerson().getFullName());
-        if (StringUtils.isNotBlank(schedule.getDescription())) {
+        builder.append(NEWLINE);
+        builder.append(propertyReader.readProperty(DOCTOR));
+        builder.append(COLON + SPACE);
+        builder.append(schedule.getDoctor().getPerson().getFullName());
+        if (StringUtils.isNotBlank(schedule.getComplaint())) {
             builder.append(NEWLINE);
             builder.append(propertyReader.readProperty(COMPLAINT));
             builder.append(COLON + SPACE);
-            builder.append(schedule.getDescription());
+            builder.append(schedule.getComplaint());
         }
         schedule.setTitle(builder.toString());
     }

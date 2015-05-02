@@ -46,6 +46,18 @@
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
+                    <h:outputLabel for="doctor" value="#{msgs['schedule.doctor']}:" />
+                    <p:selectOneMenu id="doctor"
+                                     value="#{scheduleBean.event.doctor}"
+                                     label="#{msgs['schedule.doctor']}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     style="width: 95%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{employeeListBean.doctors}" var="doctor"
+                                       itemValue="#{doctor}"
+                                       itemLabel="#{doctor.person.fullName}" />
+                    </p:selectOneMenu>
                     <h:outputLabel for="from" value="#{msgs['schedule.from']}:" />
                     <p:calendar id="from"
                                 value="#{scheduleBean.event.startDate}"
@@ -62,9 +74,13 @@
                                 navigator="true"
                                 locale="ru"
                                 required="true" />
-                    <h:outputLabel for="description" value="#{msgs['schedule.complaint']}:" />
-                    <p:inputTextarea id="description"
-                                     value="#{scheduleBean.event.description}"
+                    <h:outputLabel for="complaint" value="#{msgs['schedule.complaint']}:" />
+                    <p:inputTextarea id="complaint"
+                                     value="#{scheduleBean.event.complaint}"
+                                     maxlength="1000"/>
+                    <h:outputLabel for="additionalInfo" value="#{msgs['schedule.additionalInfo']}:" />
+                    <p:inputTextarea id="additionalInfo"
+                                     value="#{scheduleBean.event.additionalInfo}"
                                      maxlength="1000"/>
                     <h:outputLabel for="allDay" value="#{msgs['schedule.allDay']}:" />
                     <h:selectBooleanCheckbox id="allDay" value="#{scheduleBean.event.allDay}" />
