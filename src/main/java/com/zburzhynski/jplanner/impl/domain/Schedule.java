@@ -27,12 +27,17 @@ import javax.persistence.Transient;
 public class Schedule extends Domain implements ScheduleEvent {
 
     public static final String P_PERSON = "person";
+    public static final String P_DOCTOR = "doctor";
     public static final String P_START_DATE = "startDate";
     public static final String P_END_DATE = "endDate";
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
     private Person person = new Person();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private Employee doctor = new Employee();
 
     @Column(name = "start_date")
     private Date startDate;
@@ -43,8 +48,11 @@ public class Schedule extends Domain implements ScheduleEvent {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "complaint")
+    private String complaint;
+
+    @Column(name = "additional_info")
+    private String additionalInfo;
 
     @Transient
     private Object data;
@@ -85,6 +93,14 @@ public class Schedule extends Domain implements ScheduleEvent {
         this.person = person;
     }
 
+    public Employee getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Employee doctor) {
+        this.doctor = doctor;
+    }
+
     @Override
     public Date getStartDate() {
         return startDate;
@@ -112,13 +128,25 @@ public class Schedule extends Domain implements ScheduleEvent {
         this.title = title;
     }
 
-    @Override
-    public String getDescription() {
-        return description;
+    public String getComplaint() {
+        return complaint;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setComplaint(String complaint) {
+        this.complaint = complaint;
+    }
+
+    public String getAdditionalInfo() {
+        return additionalInfo;
+    }
+
+    public void setAdditionalInfo(String additionalInfo) {
+        this.additionalInfo = additionalInfo;
+    }
+
+    @Override
+    public String getDescription() {
+        return title;
     }
 
     @Override
@@ -174,7 +202,8 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
             .append(title, that.title)
-            .append(description, that.description)
+            .append(complaint, that.complaint)
+            .append(additionalInfo, that.additionalInfo)
             .append(data, that.data)
             .append(allDay, that.allDay)
             .append(styleClass, that.styleClass)
@@ -190,7 +219,8 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append(startDate)
             .append(endDate)
             .append(title)
-            .append(description)
+            .append(complaint)
+            .append(additionalInfo)
             .append(data)
             .append(allDay)
             .append(styleClass)
@@ -206,7 +236,8 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append("startDate", startDate)
             .append("endDate", endDate)
             .append("title", title)
-            .append("description", description)
+            .append("complaint", complaint)
+            .append("additionalInfo", additionalInfo)
             .append("data", data)
             .append("allDay", allDay)
             .append("styleClass", styleClass)

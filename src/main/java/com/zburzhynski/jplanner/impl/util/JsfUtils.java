@@ -1,4 +1,4 @@
-package com.zburzhynski.jplanner.impl.utils;
+package com.zburzhynski.jplanner.impl.util;
 
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;

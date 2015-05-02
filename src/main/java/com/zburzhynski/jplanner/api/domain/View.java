@@ -10,7 +10,8 @@ package com.zburzhynski.jplanner.api.domain;
 public enum View {
 
     SCHEDULE_EVENTS("/pages/event/schedule-events?faces-redirect=true"),
-    SCHEDULE_EVENT("/pages/event/schedule-event?faces-redirect=true");
+    SCHEDULE_EVENT("/pages/event/schedule-event?faces-redirect=true"),
+    ABOUT("/pages/help/about?faces-redirect=true");
 
     private String path;
 

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form>
+                <h3 style="color: blue;">#{msgs['about.str1']}.</h3>
+                <h3>#{msgs['about.str2']}!</h3>
+                <h3>#{msgs['about.str3']}:</h3>
+                <ul>
+                    <li><span style="font-size: 16px">#{msgs['about.str4']}</span></li>
+                    <li><span style="font-size: 16px">#{msgs['about.str5']}</span></li>
+                    <li><span style="font-size: 16px">#{msgs['about.str6']}</span></li>
+                    <li><span style="font-size: 16px">#{msgs['about.str7']}</span></li>
+                    <li><span style="font-size: 16px">#{msgs['about.str8']}</span></li>
+                    <li><span style="font-size: 16px">#{msgs['about.str9']}</span></li>
+                    <li><span style="font-size: 16px">#{msgs['about.str10']}</span></li>
+                </ul>
+                <h3>#{msgs['about.str11']}!</h3>
+                <h3>#{msgs['about.str12']}:</h3>
+                <h3 style="color: green">#{msgs['author.fullName']}</h3>
+                <h3 style="color: green;">#{msgs['author.mobilePhoneNumber']}</h3>
+                <h3 style="color: green;">#{msgs['author.email']}</h3>
+                <h3 style="color: green;">#{msgs['author.skype']}</h3>
+                <h:commandButton value="#{msgs['button.ok']}" action="#{mainMenuBean.schedules}" immediate="true" />
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

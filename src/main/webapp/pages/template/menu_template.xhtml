@@ -11,14 +11,14 @@
         <ui:composition>
             <h:form id="mainMenuForm">
                 <p:menubar>
-                    <p:menuitem id="mSchedule" value="#{msgs['mainMenu.schedule']}"/>
+                    <p:menuitem id="mSchedules" value="#{msgs['mainMenu.schedule']}" action="#{mainMenuBean.schedules}" />
                     <p:menuitem id="mReports" value="#{msgs['mainMenu.reports']}" icon="ui-icon ui-icon-copy" />
                     <p:submenu id="mSettings" label="#{msgs['mainMenu.settings']}" icon="ui-icon ui-icon-gear">
                         <p:menuitem id="smSettings" value="#{msgs['mainMenu.settings']}" />
                         <p:menuitem id="smEmployees" value="#{msgs['mainMenu.settings.employees']}" />
                     </p:submenu>
                     <p:submenu id="mHelp" label="#{msgs['mainMenu.help']}" icon="ui-icon ui-icon-help">
-                        <p:menuitem id="smAbout" value="#{msgs['mainMenu.help.about']}"/>
+                        <p:menuitem id="smAbout" value="#{msgs['mainMenu.help.about']}" action="#{mainMenuBean.about}" />
                     </p:submenu>
                 </p:menubar>
             </h:form>

@@ -16,26 +16,29 @@
                     <p:inputText id="surname"
                                  value="#{scheduleBean.event.person.surname}"
                                  label="#{msgs['person.surname']}"
+                                 maxlength="50"
                                  required="true" />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
                     <p:inputText id="name"
                                  value="#{scheduleBean.event.person.name}"
                                  label="#{msgs['person.name']}"
+                                 maxlength="50"
                                  required="true" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
                                  value="#{scheduleBean.event.person.patronymic}"
                                  label="#{msgs['person.patronymic']}"
+                                 maxlength="50"
                                  required="true" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
                                 value="#{scheduleBean.event.person.birthday}"
                                 label="#{msgs['person.birthday']}"
                                 pattern="dd/MM/yyyy"
-                                locale="ru" navigator="true"
-                                mindate="01.01.1900"
-                                required="true"
-                                converterMessage="#{msgs['validator.invalidDate']}">
+                                yearRange="1900:c"
+                                navigator="true"
+                                locale="ru"
+                                required="true">
                     </p:calendar>
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
                     <p:selectOneRadio id="gender"
@@ -43,22 +46,42 @@
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
+                    <h:outputLabel for="doctor" value="#{msgs['schedule.doctor']}:" />
+                    <p:selectOneMenu id="doctor"
+                                     value="#{scheduleBean.event.doctor}"
+                                     label="#{msgs['schedule.doctor']}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     style="width: 95%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{employeeListBean.doctors}" var="doctor"
+                                       itemValue="#{doctor}"
+                                       itemLabel="#{doctor.person.fullName}" />
+                    </p:selectOneMenu>
                     <h:outputLabel for="from" value="#{msgs['schedule.from']}:" />
                     <p:calendar id="from"
                                 value="#{scheduleBean.event.startDate}"
                                 label="#{msgs['schedule.from']}"
                                 pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
                                 locale="ru"
-                                required="true" />
+                                required="true"/>
                     <h:outputLabel for="to" value="#{msgs['schedule.to']}:" />
                     <p:calendar id="to"
                                 value="#{scheduleBean.event.endDate}"
                                 label="#{msgs['schedule.to']}"
                                 pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
                                 locale="ru"
                                 required="true" />
-                    <h:outputLabel for="description" value="#{msgs['schedule.description']}:" />
-                    <p:inputTextarea id="description" value="#{scheduleBean.event.description}" />
+                    <h:outputLabel for="complaint" value="#{msgs['schedule.complaint']}:" />
+                    <p:inputTextarea id="complaint"
+                                     value="#{scheduleBean.event.complaint}"
+                                     maxlength="1000"/>
+                    <h:outputLabel for="additionalInfo" value="#{msgs['schedule.additionalInfo']}:" />
+                    <p:inputTextarea id="additionalInfo"
+                                     value="#{scheduleBean.event.additionalInfo}"
+                                     maxlength="1000"/>
                     <h:outputLabel for="allDay" value="#{msgs['schedule.allDay']}:" />
                     <h:selectBooleanCheckbox id="allDay" value="#{scheduleBean.event.allDay}" />
                 </h:panelGrid>
