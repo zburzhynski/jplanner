@@ -40,9 +40,7 @@ databaseChangeLog {
             column(name: 'name', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The job position name') {
                 constraints(nullable: false)
             }
-            column(name: 'position_type', type: 'VARCHAR(20)', defaultValue: '', remarks: 'The job position type') {
-                constraints(nullable: false)
-            }
+            column(name: 'position_type', type: 'VARCHAR(20)', defaultValue: '', remarks: 'The job position type')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'job_position', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_job_position')
