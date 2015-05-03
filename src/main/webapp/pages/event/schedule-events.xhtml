@@ -8,6 +8,7 @@
                 template="/pages/template/layout_template.xhtml">
 
     <ui:define name="content">
+        <h:outputStylesheet name="schedule.css" library="css" />
         <p:panel>
             <h:form id="eventsForm">
                 <p:growl id="messages" showDetail="true" />
@@ -18,6 +19,7 @@
                             timeFormat="H:mm"
                             showWeekends="true"
                             firstHour="8"
+                            allDaySlot="false"
                             timeZone="#{scheduleBean.timeZone}"
                             view="#{scheduleBean.scheduleView}"
                             initialDate="#{scheduleBean.initialDate}"

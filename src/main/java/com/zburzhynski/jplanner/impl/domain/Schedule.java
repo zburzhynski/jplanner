@@ -16,7 +16,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * Schedule event.
@@ -61,18 +60,6 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Column(name = "additional_info")
     private String additionalInfo;
-
-    @Transient
-    private Object data;
-
-    @Transient
-    private boolean allDay;
-
-    @Transient
-    private String styleClass;
-
-    @Transient
-    private boolean editable = true;
 
     /**
      * Default constructor.
@@ -167,38 +154,22 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Override
     public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
+        return null;
     }
 
     @Override
     public boolean isAllDay() {
-        return allDay;
-    }
-
-    public void setAllDay(boolean allDay) {
-        this.allDay = allDay;
+        return false;
     }
 
     @Override
     public String getStyleClass() {
-        return styleClass;
-    }
-
-    public void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
+        return status.name().toLowerCase();
     }
 
     @Override
     public boolean isEditable() {
-        return editable;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
+        return true;
     }
 
     @Override
@@ -222,10 +193,6 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append(title, that.title)
             .append(complaint, that.complaint)
             .append(additionalInfo, that.additionalInfo)
-            .append(data, that.data)
-            .append(allDay, that.allDay)
-            .append(styleClass, that.styleClass)
-            .append(editable, that.editable)
             .isEquals();
     }
 
@@ -241,10 +208,6 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append(title)
             .append(complaint)
             .append(additionalInfo)
-            .append(data)
-            .append(allDay)
-            .append(styleClass)
-            .append(editable)
             .toHashCode();
     }
 
@@ -260,10 +223,6 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append("title", title)
             .append("complaint", complaint)
             .append("additionalInfo", additionalInfo)
-            .append("data", data)
-            .append("allDay", allDay)
-            .append("styleClass", styleClass)
-            .append("editable", editable)
             .toString();
     }
 

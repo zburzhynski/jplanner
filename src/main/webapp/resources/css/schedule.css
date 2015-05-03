@@ -1,0 +1,9 @@
+.started {
+    background: #2b802f;
+}
+.finished {
+    background: #8b5333;
+}
+.canceled {
+    background: #ff4b43;
+}
