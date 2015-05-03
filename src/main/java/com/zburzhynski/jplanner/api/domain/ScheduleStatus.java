@@ -11,7 +11,8 @@ public enum ScheduleStatus {
 
     PLANNED("scheduleStatus.planned"),
     STARTED("scheduleStatus.started"),
-    FINISHED("scheduleStatus.finished");
+    FINISHED("scheduleStatus.finished"),
+    CANCELED("scheduleStatus.canceled");
 
     private String value;
 
