@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.domain;
 
+import com.zburzhynski.jplanner.api.domain.ScheduleStatus;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,6 +10,8 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -27,6 +30,7 @@ import javax.persistence.Transient;
 public class Schedule extends Domain implements ScheduleEvent {
 
     public static final String P_PERSON = "person";
+    public static final String P_STATUS = "status";
     public static final String P_DOCTOR = "doctor";
     public static final String P_START_DATE = "startDate";
     public static final String P_END_DATE = "endDate";
@@ -34,6 +38,10 @@ public class Schedule extends Domain implements ScheduleEvent {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
     private Person person = new Person();
+
+    @Column(name = "schedule_status")
+    @Enumerated(value = EnumType.STRING)
+    private ScheduleStatus status = ScheduleStatus.PLANNED;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
@@ -91,6 +99,14 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public ScheduleStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ScheduleStatus status) {
+        this.status = status;
     }
 
     public Employee getDoctor() {
@@ -199,6 +215,8 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(person, that.person)
+            .append(status, that.status)
+            .append(doctor, that.doctor)
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
             .append(title, that.title)
@@ -216,6 +234,8 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(person)
+            .append(status)
+            .append(doctor)
             .append(startDate)
             .append(endDate)
             .append(title)
@@ -233,6 +253,8 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("person", person)
+            .append("status", status)
+            .append("doctor", doctor)
             .append("startDate", startDate)
             .append("endDate", endDate)
             .append("title", title)

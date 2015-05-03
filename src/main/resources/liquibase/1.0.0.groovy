@@ -87,6 +87,9 @@ databaseChangeLog {
             column(name: 'person_id', type: 'VARCHAR(128)', remarks: 'The reference to the person table') {
                 constraints(nullable: false)
             }
+            column(name: 'schedule_status', type: 'VARCHAR(10)', defaultValue: '', remarks: 'Schedule status') {
+                constraints(nullable: false)
+            }
             column(name: 'doctor_id', type: 'VARCHAR(128)', remarks: 'The reference to the employee table') {
                 constraints(nullable: false)
             }

@@ -65,6 +65,14 @@
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
+                    <h:outputLabel for="status" value="#{msgs['schedule.status']}:" />
+                    <p:selectOneMenu id="status"
+                                     value="#{scheduleBean.event.status}"
+                                     required="true"
+                                     style="width: 100%">
+                        <f:selectItems value="#{scheduleStatusBean.statuses}" var="status" itemValue="#{status}"
+                                       itemLabel="#{msgs[status.value]}" />
+                    </p:selectOneMenu>
                     <h:outputLabel for="doctor" value="#{msgs['schedule.doctor']}:" />
                     <p:selectOneMenu id="doctor"
                                      value="#{scheduleBean.event.doctor}"
