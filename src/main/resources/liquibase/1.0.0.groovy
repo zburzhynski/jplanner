@@ -119,4 +119,43 @@ databaseChangeLog {
                 referencedTableName: 'employee', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
+    changeSet(id: '2015-05-02-10', author: 'hexed2 <hexed2@gmail.com>') {
+        createTable(schemaName: 'jplanner', tableName: 'cabinet', tablespace: 'jplanner_data', remarks: 'Reference of cabinet') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of cabinet') {
+                constraints(nullable: false)
+            }
+            column(name: 'number', type: 'VARCHAR(20)', defaultValue: '', remarks: 'The number of cabinet') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(50)', defaultValue: '', remarks: 'The cabinet name') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The cabinet description')
+        }
+        addPrimaryKey(schemaName: 'jplanner', tableName: 'cabinet', tablespace: 'jplanner_index',
+                columnNames: 'id', constraintName: 'PK_cabinet')
+    }
+
+    changeSet(id: '2015-05-02-11', author: 'hexed2 <hexed2@gmail.com>') {
+        createTable(schemaName: 'jplanner', tableName: 'workspace', tablespace: 'jplanner_data', remarks: 'Reference of workspace') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of workspace') {
+                constraints(nullable: false)
+            }
+            column(name: 'cabinet_id', type: 'VARCHAR(128)', remarks: 'The reference to the cabinet table') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(50)', defaultValue: '', remarks: 'The workspace name') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The workspace description')
+        }
+        addPrimaryKey(schemaName: 'jplanner', tableName: 'workspace', tablespace: 'jplanner_index',
+                columnNames: 'id', constraintName: 'PK_workspace')
+    }
+
+    changeSet(id: '2015-05-02-12', author: 'hexed2 <hexed2@gmail.com>') {
+        addForeignKeyConstraint(constraintName: 'FK_cabinet_2_workspace',
+                baseTableName: 'workspace', baseTableSchemaName: 'jplanner', baseColumnNames: 'cabinet_id',
+                referencedTableName: 'cabinet', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
+    }
 }
