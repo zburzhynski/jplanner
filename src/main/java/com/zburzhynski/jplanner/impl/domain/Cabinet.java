@@ -4,8 +4,13 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -17,7 +22,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(schema = "jplanner", name = "cabinet")
-public class Cabinet  extends Domain {
+public class Cabinet extends Domain {
 
     public static final String P_NUMBER = "number";
 
@@ -33,6 +38,10 @@ public class Cabinet  extends Domain {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "cabinet_id")
+    private List<Workplace> workplaces;
 
     public String getNumber() {
         return number;
@@ -58,6 +67,17 @@ public class Cabinet  extends Domain {
         this.description = description;
     }
 
+    public List<Workplace> getWorkplaces() {
+        if (workplaces == null) {
+            return new ArrayList<>();
+        }
+        return workplaces;
+    }
+
+    public void setWorkplaces(List<Workplace> workplaces) {
+        this.workplaces = workplaces;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -70,30 +90,31 @@ public class Cabinet  extends Domain {
 
         Cabinet that = (Cabinet) o;
         return new EqualsBuilder()
-                .appendSuper(super.equals(o))
-                .append(number, that.number)
-                .append(name, that.name)
-                .append(description, that.description)
-                .isEquals();
+            .appendSuper(super.equals(o))
+            .append(number, that.number)
+            .append(name, that.name)
+            .append(description, that.description)
+            .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(number)
-                .append(name)
-                .append(description)
-                .toHashCode();
+            .appendSuper(super.hashCode())
+            .append(number)
+            .append(name)
+            .append(description)
+            .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("number", number)
-                .append("name", name)
-                .append("description", description)
-                .toString();
+            .appendSuper(super.toString())
+            .append("number", number)
+            .append("name", name)
+            .append("description", description)
+            .toString();
     }
+
 }

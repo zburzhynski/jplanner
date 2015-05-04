@@ -4,10 +4,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 /**
- * Workspace.
+ * Workplace.
  * <p/>
  * Date: 04.05.2015
  *
@@ -15,8 +20,8 @@ import javax.persistence.*;
  */
 
 @Entity
-@Table(schema = "jplanner", name = "workspace")
-public class Workspace extends Domain{
+@Table(schema = "jplanner", name = "workplace")
+public class Workplace extends Domain {
 
     public static final String P_NAME = "name";
 
@@ -24,7 +29,7 @@ public class Workspace extends Domain{
 
     public static final String P_CABINET = "cabinet";
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cabinet_id")
     private Cabinet cabinet = new Cabinet();
 
@@ -34,13 +39,6 @@ public class Workspace extends Domain{
     @Column(name = "description")
     private String description;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public Cabinet getCabinet() {
         return cabinet;
@@ -48,6 +46,14 @@ public class Workspace extends Domain{
 
     public void setCabinet(Cabinet cabinet) {
         this.cabinet = cabinet;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
@@ -64,36 +70,37 @@ public class Workspace extends Domain{
             return true;
         }
 
-        if (!(o instanceof Workspace)) {
+        if (!(o instanceof Workplace)) {
             return false;
         }
 
-        Workspace that = (Workspace) o;
+        Workplace that = (Workplace) o;
         return new EqualsBuilder()
-                .appendSuper(super.equals(o))
-                .append(name, that.name)
-                .append(cabinet, that.cabinet)
-                .append(description, that.description)
-                .isEquals();
+            .appendSuper(super.equals(o))
+            .append(cabinet, that.cabinet)
+            .append(name, that.name)
+            .append(description, that.description)
+            .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-                .appendSuper(super.hashCode())
-                .append(name)
-                .append(cabinet)
-                .append(description)
-                .toHashCode();
+            .appendSuper(super.hashCode())
+            .append(cabinet)
+            .append(name)
+            .append(description)
+            .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .appendSuper(super.toString())
-                .append("name", name)
-                .append("cabinet", cabinet)
-                .append("description", description)
-                .toString();
+            .appendSuper(super.toString())
+            .append("cabinet", cabinet)
+            .append("name", name)
+            .append("description", description)
+            .toString();
     }
+
 }
