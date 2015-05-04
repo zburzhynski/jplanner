@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.impl.repository;
 
 import static com.zburzhynski.jplanner.impl.domain.Person.P_ID;
+import static com.zburzhynski.jplanner.impl.domain.Schedule.P_DOCTOR;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_END_DATE;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_PERSON;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_START_DATE;
@@ -29,6 +30,7 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
     public Schedule findById(String id) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_PERSON, P_PERSON);
+        criteria.createAlias(P_DOCTOR, P_DOCTOR);
         criteria.add(Restrictions.eq(P_ID, id));
         return (Schedule) criteria.uniqueResult();
     }

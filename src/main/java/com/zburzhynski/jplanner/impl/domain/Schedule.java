@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.domain;
 
+import com.zburzhynski.jplanner.api.domain.ScheduleStatus;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -9,11 +10,12 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  * Schedule event.
@@ -27,6 +29,7 @@ import javax.persistence.Transient;
 public class Schedule extends Domain implements ScheduleEvent {
 
     public static final String P_PERSON = "person";
+    public static final String P_STATUS = "status";
     public static final String P_DOCTOR = "doctor";
     public static final String P_START_DATE = "startDate";
     public static final String P_END_DATE = "endDate";
@@ -34,6 +37,10 @@ public class Schedule extends Domain implements ScheduleEvent {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
     private Person person = new Person();
+
+    @Column(name = "schedule_status")
+    @Enumerated(value = EnumType.STRING)
+    private ScheduleStatus status = ScheduleStatus.PLANNED;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
@@ -53,18 +60,6 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Column(name = "additional_info")
     private String additionalInfo;
-
-    @Transient
-    private Object data;
-
-    @Transient
-    private boolean allDay;
-
-    @Transient
-    private String styleClass;
-
-    @Transient
-    private boolean editable = true;
 
     /**
      * Default constructor.
@@ -91,6 +86,14 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     public void setPerson(Person person) {
         this.person = person;
+    }
+
+    public ScheduleStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ScheduleStatus status) {
+        this.status = status;
     }
 
     public Employee getDoctor() {
@@ -151,38 +154,22 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Override
     public Object getData() {
-        return data;
-    }
-
-    public void setData(Object data) {
-        this.data = data;
+        return null;
     }
 
     @Override
     public boolean isAllDay() {
-        return allDay;
-    }
-
-    public void setAllDay(boolean allDay) {
-        this.allDay = allDay;
+        return false;
     }
 
     @Override
     public String getStyleClass() {
-        return styleClass;
-    }
-
-    public void setStyleClass(String styleClass) {
-        this.styleClass = styleClass;
+        return status.name().toLowerCase();
     }
 
     @Override
     public boolean isEditable() {
-        return editable;
-    }
-
-    public void setEditable(boolean editable) {
-        this.editable = editable;
+        return true;
     }
 
     @Override
@@ -199,15 +186,13 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(person, that.person)
+            .append(status, that.status)
+            .append(doctor, that.doctor)
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
             .append(title, that.title)
             .append(complaint, that.complaint)
             .append(additionalInfo, that.additionalInfo)
-            .append(data, that.data)
-            .append(allDay, that.allDay)
-            .append(styleClass, that.styleClass)
-            .append(editable, that.editable)
             .isEquals();
     }
 
@@ -216,15 +201,13 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(person)
+            .append(status)
+            .append(doctor)
             .append(startDate)
             .append(endDate)
             .append(title)
             .append(complaint)
             .append(additionalInfo)
-            .append(data)
-            .append(allDay)
-            .append(styleClass)
-            .append(editable)
             .toHashCode();
     }
 
@@ -233,15 +216,13 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("person", person)
+            .append("status", status)
+            .append("doctor", doctor)
             .append("startDate", startDate)
             .append("endDate", endDate)
             .append("title", title)
             .append("complaint", complaint)
             .append("additionalInfo", additionalInfo)
-            .append("data", data)
-            .append("allDay", allDay)
-            .append("styleClass", styleClass)
-            .append("editable", editable)
             .toString();
     }
 
