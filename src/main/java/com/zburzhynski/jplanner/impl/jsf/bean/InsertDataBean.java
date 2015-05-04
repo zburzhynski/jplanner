@@ -1,8 +1,10 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
-import com.zburzhynski.jplanner.api.service.IScheduleService;
+import com.zburzhynski.jplanner.api.service.IPositionService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.domain.Position;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
@@ -20,6 +22,9 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class InsertDataBean implements Serializable {
 
+    @ManagedProperty(value = "#{positionService}")
+    private IPositionService positionService;
+
     @ManagedProperty(value = "#{employeeService}")
     private IEmployeeService employeeService;
 
@@ -27,12 +32,21 @@ public class InsertDataBean implements Serializable {
      * Inserts test data to database.
      */
     public void insertData() {
+        Position doctorPosition = new Position();
+        doctorPosition.setName("Врач-терапевт");
+        doctorPosition.setPositionType(PositionType.DOCTOR);
+        positionService.saveOrUpdate(doctorPosition);
+
         Employee doctor = new Employee();
         doctor.getPerson().setSurname("Клопов");
         doctor.getPerson().setName("Виталий");
         doctor.getPerson().setPatronymic("Юрьевич");
-        doctor.getPosition().setId("11111");
+        doctor.setPosition(doctorPosition);
         employeeService.saveOrUpdate(doctor);
+    }
+
+    public void setPositionService(IPositionService positionService) {
+        this.positionService = positionService;
     }
 
     public void setEmployeeService(IEmployeeService employeeService) {
