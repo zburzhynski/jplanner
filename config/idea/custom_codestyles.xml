@@ -5,7 +5,7 @@
   <option name="IMPORT_LAYOUT_TABLE">
     <value>
       <package name="" withSubpackages="true" static="true" />
-      <package name="com.copyright" withSubpackages="true" static="false" />
+      <package name="com.zburzhynski" withSubpackages="true" static="false" />
       <package name="com" withSubpackages="true" static="false" />
       <package name="junit" withSubpackages="true" static="false" />
       <package name="net" withSubpackages="true" static="false" />
