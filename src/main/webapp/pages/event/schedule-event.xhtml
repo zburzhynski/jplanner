@@ -13,41 +13,41 @@
                 font-weight: bold;
                 width: 20%;
             }
-            .input {
+            .val {
                 width: 80%;
             }
-            .mw {
-                width: 100%;
+            .inp {
+                width: 97%;
             }
             .cal .ui-inputfield {
-                width: 100%;
+                width: 97%;
             }
         </style>
         <p:panel>
             <h:form>
                 <p:messages id="messages" autoUpdate="true" closable="true" />
-                <h:panelGrid columns="2" columnClasses="name, input" width="40%">
+                <h:panelGrid columns="2" columnClasses="name, val" width="40%">
                     <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
                     <p:inputText id="surname"
                                  value="#{scheduleBean.event.person.surname}"
                                  label="#{msgs['person.surname']}"
                                  maxlength="50"
                                  required="true"
-                                 styleClass="mw" />
+                                 styleClass="inp" />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
                     <p:inputText id="name"
                                  value="#{scheduleBean.event.person.name}"
                                  label="#{msgs['person.name']}"
                                  maxlength="50"
                                  required="true"
-                                 styleClass="mw" />
+                                 styleClass="inp" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
                                  value="#{scheduleBean.event.person.patronymic}"
                                  label="#{msgs['person.patronymic']}"
                                  maxlength="50"
                                  required="true"
-                                 styleClass="mw" />
+                                 styleClass="inp" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
                                 value="#{scheduleBean.event.person.birthday}"
@@ -107,12 +107,12 @@
                     <p:inputTextarea id="complaint"
                                      value="#{scheduleBean.event.complaint}"
                                      maxlength="1000"
-                                     styleClass="mw" />
+                                     styleClass="inp" />
                     <h:outputLabel for="additionalInfo" value="#{msgs['schedule.additionalInfo']}:" />
                     <p:inputTextarea id="additionalInfo"
                                      value="#{scheduleBean.event.additionalInfo}"
                                      maxlength="1000"
-                                     styleClass="mw" />
+                                     styleClass="inp" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <p:commandButton id="save"
