@@ -67,6 +67,11 @@ public class Cabinet extends Domain {
         this.description = description;
     }
 
+    /**
+     * Gets workplaces.
+     *
+     * @return workplaces
+     */
     public List<Workplace> getWorkplaces() {
         if (workplaces == null) {
             return new ArrayList<>();
@@ -74,6 +79,11 @@ public class Cabinet extends Domain {
         return workplaces;
     }
 
+    /**
+     * Sets workplaces.
+     *
+     * @param workplaces workplaces to set
+     */
     public void setWorkplaces(List<Workplace> workplaces) {
         this.workplaces = workplaces;
     }
