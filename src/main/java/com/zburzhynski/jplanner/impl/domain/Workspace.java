@@ -4,29 +4,29 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
- * Cabinet.
+ * Workspace.
  * <p/>
- * Date: 02.05.2015
+ * Date: 04.05.2015
  *
  * @author hexed2
  */
-@Entity
-@Table(schema = "jplanner", name = "cabinet")
-public class Cabinet  extends Domain {
 
-    public static final String P_NUMBER = "number";
+@Entity
+@Table(schema = "jplanner", name = "workspace")
+public class Workspace extends Domain{
 
     public static final String P_NAME = "name";
 
     public static final String P_DESCRIPTION = "description";
 
-    @Column(name = "number")
-    private String number;
+    public static final String P_CABINET = "cabinet";
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "cabinet_id")
+    private Cabinet cabinet = new Cabinet();
 
     @Column(name = "name")
     private String name;
@@ -34,20 +34,20 @@ public class Cabinet  extends Domain {
     @Column(name = "description")
     private String description;
 
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
     public String getName() {
         return name;
     }
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Cabinet getCabinet() {
+        return cabinet;
+    }
+
+    public void setCabinet(Cabinet cabinet) {
+        this.cabinet = cabinet;
     }
 
     public String getDescription() {
@@ -64,15 +64,15 @@ public class Cabinet  extends Domain {
             return true;
         }
 
-        if (!(o instanceof Cabinet)) {
+        if (!(o instanceof Workspace)) {
             return false;
         }
 
-        Cabinet that = (Cabinet) o;
+        Workspace that = (Workspace) o;
         return new EqualsBuilder()
                 .appendSuper(super.equals(o))
-                .append(number, that.number)
                 .append(name, that.name)
+                .append(cabinet, that.cabinet)
                 .append(description, that.description)
                 .isEquals();
     }
@@ -81,8 +81,8 @@ public class Cabinet  extends Domain {
     public int hashCode() {
         return new HashCodeBuilder()
                 .appendSuper(super.hashCode())
-                .append(number)
                 .append(name)
+                .append(cabinet)
                 .append(description)
                 .toHashCode();
     }
@@ -91,8 +91,8 @@ public class Cabinet  extends Domain {
     public String toString() {
         return new ToStringBuilder(this)
                 .appendSuper(super.toString())
-                .append("number", number)
                 .append("name", name)
+                .append("cabinet", cabinet)
                 .append("description", description)
                 .toString();
     }
