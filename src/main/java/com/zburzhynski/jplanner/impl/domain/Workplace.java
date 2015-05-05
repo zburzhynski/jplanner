@@ -16,7 +16,7 @@ import javax.persistence.Table;
  * <p/>
  * Date: 04.05.2015
  *
- * @author hexed2
+ * @author Mikalai Karabeika
  */
 
 @Entity

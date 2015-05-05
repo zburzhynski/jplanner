@@ -18,7 +18,7 @@ import javax.persistence.Table;
  * <p/>
  * Date: 02.05.2015
  *
- * @author hexed2
+ * @author Mikalai Karabeika
  */
 @Entity
 @Table(schema = "jplanner", name = "cabinet")
@@ -98,31 +98,34 @@ public class Cabinet extends Domain {
 
         Cabinet that = (Cabinet) o;
         return new EqualsBuilder()
-            .appendSuper(super.equals(o))
-            .append(number, that.number)
-            .append(name, that.name)
-            .append(description, that.description)
-            .isEquals();
+                .appendSuper(super.equals(o))
+                .append(number, that.number)
+                .append(name, that.name)
+                .append(description, that.description)
+                .append(workplaces, that.workplaces)
+                .isEquals();
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder()
-            .appendSuper(super.hashCode())
-            .append(number)
-            .append(name)
-            .append(description)
-            .toHashCode();
+                .appendSuper(super.hashCode())
+                .append(number)
+                .append(name)
+                .append(description)
+                .append(workplaces.hashCode())
+                .toHashCode();
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-            .appendSuper(super.toString())
-            .append("number", number)
-            .append("name", name)
-            .append("description", description)
-            .toString();
+                .appendSuper(super.toString())
+                .append("number", number)
+                .append("name", name)
+                .append("description", description)
+                .append("workspaces", workplaces.toString())
+                .toString();
     }
 
 }
