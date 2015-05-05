@@ -28,11 +28,20 @@ import javax.persistence.Table;
 @Table(schema = "jplanner", name = "schedule")
 public class Schedule extends Domain implements ScheduleEvent {
 
+    public static final String P_WORKPLACE = "workplace";
+    public static final String P_PATIENT_ID = "patientId";
     public static final String P_PERSON = "person";
     public static final String P_STATUS = "status";
     public static final String P_DOCTOR = "doctor";
     public static final String P_START_DATE = "startDate";
     public static final String P_END_DATE = "endDate";
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "workplace_id")
+    private Workplace workplace;
+
+    @Column(name = "patient_id")
+    private String patientId;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
@@ -78,6 +87,22 @@ public class Schedule extends Domain implements ScheduleEvent {
         this.startDate = startDate;
         this.endDate = endDate;
         this.title = title;
+    }
+
+    public Workplace getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
     public Person getPerson() {
@@ -185,6 +210,8 @@ public class Schedule extends Domain implements ScheduleEvent {
         Schedule that = (Schedule) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
+            .append(workplace, that.workplace)
+            .append(patientId, that.patientId)
             .append(person, that.person)
             .append(status, that.status)
             .append(doctor, that.doctor)
@@ -200,6 +227,8 @@ public class Schedule extends Domain implements ScheduleEvent {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
+            .append(workplace)
+            .append(patientId)
             .append(person)
             .append(status)
             .append(doctor)
@@ -215,6 +244,8 @@ public class Schedule extends Domain implements ScheduleEvent {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
+            .append("workplace", workplace)
+            .append("patientId", patientId)
             .append("person", person)
             .append("status", status)
             .append("doctor", doctor)
