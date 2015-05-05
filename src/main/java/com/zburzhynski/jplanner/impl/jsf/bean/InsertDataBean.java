@@ -1,10 +1,13 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import com.zburzhynski.jplanner.api.domain.PositionType;
+import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.api.service.IPositionService;
+import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Position;
+import com.zburzhynski.jplanner.impl.domain.Workplace;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
@@ -25,6 +28,9 @@ public class InsertDataBean implements Serializable {
     @ManagedProperty(value = "#{positionService}")
     private IPositionService positionService;
 
+    @ManagedProperty(value = "#{cabinetService}")
+    private ICabinetService cabinetService;
+
     @ManagedProperty(value = "#{employeeService}")
     private IEmployeeService employeeService;
 
@@ -32,6 +38,22 @@ public class InsertDataBean implements Serializable {
      * Inserts test data to database.
      */
     public void insertData() {
+        Workplace workplace1 = new Workplace();
+        workplace1.setName("Кресло 1");
+        workplace1.setDescription("Описание первого кресла");
+
+        Workplace workplace2 = new Workplace();
+        workplace2.setName("Кресло 2");
+        workplace2.setDescription("Описание второго кресла");
+
+        Cabinet cabinet = new Cabinet();
+        cabinet.setNumber("100а");
+        cabinet.setName("Дентар");
+        cabinet.setDescription("Хороший кабинет");
+        cabinet.getWorkplaces().add(workplace1);
+        cabinet.getWorkplaces().add(workplace2);
+        cabinetService.saveOrUpdate(cabinet);
+
         Position doctorPosition = new Position();
         doctorPosition.setName("Врач-терапевт");
         doctorPosition.setPositionType(PositionType.DOCTOR);
@@ -47,6 +69,10 @@ public class InsertDataBean implements Serializable {
 
     public void setPositionService(IPositionService positionService) {
         this.positionService = positionService;
+    }
+
+    public void setCabinetService(ICabinetService cabinetService) {
+        this.cabinetService = cabinetService;
     }
 
     public void setEmployeeService(IEmployeeService employeeService) {
