@@ -38,7 +38,7 @@ public class Cabinet extends Domain {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cabinet_id")
+    @JoinColumn(name = "cabinet_id", nullable = false)
     private List<Workplace> workplaces;
 
     public String getNumber() {
@@ -72,7 +72,7 @@ public class Cabinet extends Domain {
      */
     public List<Workplace> getWorkplaces() {
         if (workplaces == null) {
-            return new ArrayList<>();
+            workplaces = new ArrayList<>();
         }
         return workplaces;
     }

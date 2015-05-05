@@ -28,7 +28,7 @@ public class Workplace extends Domain {
     public static final String P_CABINET = "cabinet";
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "cabinet_id")
+    @JoinColumn(name = "cabinet_id", insertable = false, updatable = false)
     private Cabinet cabinet;
 
     @Column(name = "name")
