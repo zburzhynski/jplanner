@@ -7,7 +7,7 @@ databaseChangeLog {
         }
     }
 
-    changeSet(id: '2015-04-30-2', author: 'hexed2 <hexed2@gmail.com>') {
+    changeSet(id: '2015-04-30-2', author: 'Mikalai Karabeika <hexed2@gmail.com>') {
         createTable(schemaName: 'jplanner', tableName: 'cabinet', tablespace: 'jplanner_data', remarks: 'Reference of cabinet') {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of cabinet') {
                 constraints(nullable: false)
@@ -24,7 +24,7 @@ databaseChangeLog {
                 columnNames: 'id', constraintName: 'PK_cabinet')
     }
 
-    changeSet(id: '2015-04-30-3', author: 'hexed2 <hexed2@gmail.com>') {
+    changeSet(id: '2015-04-30-3', author: 'Mikalai Karabeika <hexed2@gmail.com>') {
         createTable(schemaName: 'jplanner', tableName: 'workplace', tablespace: 'jplanner_data', remarks: 'Reference of workplace') {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of workplace') {
                 constraints(nullable: false)
@@ -41,7 +41,7 @@ databaseChangeLog {
                 columnNames: 'id', constraintName: 'PK_workplace')
     }
 
-    changeSet(id: '2015-04-30-4', author: 'hexed2 <hexed2@gmail.com>') {
+    changeSet(id: '2015-04-30-4', author: 'Mikalai Karabeika <hexed2@gmail.com>') {
         addForeignKeyConstraint(constraintName: 'FK_workplace_2_cabinet',
                 baseTableName: 'workplace', baseTableSchemaName: 'jplanner', baseColumnNames: 'cabinet_id',
                 referencedTableName: 'cabinet', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
