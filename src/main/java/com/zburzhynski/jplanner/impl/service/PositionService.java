@@ -65,9 +65,6 @@ public class PositionService implements IPositionService<String, Position> {
         return positionRepository.findAll();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isUsed(Position position) {
         return positionRepository.isUsed(position);

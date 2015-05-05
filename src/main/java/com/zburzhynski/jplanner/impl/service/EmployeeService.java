@@ -73,33 +73,21 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
 //        return employeeRepository.countByRange(filters);
 //    }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Employee getByLogin(String login) {
-        return  (Employee) employeeRepository.findByLogin(login);
+        return (Employee) employeeRepository.findByLogin(login);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<Employee> getByPosition(PositionType positionType) {
         return employeeRepository.findByPosition(positionType);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public List<Employee> getAll() {
         return employeeRepository.findAll();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isUsed(Employee employee) {
         return employeeRepository.isUsed(employee);

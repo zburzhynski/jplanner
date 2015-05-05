@@ -55,9 +55,6 @@ public class CabinetService implements ICabinetService<String, Cabinet> {
         return cabinetRepository.findAll();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public boolean isUsed(Cabinet cabinet) {
         return cabinetRepository.isUsed(cabinet);
