@@ -3,7 +3,7 @@ package com.zburzhynski.jplanner.api.repository;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 
 /**
- * Class has common methods for working with jsf beans.
+ * Cabinet repository interface.
  * <p/>
  * Date: 05.05.2015
  *

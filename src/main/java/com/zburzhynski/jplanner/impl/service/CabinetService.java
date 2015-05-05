@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Implementation of {@link com.zburzhynski.jplanner.api.service.ICabinetService} interface.
+ * Implementation of {@link ICabinetService} interface.
  * <p/>
  * Date: 05.05.2015
  *
@@ -62,4 +62,5 @@ public class CabinetService implements ICabinetService<String, Cabinet> {
     public boolean isUsed(Cabinet cabinet) {
         return cabinetRepository.isUsed(cabinet);
     }
+
 }

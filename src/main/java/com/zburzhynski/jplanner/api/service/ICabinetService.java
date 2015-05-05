@@ -3,7 +3,7 @@ package com.zburzhynski.jplanner.api.service;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 
 /**
- * Class has common methods for working with jsf beans.
+ * Cabinet service.
  * <p/>
  * Date: 05.05.2015
  *

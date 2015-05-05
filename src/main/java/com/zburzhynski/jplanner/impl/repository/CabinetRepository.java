@@ -18,7 +18,7 @@ import java.util.Map;
  */
 @Repository("cabinetRepository")
 public class CabinetRepository extends AbstractBaseRepository<String, Cabinet>
-        implements ICabinetRepository<String, Cabinet> {
+    implements ICabinetRepository<String, Cabinet> {
 
     @Override
     public boolean isUsed(Cabinet cabinet) {
@@ -36,4 +36,5 @@ public class CabinetRepository extends AbstractBaseRepository<String, Cabinet>
         orders.put(P_NAME, true);
         return orders;
     }
+
 }
