@@ -24,21 +24,18 @@ import javax.persistence.Table;
 public class Workplace extends Domain {
 
     public static final String P_NAME = "name";
-
     public static final String P_DESCRIPTION = "description";
-
     public static final String P_CABINET = "cabinet";
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cabinet_id")
-    private Cabinet cabinet = new Cabinet();
+    private Cabinet cabinet;
 
     @Column(name = "name")
     private String name;
 
     @Column(name = "description")
     private String description;
-
 
     public Cabinet getCabinet() {
         return cabinet;

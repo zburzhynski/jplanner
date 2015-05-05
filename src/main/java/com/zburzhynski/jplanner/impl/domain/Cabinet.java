@@ -25,9 +25,7 @@ import javax.persistence.Table;
 public class Cabinet extends Domain {
 
     public static final String P_NUMBER = "number";
-
     public static final String P_NAME = "name";
-
     public static final String P_DESCRIPTION = "description";
 
     @Column(name = "number")

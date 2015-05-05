@@ -53,7 +53,7 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doctor_id")
-    private Employee doctor = new Employee();
+    private Employee doctor;
 
     @Column(name = "start_date")
     private Date startDate;

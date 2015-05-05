@@ -32,7 +32,7 @@ public class Employee extends Domain {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "job_position_id")
-    private Position position = new Position();
+    private Position position;
 
     @Column(name = "email")
     private String email;
