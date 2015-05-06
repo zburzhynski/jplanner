@@ -53,4 +53,13 @@ public final class JsfUtils {
         context.setViewRoot(root);
     }
 
+    /**
+     * Updates element state.
+     *
+     * @param name name of element tot update
+     */
+    public static void update(String name) {
+        FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(name);
+    }
+
 }

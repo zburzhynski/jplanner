@@ -5,6 +5,7 @@ import static com.zburzhynski.jplanner.api.domain.CommonConstant.NEWLINE;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
@@ -16,7 +17,6 @@ import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
@@ -48,6 +48,8 @@ import javax.faces.context.FacesContext;
 public class ScheduleBean implements Serializable {
 
     private static final int MIN_EVENT_LENGTH = 30;
+
+    private static final String SCHEDULER_COMPONENT = "eventsForm:scheduler";
 
     private static final String PATIENT = "schedule.patient";
 
@@ -81,6 +83,13 @@ public class ScheduleBean implements Serializable {
      */
     @PostConstruct
     public void init() {
+        List<Cabinet> cabinets = cabinetService.getAll();
+        if (isNotEmpty(cabinets)) {
+            cabinet = (Cabinet) cabinetService.getById(cabinets.get(0).getId());
+            if (isNotEmpty(cabinet.getWorkplaces())) {
+                workplace = cabinet.getWorkplaces().get(0);
+            }
+        }
         eventModel = new LazyScheduleModel() {
             @Override
             public void loadEvents(Date start, Date end) {
@@ -158,7 +167,6 @@ public class ScheduleBean implements Serializable {
         }
         prepareScheduleTitle(event);
         scheduleService.saveOrUpdate(event);
-        init();
         return SCHEDULE_EVENTS.getPath();
     }
 
@@ -176,15 +184,15 @@ public class ScheduleBean implements Serializable {
      */
     public void selectCabinetListener() {
         cabinet = (Cabinet) cabinetService.getById(cabinet.getId());
-        workplace = CollectionUtils.isNotEmpty(cabinet.getWorkplaces()) ?
-            cabinet.getWorkplaces().get(0) : null;
+        workplace = isNotEmpty(cabinet.getWorkplaces()) ? cabinet.getWorkplaces().get(0) : null;
+        JsfUtils.update(SCHEDULER_COMPONENT);
     }
 
     /**
      * Select workplace listener.
      */
     public void selectWorkplaceListener() {
-
+        JsfUtils.update(SCHEDULER_COMPONENT);
     }
 
     public String getTimeZone() {
