@@ -16,7 +16,9 @@ import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import com.zburzhynski.jplanner.impl.util.MessageHelper;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
@@ -30,11 +32,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
-import javax.faces.context.FacesContext;
 
 /**
  * Schedule event bean.
@@ -50,6 +50,12 @@ public class ScheduleBean implements Serializable {
     private static final int MIN_EVENT_LENGTH = 30;
 
     private static final String SCHEDULER_COMPONENT = "eventsForm:scheduler";
+
+    private static final String WORKPLACE_NOT_SELECTED = "schedule.workplaceNotSelected";
+
+    private static final String EVENT_MOVED = "schedule.eventMoved";
+
+    private static final String EVENT_RESIZED = "schedule.eventResized";
 
     private static final String PATIENT = "schedule.patient";
 
@@ -69,14 +75,17 @@ public class ScheduleBean implements Serializable {
 
     private Date initialDate = new Date();
 
-    @ManagedProperty(value = "#{cabinetService}")
-    private ICabinetService cabinetService;
-
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
 
+    @ManagedProperty(value = "#{cabinetService}")
+    private ICabinetService cabinetService;
+
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader propertyReader;
+
+    @ManagedProperty(value = "#{messageHelper}")
+    private MessageHelper messageHelper;
 
     /**
      * Inits bean state.
@@ -106,9 +115,13 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent {@link SelectEvent}
      */
     public void createEvent(SelectEvent selectEvent) {
-        initialDate = (Date) selectEvent.getObject();
-        event = buildScheduleEvent(selectEvent);
-        JsfUtils.redirect(SCHEDULE_EVENT.getPath());
+        if (cabinet != null && CollectionUtils.isNotEmpty(cabinet.getWorkplaces())) {
+            initialDate = (Date) selectEvent.getObject();
+            event = buildScheduleEvent(selectEvent);
+            JsfUtils.redirect(SCHEDULE_EVENT.getPath());
+        } else {
+            messageHelper.addMessage(WORKPLACE_NOT_SELECTED);
+        }
     }
 
     /**
@@ -134,9 +147,7 @@ public class ScheduleBean implements Serializable {
         schedule.setStartDate(scheduleEvent.getStartDate());
         schedule.setEndDate(scheduleEvent.getEndDate());
         scheduleService.saveOrUpdate(schedule);
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event moved", "Day delta:"
-            + moveEvent.getDayDelta() + ", Minute delta:" + moveEvent.getMinuteDelta());
-        addMessage(message);
+        messageHelper.addMessage(EVENT_MOVED, schedule.getTitle());
     }
 
     /**
@@ -149,9 +160,7 @@ public class ScheduleBean implements Serializable {
         Schedule schedule = (Schedule) scheduleService.getById(scheduleEvent.getId());
         schedule.setEndDate(scheduleEvent.getEndDate());
         scheduleService.saveOrUpdate(schedule);
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Event resized", "Day delta:"
-            + resizeEvent.getDayDelta() + ", Minute delta:" + resizeEvent.getMinuteDelta());
-        addMessage(message);
+        messageHelper.addMessage(EVENT_RESIZED, schedule.getTitle());
     }
 
     /**
@@ -247,16 +256,20 @@ public class ScheduleBean implements Serializable {
         this.initialDate = initialDate;
     }
 
-    public void setCabinetService(ICabinetService cabinetService) {
-        this.cabinetService = cabinetService;
-    }
-
     public void setScheduleService(IScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
 
+    public void setCabinetService(ICabinetService cabinetService) {
+        this.cabinetService = cabinetService;
+    }
+
     public void setPropertyReader(PropertyReader propertyReader) {
         this.propertyReader = propertyReader;
+    }
+
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
     }
 
     private void prepareScheduleTitle(Schedule schedule) {
@@ -293,10 +306,6 @@ public class ScheduleBean implements Serializable {
         searchCriteria.setStartDate(startDate);
         searchCriteria.setEndDate(endDate);
         return searchCriteria;
-    }
-
-    private void addMessage(FacesMessage message) {
-        FacesContext.getCurrentInstance().addMessage(null, message);
     }
 
 }
