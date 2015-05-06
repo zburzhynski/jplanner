@@ -7,3 +7,18 @@
 .canceled {
     background: #ff4b43;
 }
+
+.cabinetLabel {
+    width: 10%;
+    text-align: right;
+}
+.cabinetValue {
+    width: 33%;
+}
+.workplaceLabel {
+    width: 24%;
+    text-align: right;
+}
+.workplaceValue {
+    width: 33%;
+}
