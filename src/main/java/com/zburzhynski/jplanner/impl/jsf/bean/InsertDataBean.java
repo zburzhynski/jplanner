@@ -46,13 +46,19 @@ public class InsertDataBean implements Serializable {
         workplace2.setName("Кресло 2");
         workplace2.setDescription("Описание второго кресла");
 
-        Cabinet cabinet = new Cabinet();
-        cabinet.setNumber("100а");
-        cabinet.setName("Дентар");
-        cabinet.setDescription("Хороший кабинет");
-        cabinet.getWorkplaces().add(workplace1);
-        cabinet.getWorkplaces().add(workplace2);
-        cabinetService.saveOrUpdate(cabinet);
+        Cabinet cabinet1 = new Cabinet();
+        cabinet1.setNumber("100а");
+        cabinet1.setName("Дентар");
+        cabinet1.setDescription("Хороший кабинет");
+        cabinet1.getWorkplaces().add(workplace1);
+        cabinet1.getWorkplaces().add(workplace2);
+        cabinetService.saveOrUpdate(cabinet1);
+
+        Cabinet cabinet2 = new Cabinet();
+        cabinet2.setNumber("200б");
+        cabinet2.setName("Дисамед");
+        cabinet2.setDescription("Отличный кабинет");
+        cabinetService.saveOrUpdate(cabinet2);
 
         Position doctorPosition = new Position();
         doctorPosition.setName("Врач-терапевт");
