@@ -27,6 +27,8 @@ public class Cabinet extends Domain {
     public static final String P_NUMBER = "number";
     public static final String P_NAME = "name";
     public static final String P_DESCRIPTION = "description";
+    public static final String P_WORKPLACE = "workplace";
+    public static final String P_WORKPLACES = "workplaces";
 
     @Column(name = "number")
     private String number;
@@ -102,7 +104,6 @@ public class Cabinet extends Domain {
             .append(number, that.number)
             .append(name, that.name)
             .append(description, that.description)
-            .append(workplaces, that.workplaces)
             .isEquals();
     }
 
@@ -113,7 +114,6 @@ public class Cabinet extends Domain {
             .append(number)
             .append(name)
             .append(description)
-            .append(workplaces.hashCode())
             .toHashCode();
     }
 
@@ -124,7 +124,6 @@ public class Cabinet extends Domain {
             .append("number", number)
             .append("name", name)
             .append("description", description)
-            .append("workspaces", workplaces.toString())
             .toString();
     }
 

@@ -7,12 +7,16 @@ import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
+import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
@@ -53,11 +57,18 @@ public class ScheduleBean implements Serializable {
 
     private ScheduleModel eventModel;
 
+    private Cabinet cabinet;
+
+    private Workplace workplace;
+
     private Schedule event;
 
     private String scheduleView = "agendaWeek";
 
     private Date initialDate = new Date();
+
+    @ManagedProperty(value = "#{cabinetService}")
+    private ICabinetService cabinetService;
 
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
@@ -160,6 +171,22 @@ public class ScheduleBean implements Serializable {
         return SCHEDULE_EVENTS.getPath();
     }
 
+    /**
+     * Select cabinet listener.
+     */
+    public void selectCabinetListener() {
+        cabinet = (Cabinet) cabinetService.getById(cabinet.getId());
+        workplace = CollectionUtils.isNotEmpty(cabinet.getWorkplaces()) ?
+            cabinet.getWorkplaces().get(0) : null;
+    }
+
+    /**
+     * Select workplace listener.
+     */
+    public void selectWorkplaceListener() {
+
+    }
+
     public String getTimeZone() {
         return TimeZone.getDefault().getID();
     }
@@ -170,6 +197,22 @@ public class ScheduleBean implements Serializable {
 
     public void setEventModel(ScheduleModel eventModel) {
         this.eventModel = eventModel;
+    }
+
+    public Cabinet getCabinet() {
+        return cabinet;
+    }
+
+    public void setCabinet(Cabinet cabinet) {
+        this.cabinet = cabinet;
+    }
+
+    public Workplace getWorkplace() {
+        return workplace;
+    }
+
+    public void setWorkplace(Workplace workplace) {
+        this.workplace = workplace;
     }
 
     public Schedule getEvent() {
@@ -194,6 +237,10 @@ public class ScheduleBean implements Serializable {
 
     public void setInitialDate(Date initialDate) {
         this.initialDate = initialDate;
+    }
+
+    public void setCabinetService(ICabinetService cabinetService) {
+        this.cabinetService = cabinetService;
     }
 
     public void setScheduleService(IScheduleService scheduleService) {
@@ -226,11 +273,13 @@ public class ScheduleBean implements Serializable {
         Date startDate = (Date) selectEvent.getObject();
         Date endDate = DateUtils.addMinuteToDate(startDate, MIN_EVENT_LENGTH);
         Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
+        scheduleEvent.setWorkplace(workplace);
         return scheduleEvent;
     }
 
     private ScheduleSearchCriteria buildScheduleSearchCriteria(Date start, Date end) {
         ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
+        searchCriteria.setWorkplace(workplace);
         Date startDate = DateUtils.setInitialTime(DateUtils.addDayToDate(start, 1));
         Date endDate = DateUtils.setFinalTime(end);
         searchCriteria.setStartDate(startDate);

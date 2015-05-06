@@ -5,6 +5,7 @@ import static com.zburzhynski.jplanner.impl.domain.Schedule.P_DOCTOR;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_END_DATE;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_PERSON;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_START_DATE;
+import static com.zburzhynski.jplanner.impl.domain.Schedule.P_WORKPLACE;
 import com.zburzhynski.jplanner.api.repository.IScheduleRepository;
 import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
@@ -43,6 +44,9 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
         }
         if (searchCriteria.getEndDate() != null) {
             criteria.add(Restrictions.le(P_END_DATE, searchCriteria.getEndDate()));
+        }
+        if (searchCriteria.getWorkplace() != null) {
+            criteria.add(Restrictions.eq(P_WORKPLACE, searchCriteria.getWorkplace()));
         }
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
