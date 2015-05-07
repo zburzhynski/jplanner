@@ -189,6 +189,15 @@ public class ScheduleBean implements Serializable {
     }
 
     /**
+     * Select view listener.
+     *
+     * @param selectEvent {@link SelectEvent}
+     */
+    public void selectViewListener(SelectEvent selectEvent) {
+        scheduleView = (String) selectEvent.getObject();
+    }
+
+    /**
      * Select cabinet listener.
      */
     public void selectCabinetListener() {

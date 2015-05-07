@@ -58,6 +58,7 @@
                     <p:ajax event="eventSelect" listener="#{scheduleBean.editEvent}" />
                     <p:ajax event="eventMove" listener="#{scheduleBean.moveEvent}" update="messages" />
                     <p:ajax event="eventResize" listener="#{scheduleBean.resizeEvent}" update="messages" />
+                    <p:ajax event="viewChange" listener="#{scheduleBean.selectViewListener}" />
                 </p:schedule>
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
             </h:form>
