@@ -12,34 +12,33 @@
         <p:panel>
             <h:form id="eventsForm">
                 <p:growl id="messages" showDetail="true" />
-                <p:panel>
-                    <h:panelGrid columns="5" columnClasses="cabinetLabel,cabinetValue,workplaceLabel,workplaceValue" width="60%">
-                        <h:outputText value="#{msgs['schedule.cabinet']}:" />
-                        <p:selectOneMenu id="cabinet"
-                                         value="#{scheduleBean.cabinet}"
-                                         label="#{msgs['schedule.cabinet']}"
-                                         converter="entityConverter"
-                                         required="true"
-                                         style="width: 100%">
-                            <f:selectItems value="#{cabinetListBean.cabinets}" var="cabinet"
-                                           itemValue="#{cabinet}"
-                                           itemLabel="#{cabinet.number}" />
-                            <p:ajax event="change" update="workplace" listener="#{scheduleBean.selectCabinetListener}" />
-                        </p:selectOneMenu>
-                        <h:outputText value="#{msgs['schedule.workplace']}:" />
-                        <p:selectOneMenu id="workplace"
-                                         value="#{scheduleBean.workplace}"
-                                         label="#{msgs['schedule.workplace']}"
-                                         converter="entityConverter"
-                                         required="true"
-                                         style="width: 100%">
-                            <f:selectItems value="#{scheduleBean.cabinet.workplaces}" var="workplace"
-                                           itemValue="#{workplace}"
-                                           itemLabel="#{workplace.name}" />
-                            <p:ajax event="change" update="scheduler" listener="#{scheduleBean.selectWorkplaceListener}" />
-                        </p:selectOneMenu>
-                    </h:panelGrid>
-                </p:panel>
+                <h:panelGrid columns="5" columnClasses="cabinetLabel,cabinetValue,workplaceLabel,workplaceValue" width="60%">
+                    <h:outputText value="#{msgs['schedule.cabinet']}:" />
+                    <p:selectOneMenu id="cabinet"
+                                     value="#{scheduleBean.cabinet}"
+                                     label="#{msgs['schedule.cabinet']}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     style="width: 100%">
+                        <f:selectItems value="#{cabinetListBean.cabinets}" var="cabinet"
+                                       itemValue="#{cabinet}"
+                                       itemLabel="#{cabinet.number}" />
+                        <p:ajax event="change" update="workplace" listener="#{scheduleBean.selectCabinetListener}" />
+                    </p:selectOneMenu>
+                    <h:outputText value="#{msgs['schedule.workplace']}:" />
+                    <p:selectOneMenu id="workplace"
+                                     value="#{scheduleBean.workplace}"
+                                     label="#{msgs['schedule.workplace']}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     style="width: 100%">
+                        <f:selectItems value="#{scheduleBean.cabinet.workplaces}" var="workplace"
+                                       itemValue="#{workplace}"
+                                       itemLabel="#{workplace.name}" />
+                        <p:ajax event="change" update="scheduler" listener="#{scheduleBean.selectWorkplaceListener}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:separator />
                 <br/>
                 <p:schedule id="scheduler"
                             value="#{scheduleBean.eventModel}"
