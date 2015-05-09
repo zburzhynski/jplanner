@@ -117,7 +117,6 @@
                 <h:panelGrid columns="2">
                     <p:commandButton id="save"
                                      value="#{msgs['button.save']}"
-                                     actionListener="#{scheduleValidator.validate(scheduleBean.event)}"
                                      action="#{scheduleBean.saveEvent}"
                                      update="messages" />
                     <p:commandButton type="cancel"

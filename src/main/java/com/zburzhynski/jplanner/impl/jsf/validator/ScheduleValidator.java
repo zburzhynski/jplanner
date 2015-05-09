@@ -2,13 +2,13 @@ package com.zburzhynski.jplanner.impl.jsf.validator;
 
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 import javax.faces.application.FacesMessage;
-import javax.faces.bean.ManagedBean;
 import javax.faces.context.FacesContext;
-import javax.faces.validator.ValidatorException;
-import javax.faces.view.ViewScoped;
 
 /**
  * Schedule event validator.
@@ -17,34 +17,37 @@ import javax.faces.view.ViewScoped;
  *
  * @author Vladimir Zburzhynski
  */
-@ManagedBean
-@ViewScoped
+@Component
 public class ScheduleValidator implements Serializable {
 
     /**
      * Validates schedule event.
      *
-     * @param schedule {@link Schedule}
-     * @throws ValidatorException if any
+     * @param schedule {@Schedule}
+     * @return true if valid, else false
      */
-    public void validate(Schedule schedule) throws ValidatorException {
-        checkRequiredFields(schedule);
-        checkPeriod(schedule);
+    public boolean validate(Schedule schedule) {
+        Set<Boolean> result = new HashSet<>();
+        result.add(checkRequiredFields(schedule));
+        result.add(checkPeriod(schedule));
+        return !result.contains(false);
     }
 
-    private void checkRequiredFields(Schedule schedule) {
+    private boolean checkRequiredFields(Schedule schedule) {
         if (schedule.getWorkplace() == null) {
             addMessage("Не выбрано рабочее место");
-            throw new ValidatorException(new FacesMessage());
+            return false;
         }
+        return true;
     }
 
-    private void checkPeriod(Schedule schedule) {
+    private boolean checkPeriod(Schedule schedule) {
         if (schedule.getStartDate().after(schedule.getEndDate())
             || schedule.getStartDate().equals(schedule.getEndDate())) {
             addMessage("Дата начала события больше чем дата окончания");
-            throw new ValidatorException(new FacesMessage(""));
+            return false;
         }
+        return true;
     }
 
     private void addMessage(String validationMessage) {

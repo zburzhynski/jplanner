@@ -14,6 +14,7 @@ import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
+import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.MessageHelper;
@@ -80,6 +81,9 @@ public class ScheduleBean implements Serializable {
 
     @ManagedProperty(value = "#{cabinetService}")
     private ICabinetService cabinetService;
+
+    @ManagedProperty(value = "#{scheduleValidator}")
+    private ScheduleValidator scheduleValidator;
 
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader propertyReader;
@@ -169,6 +173,10 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String saveEvent() {
+        boolean valid = scheduleValidator.validate(event);
+        if (!valid) {
+            return null;
+        }
         if (isBlank(event.getId())) {
             eventModel.addEvent(event);
         } else {
@@ -271,6 +279,10 @@ public class ScheduleBean implements Serializable {
 
     public void setCabinetService(ICabinetService cabinetService) {
         this.cabinetService = cabinetService;
+    }
+
+    public void setScheduleValidator(ScheduleValidator scheduleValidator) {
+        this.scheduleValidator = scheduleValidator;
     }
 
     public void setPropertyReader(PropertyReader propertyReader) {
