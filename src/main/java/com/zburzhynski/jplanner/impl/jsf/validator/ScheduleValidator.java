@@ -1,14 +1,10 @@
 package com.zburzhynski.jplanner.impl.jsf.validator;
 
-import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import org.springframework.stereotype.Component;
 
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 
 /**
  * Schedule event validator.
@@ -18,7 +14,10 @@ import javax.faces.context.FacesContext;
  * @author Vladimir Zburzhynski
  */
 @Component
-public class ScheduleValidator implements Serializable {
+public class ScheduleValidator extends BaseValidator {
+
+    private static final String WORKPLACE_NOT_SELECTED = "scheduleValidator.workplaceNotSelected";
+    private static final String START_DATE_GREATER_THEN_END_DATE = "scheduleValidator.startDateGreaterThenEndDate";
 
     /**
      * Validates schedule event.
@@ -35,7 +34,7 @@ public class ScheduleValidator implements Serializable {
 
     private boolean checkRequiredFields(Schedule schedule) {
         if (schedule.getWorkplace() == null) {
-            addMessage("Не выбрано рабочее место");
+            addMessage(WORKPLACE_NOT_SELECTED);
             return false;
         }
         return true;
@@ -44,17 +43,10 @@ public class ScheduleValidator implements Serializable {
     private boolean checkPeriod(Schedule schedule) {
         if (schedule.getStartDate().after(schedule.getEndDate())
             || schedule.getStartDate().equals(schedule.getEndDate())) {
-            addMessage("Дата начала события больше чем дата окончания");
+            addMessage(START_DATE_GREATER_THEN_END_DATE);
             return false;
         }
         return true;
-    }
-
-    private void addMessage(String validationMessage) {
-        FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage = new FacesMessage(validationMessage);
-        facesMessage.setSeverity(SEVERITY_ERROR);
-        context.addMessage(null, facesMessage);
     }
 
 }
