@@ -24,7 +24,7 @@
             }
         </style>
         <p:panel>
-            <h:form>
+            <h:form id="eventForm">
                 <p:messages id="messages" autoUpdate="true" closable="true" />
                 <h:panelGrid columns="2" columnClasses="name, val" width="40%">
                     <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
@@ -117,7 +117,9 @@
                 <h:panelGrid columns="2">
                     <p:commandButton id="save"
                                      value="#{msgs['button.save']}"
-                                     action="#{scheduleBean.saveEvent}"  />
+                                     actionListener="#{scheduleValidator.validate(scheduleBean.event)}"
+                                     action="#{scheduleBean.saveEvent}"
+                                     update="messages" />
                     <p:commandButton type="cancel"
                                      value="#{msgs['button.cancel']}"
                                      action="#{scheduleBean.cancelUpdateEvent}"
