@@ -63,6 +63,11 @@ public class ScheduleService implements IScheduleService<String, Schedule> {
     }
 
     @Override
+    public List<Schedule> containByCriteria(ScheduleSearchCriteria containCriteria) {
+        return scheduleRepository.containByCriteria(containCriteria);
+    }
+
+    @Override
     public List<Schedule> getAll() {
         return scheduleRepository.findAll();
     }

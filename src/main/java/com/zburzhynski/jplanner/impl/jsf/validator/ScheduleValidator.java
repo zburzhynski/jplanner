@@ -1,9 +1,15 @@
 package com.zburzhynski.jplanner.impl.jsf.validator;
 
+import com.zburzhynski.jplanner.api.service.IScheduleService;
+import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -18,6 +24,11 @@ public class ScheduleValidator extends BaseValidator {
 
     private static final String WORKPLACE_NOT_SELECTED = "scheduleValidator.workplaceNotSelected";
     private static final String START_DATE_GREATER_THEN_END_DATE = "scheduleValidator.startDateGreaterThenEndDate";
+    private static final String TIME_NOT_AVAILABLE = "scheduleValidator.timeNotAvailable";
+    private static final String DOCTOR_NOT_AVAILABLE = "scheduleValidator.doctorNotAvailable";
+
+    @Autowired
+    private IScheduleService scheduleService;
 
     /**
      * Validates schedule event.
@@ -29,6 +40,8 @@ public class ScheduleValidator extends BaseValidator {
         Set<Boolean> result = new HashSet<>();
         result.add(checkRequiredFields(schedule));
         result.add(checkPeriod(schedule));
+        result.add(checkIsTimeAvailable(schedule));
+        result.add(checkIsDoctorAvailable(schedule));
         return !result.contains(false);
     }
 
@@ -45,6 +58,42 @@ public class ScheduleValidator extends BaseValidator {
             || schedule.getStartDate().equals(schedule.getEndDate())) {
             addMessage(START_DATE_GREATER_THEN_END_DATE);
             return false;
+        }
+        return true;
+    }
+
+    private boolean checkIsTimeAvailable(Schedule schedule) {
+        ScheduleSearchCriteria containCriteria = new ScheduleSearchCriteria();
+        containCriteria.setStartDate(schedule.getStartDate());
+        containCriteria.setEndDate(schedule.getEndDate());
+        containCriteria.setWorkplace(schedule.getWorkplace());
+        List<Schedule> schedules = scheduleService.containByCriteria(containCriteria);
+        if (CollectionUtils.isNotEmpty(schedules)) {
+            for (Schedule event : schedules) {
+                if (!StringUtils.equals(event.getId(), schedule.getId())) {
+                    addMessage(TIME_NOT_AVAILABLE);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean checkIsDoctorAvailable(Schedule schedule) {
+        ScheduleSearchCriteria containCriteria = new ScheduleSearchCriteria();
+        containCriteria.setStartDate(schedule.getStartDate());
+        containCriteria.setEndDate(schedule.getEndDate());
+        containCriteria.setDoctor(schedule.getDoctor());
+        List<Schedule> schedules = scheduleService.containByCriteria(containCriteria);
+        if (CollectionUtils.isNotEmpty(schedules)) {
+            for (Schedule event : schedules) {
+                if (!StringUtils.equals(event.getId(), schedule.getId())) {
+                    Schedule exist = (Schedule) scheduleService.getById(event.getId());
+                    addMessage(DOCTOR_NOT_AVAILABLE, exist.getDoctor().getPerson().getShortName(),
+                        exist.getWorkplace().getName());
+                    return false;
+                }
+            }
         }
         return true;
     }

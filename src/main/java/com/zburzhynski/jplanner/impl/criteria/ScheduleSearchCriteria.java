@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.criteria;
 
+import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 
 import java.util.Date;
@@ -18,6 +19,8 @@ public class ScheduleSearchCriteria {
     private Date endDate;
 
     private Workplace workplace;
+
+    private Employee doctor;
 
     public Date getStartDate() {
         return startDate;
@@ -41,6 +44,14 @@ public class ScheduleSearchCriteria {
 
     public void setWorkplace(Workplace workplace) {
         this.workplace = workplace;
+    }
+
+    public Employee getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Employee doctor) {
+        this.doctor = doctor;
     }
 
 }
