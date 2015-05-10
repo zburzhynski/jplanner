@@ -61,15 +61,19 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
     public List<Schedule> containByCriteria(ScheduleSearchCriteria containCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         if (containCriteria.getStartDate() != null && containCriteria.getEndDate() != null) {
-            Conjunction startCondition = Restrictions.conjunction();
-            startCondition.add(Restrictions.ge(P_START_DATE, containCriteria.getStartDate()));
-            startCondition.add(Restrictions.le(P_START_DATE, containCriteria.getEndDate()));
-            Conjunction endCondition = Restrictions.conjunction();
-            endCondition.add(Restrictions.ge(P_END_DATE, containCriteria.getStartDate()));
-            endCondition.add(Restrictions.le(P_END_DATE, containCriteria.getEndDate()));
+            Conjunction first = Restrictions.conjunction();
+            first.add(Restrictions.ge(P_START_DATE, containCriteria.getStartDate()));
+            first.add(Restrictions.le(P_START_DATE, containCriteria.getEndDate()));
+            Conjunction second = Restrictions.conjunction();
+            second.add(Restrictions.ge(P_END_DATE, containCriteria.getStartDate()));
+            second.add(Restrictions.le(P_END_DATE, containCriteria.getEndDate()));
+            Conjunction third = Restrictions.conjunction();
+            third.add(Restrictions.lt(P_START_DATE, containCriteria.getStartDate()));
+            third.add(Restrictions.gt(P_END_DATE, containCriteria.getEndDate()));
             Disjunction rangeCondition = Restrictions.disjunction();
-            rangeCondition.add(startCondition);
-            rangeCondition.add(endCondition);
+            rangeCondition.add(first);
+            rangeCondition.add(second);
+            rangeCondition.add(third);
             criteria.add(rangeCondition);
         }
         if (containCriteria.getWorkplace() != null) {
