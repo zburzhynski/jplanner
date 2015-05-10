@@ -77,12 +77,20 @@ public class InsertDataBean implements Serializable {
         doctorPosition.setPositionType(PositionType.DOCTOR);
         positionService.saveOrUpdate(doctorPosition);
 
-        Employee doctor = new Employee();
-        doctor.getPerson().setSurname("Клопов");
-        doctor.getPerson().setName("Виталий");
-        doctor.getPerson().setPatronymic("Юрьевич");
-        doctor.setPosition(doctorPosition);
-        employeeService.saveOrUpdate(doctor);
+        Employee doctor1 = new Employee();
+        doctor1.getPerson().setSurname("Клопов");
+        doctor1.getPerson().setName("Виталий");
+        doctor1.getPerson().setPatronymic("Юрьевич");
+        doctor1.setPosition(doctorPosition);
+        employeeService.saveOrUpdate(doctor1);
+
+
+        Employee doctor2 = new Employee();
+        doctor2.getPerson().setSurname("Федоров");
+        doctor2.getPerson().setName("Александр");
+        doctor2.getPerson().setPatronymic("Григорьевич");
+        doctor2.setPosition(doctorPosition);
+        employeeService.saveOrUpdate(doctor2);
     }
 
     public void setPositionService(IPositionService positionService) {
