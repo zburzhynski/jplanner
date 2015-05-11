@@ -90,7 +90,7 @@ public class ScheduleValidator extends BaseValidator {
                 if (!StringUtils.equals(event.getId(), schedule.getId())) {
                     Schedule exist = (Schedule) scheduleService.getById(event.getId());
                     addMessage(DOCTOR_NOT_AVAILABLE, exist.getDoctor().getPerson().getShortName(),
-                        exist.getWorkplace().getName());
+                        exist.getPerson().getShortName(), exist.getWorkplace().getName());
                     return false;
                 }
             }
