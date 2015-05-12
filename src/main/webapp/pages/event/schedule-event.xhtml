@@ -128,10 +128,25 @@
                     <p:commandButton id="remove"
                                      value="#{msgs['button.remove']}"
                                      action="#{scheduleBean.removeEvent}"
+                                     rendered="#{not empty scheduleBean.event.id}"
                                      icon="ui-icon-close"
-                                     style="margin-left: 4px" />
+                                     style="margin-left: 4px">
+                        <p:confirm header="#{msgs['removeScheduleConfirm.header']}"
+                                   message="#{msgs['removeScheduleConfirm.message']}?"
+                                   icon="ui-icon-alert" />
+                    </p:commandButton>
                 </h:panelGrid>
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>
         </p:panel>
     </ui:define>
