@@ -114,15 +114,22 @@
                                      maxlength="1000"
                                      styleClass="inp" />
                 </h:panelGrid>
-                <h:panelGrid columns="2">
+                <h:panelGrid columns="3">
                     <p:commandButton id="save"
                                      value="#{msgs['button.save']}"
                                      action="#{scheduleBean.saveEvent}"
-                                     update="messages" />
+                                     update="messages"
+                                     icon="ui-icon-disk" />
                     <p:commandButton type="cancel"
                                      value="#{msgs['button.cancel']}"
                                      action="#{scheduleBean.cancelUpdateEvent}"
-                                     immediate="true" />
+                                     immediate="true"
+                                     icon="ui-icon-cancel" />
+                    <p:commandButton id="remove"
+                                     value="#{msgs['button.remove']}"
+                                     action="#{scheduleBean.removeEvent}"
+                                     icon="ui-icon-close"
+                                     style="margin-left: 4px" />
                 </h:panelGrid>
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
             </h:form>

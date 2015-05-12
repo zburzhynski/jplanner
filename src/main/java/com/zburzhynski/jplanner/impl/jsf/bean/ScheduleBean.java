@@ -197,6 +197,16 @@ public class ScheduleBean implements Serializable {
     }
 
     /**
+     * Removes schedule event.
+     *
+     * @return path for navigating
+     */
+    public String removeEvent() {
+        scheduleService.delete(event);
+        return SCHEDULE_EVENTS.getPath();
+    }
+
+    /**
      * Select view listener.
      *
      * @param selectEvent {@link SelectEvent}
