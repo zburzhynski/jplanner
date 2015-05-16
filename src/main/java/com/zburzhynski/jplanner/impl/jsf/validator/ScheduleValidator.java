@@ -33,16 +33,25 @@ public class ScheduleValidator extends BaseValidator {
     /**
      * Validates schedule event.
      *
-     * @param schedule {@Schedule}
+     * @param schedule {@link Schedule}
      * @return true if valid, else false
      */
     public boolean validate(Schedule schedule) {
         Set<Boolean> result = new HashSet<>();
         result.add(checkRequiredFields(schedule));
         result.add(checkPeriod(schedule));
-        result.add(checkIsTimeAvailable(schedule));
-        result.add(checkIsDoctorAvailable(schedule));
+        result.add(validateTimeAndDoctor(schedule));
         return !result.contains(false);
+    }
+
+    /**
+     * Validates time and doctor of schedule event.
+     *
+     * @param schedule {@link Schedule}
+     * @return true if valid, else false
+     */
+    public boolean validateTimeAndDoctor(Schedule schedule) {
+        return checkIsTimeAvailable(schedule) ? checkIsDoctorAvailable(schedule) : false;
     }
 
     private boolean checkRequiredFields(Schedule schedule) {

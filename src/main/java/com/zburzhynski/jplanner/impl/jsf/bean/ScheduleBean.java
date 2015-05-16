@@ -147,9 +147,19 @@ public class ScheduleBean implements Serializable {
      */
     public void moveEvent(ScheduleEntryMoveEvent moveEvent) {
         ScheduleEvent scheduleEvent = moveEvent.getScheduleEvent();
+        initialDate = scheduleEvent.getStartDate();
         Schedule schedule = (Schedule) scheduleService.getById(scheduleEvent.getId());
+        Date originalStartDate = schedule.getStartDate();
+        Date originalEndDate = schedule.getEndDate();
         schedule.setStartDate(scheduleEvent.getStartDate());
         schedule.setEndDate(scheduleEvent.getEndDate());
+        boolean valid = scheduleValidator.validateTimeAndDoctor(schedule);
+        if (!valid) {
+            schedule.setStartDate(originalStartDate);
+            schedule.setEndDate(originalEndDate);
+            eventModel.updateEvent(schedule);
+            return;
+        }
         scheduleService.saveOrUpdate(schedule);
         messageHelper.addMessage(EVENT_MOVED, schedule.getTitle());
     }
@@ -161,8 +171,16 @@ public class ScheduleBean implements Serializable {
      */
     public void resizeEvent(ScheduleEntryResizeEvent resizeEvent) {
         ScheduleEvent scheduleEvent = resizeEvent.getScheduleEvent();
+        initialDate = scheduleEvent.getStartDate();
         Schedule schedule = (Schedule) scheduleService.getById(scheduleEvent.getId());
+        Date originalEndDate = schedule.getEndDate();
         schedule.setEndDate(scheduleEvent.getEndDate());
+        boolean valid = scheduleValidator.validateTimeAndDoctor(schedule);
+        if (!valid) {
+            schedule.setEndDate(originalEndDate);
+            eventModel.updateEvent(schedule);
+            return;
+        }
         scheduleService.saveOrUpdate(schedule);
         messageHelper.addMessage(EVENT_RESIZED, schedule.getTitle());
     }

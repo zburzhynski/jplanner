@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.impl.jsf.validator;
 
 import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.Serializable;
@@ -36,7 +37,7 @@ public abstract class BaseValidator implements Serializable {
      */
     protected void addMessage(String message) {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message));
+        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message), StringUtils.EMPTY);
         facesMessage.setSeverity(SEVERITY_ERROR);
         context.addMessage(null, facesMessage);
     }
@@ -49,7 +50,7 @@ public abstract class BaseValidator implements Serializable {
      */
     protected void addMessage(String message, Object... params) {
         FacesContext context = FacesContext.getCurrentInstance();
-        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message, params));
+        FacesMessage facesMessage = new FacesMessage(reader.readProperty(message, params), StringUtils.EMPTY);
         facesMessage.setSeverity(SEVERITY_ERROR);
         context.addMessage(null, facesMessage);
     }

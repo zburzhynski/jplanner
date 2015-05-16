@@ -55,8 +55,8 @@
                             tooltip="true">
                     <p:ajax event="dateSelect" listener="#{scheduleBean.createEvent}" update="messages" />
                     <p:ajax event="eventSelect" listener="#{scheduleBean.editEvent}" />
-                    <p:ajax event="eventMove" listener="#{scheduleBean.moveEvent}" update="messages" />
-                    <p:ajax event="eventResize" listener="#{scheduleBean.resizeEvent}" update="messages" />
+                    <p:ajax event="eventMove" listener="#{scheduleBean.moveEvent}" update="messages,scheduler" />
+                    <p:ajax event="eventResize" listener="#{scheduleBean.resizeEvent}" update="messages,scheduler" />
                     <p:ajax event="viewChange" listener="#{scheduleBean.selectViewListener}" />
                 </p:schedule>
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
