@@ -9,9 +9,12 @@
 
     <ui:define name="content">
         <p:panel>
-            <h:form id="cabinetForm">
-                <h:commandButton value="#{msgs['button.add']}" action="#{mainMenuBean.cabinet}" immediate="true" />
-                <h:commandButton value="#{msgs['button.cancel']}" action="#{mainMenuBean.schedules}" immediate="true" />
+            <h:form id="cabinetsForm">
+                <h:commandButton value="#{msgs['button.add']}"
+                                 action="/pages/directory/cabinet?faces-redirect=true" />
+                <h:commandButton value="#{msgs['button.cancel']}"
+                                 action="/pages/event/schedule-events?faces-redirect=true"
+                                 immediate="true" />
             </h:form>
         </p:panel>
     </ui:define>

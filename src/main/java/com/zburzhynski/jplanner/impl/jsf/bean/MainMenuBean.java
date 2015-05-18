@@ -44,13 +44,4 @@ public class MainMenuBean implements Serializable {
         return View.CABINETS.getPath();
     }
 
-    /**
-     * Redirects to cabinet.xhtml page.
-     *
-     * @return path to redirect
-     */
-    public String cabinet() {
-        return View.CABINET.getPath();
-    }
-
 }

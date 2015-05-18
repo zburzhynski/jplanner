@@ -10,7 +10,9 @@
     <ui:define name="content">
         <p:panel>
             <h:form id="cabinetForm">
-                <h:commandButton value="#{msgs['button.cancel']}" action="#{mainMenuBean.cabinets}" immediate="true" />
+                <h:commandButton value="#{msgs['button.cancel']}"
+                                 action="/pages/directory/cabinets?faces-redirect=true"
+                                 immediate="true" />
             </h:form>
         </p:panel>
     </ui:define>
