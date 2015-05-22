@@ -222,7 +222,7 @@
         <module name="IllegalImport">
             <property name="severity" value="error"/>
             <property name="illegalPkgs"
-                      value="com.sun, org.jboss, org.apache.catalina, org.postgresql"/>
+                      value="org.jboss, org.apache.catalina, org.postgresql"/>
         </module>
 
         <module name="RedundantImport">
