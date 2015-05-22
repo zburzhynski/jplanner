@@ -136,6 +136,7 @@
                                    icon="ui-icon-alert" />
                     </p:commandButton>
                 </h:panelGrid>
+                <p:commandButton value="select" action="#{scheduleBean.choosePatient}" />
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
                 <p:confirmDialog global="true" closeOnEscape="true">
                     <p:commandButton value="#{msgs['button.ok']}"

@@ -101,6 +101,9 @@ dependencies {
 
     /* ------------- apache poi dependencies ------------- */
     compile('org.apache.poi:poi-ooxml:3.9')
+
+    /* ------------- rest dependencies ------------- */
+    compile('com.sun.jersey:jersey-client:1.19')
 }
 
 /* ---------------- integration tests setup ---------------- */
