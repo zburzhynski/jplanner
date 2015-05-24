@@ -17,7 +17,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 /**
  * Patient bean.
@@ -27,7 +27,7 @@ import javax.faces.bean.SessionScoped;
  * @author Vladimir Zburzhynski
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class PatientBean implements Serializable {
 
     private static final int PATIENT_PAGE_COUNT = 15;
