@@ -337,6 +337,7 @@
         </module>
 
         <module name="AnonInnerLength">
+            <property name="max" value="25"/>
             <property name="severity" value="warning"/>
         </module>
 
