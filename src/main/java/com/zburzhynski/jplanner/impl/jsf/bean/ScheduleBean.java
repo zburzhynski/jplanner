@@ -8,10 +8,7 @@ import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
-import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
@@ -19,7 +16,6 @@ import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
-import com.zburzhynski.jplanner.impl.rest.domain.PatientResponse;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.MessageHelper;
@@ -231,14 +227,12 @@ public class ScheduleBean implements Serializable {
 
     /**
      * Choose patient.
+     *
+     * @return path for navigating
      */
-    public void choosePatient() {
-        ClientConfig config = new DefaultClientConfig();
-        Client client = Client.create(config);
-        WebResource service = client.resource("http://localhost:8090/jdent/rest/patient/get-all");
-        PatientResponse response = service.path("rest").path("patient").get(PatientResponse.class);
+    public String choosePatient() {
+        return View.PATIENTS.getPath();
     }
-
 
     /**
      * Select view listener.

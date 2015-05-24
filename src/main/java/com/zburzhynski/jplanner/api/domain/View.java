@@ -13,7 +13,8 @@ public enum View {
     SCHEDULE_EVENT("/pages/event/schedule-event?faces-redirect=true"),
     ABOUT("/pages/help/about?faces-redirect=true"),
     CABINETS("/pages/cabinet/cabinets?faces-redirect=true"),
-    CABINET("/pages/cabinet/cabinet?faces-redirect=true");
+    CABINET("/pages/cabinet/cabinet?faces-redirect=true"),
+    PATIENTS("/pages/patient/patients?faces-redirect=true");
 
     private String path;
 

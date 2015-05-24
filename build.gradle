@@ -104,6 +104,8 @@ dependencies {
 
     /* ------------- rest dependencies ------------- */
     compile('com.sun.jersey:jersey-client:1.19')
+    compile('com.sun.jersey:jersey-core:1.19')
+    compile('com.sun.jersey:jersey-json:1.19')
 }
 
 /* ---------------- integration tests setup ---------------- */

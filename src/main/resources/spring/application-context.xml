@@ -12,7 +12,7 @@
 
     <context:component-scan base-package="com.zburzhynski.jplanner.impl.service,
     com.zburzhynski.jplanner.impl.repository, com.zburzhynski.jplanner.impl.util,
-    com.zburzhynski.jplanner.impl.jsf.validator" />
+    com.zburzhynski.jplanner.impl.jsf.validator, com.zburzhynski.jplanner.impl.rest" />
 
     <bean id="log4jInitializer"
           class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

@@ -14,7 +14,10 @@
                 width: 20%;
             }
             .val {
-                width: 80%;
+                width: 65%;
+            }
+            .btn {
+                width: 15%;
             }
             .inp {
                 width: 97%;
@@ -26,7 +29,7 @@
         <p:panel>
             <h:form id="eventForm">
                 <p:messages id="messages" autoUpdate="true" closable="true" />
-                <h:panelGrid columns="2" columnClasses="name, val" width="40%">
+                <h:panelGrid columns="3" columnClasses="name,val,btn" width="50%">
                     <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
                     <p:inputText id="surname"
                                  value="#{scheduleBean.event.person.surname}"
@@ -34,6 +37,7 @@
                                  maxlength="50"
                                  required="true"
                                  styleClass="inp" />
+                    <p:spacer />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
                     <p:inputText id="name"
                                  value="#{scheduleBean.event.person.name}"
@@ -41,6 +45,10 @@
                                  maxlength="50"
                                  required="true"
                                  styleClass="inp" />
+                    <p:commandButton action="#{scheduleBean.choosePatient}"
+                                     immediate="true"
+                                     title="#{msgs['schedule.patient']}"
+                                     icon="ui-icon-person" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
                                  value="#{scheduleBean.event.person.patronymic}"
@@ -48,6 +56,7 @@
                                  maxlength="50"
                                  required="true"
                                  styleClass="inp" />
+                    <p:spacer />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
                                 value="#{scheduleBean.event.person.birthday}"
@@ -59,12 +68,14 @@
                                 required="true"
                                 styleClass="cal">
                     </p:calendar>
+                    <p:spacer />
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
                     <p:selectOneRadio id="gender"
                                       value="#{scheduleBean.event.person.gender}">
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
+                    <p:spacer />
                     <h:outputLabel for="status" value="#{msgs['schedule.status']}:" />
                     <p:selectOneMenu id="status"
                                      value="#{scheduleBean.event.status}"
@@ -73,6 +84,7 @@
                         <f:selectItems value="#{scheduleStatusBean.statuses}" var="status" itemValue="#{status}"
                                        itemLabel="#{msgs[status.value]}" />
                     </p:selectOneMenu>
+                    <p:spacer />
                     <h:outputLabel for="doctor" value="#{msgs['schedule.doctor']}:" />
                     <p:selectOneMenu id="doctor"
                                      value="#{scheduleBean.event.doctor}"
@@ -85,6 +97,7 @@
                                        itemValue="#{doctor}"
                                        itemLabel="#{doctor.person.fullName}" />
                     </p:selectOneMenu>
+                    <p:spacer />
                     <h:outputLabel for="from" value="#{msgs['schedule.from']}:" />
                     <p:calendar id="from"
                                 value="#{scheduleBean.event.startDate}"
@@ -94,6 +107,7 @@
                                 locale="ru"
                                 required="true"
                                 styleClass="cal" />
+                    <p:spacer />
                     <h:outputLabel for="to" value="#{msgs['schedule.to']}:" />
                     <p:calendar id="to"
                                 value="#{scheduleBean.event.endDate}"
@@ -103,16 +117,19 @@
                                 locale="ru"
                                 required="true"
                                 styleClass="cal" />
+                    <p:spacer />
                     <h:outputLabel for="complaint" value="#{msgs['schedule.complaint']}:" />
                     <p:inputTextarea id="complaint"
                                      value="#{scheduleBean.event.complaint}"
                                      maxlength="1000"
                                      styleClass="inp" />
+                    <p:spacer />
                     <h:outputLabel for="additionalInfo" value="#{msgs['schedule.additionalInfo']}:" />
                     <p:inputTextarea id="additionalInfo"
                                      value="#{scheduleBean.event.additionalInfo}"
                                      maxlength="1000"
                                      styleClass="inp" />
+                    <p:spacer />
                 </h:panelGrid>
                 <h:panelGrid columns="3">
                     <p:commandButton id="save"
@@ -130,13 +147,12 @@
                                      action="#{scheduleBean.removeEvent}"
                                      rendered="#{not empty scheduleBean.event.id}"
                                      icon="ui-icon-close"
-                                     style="margin-left: 4px">
+                                     style="margin-left: 37px">
                         <p:confirm header="#{msgs['removeScheduleConfirm.header']}"
                                    message="#{msgs['removeScheduleConfirm.message']}?"
                                    icon="ui-icon-alert" />
                     </p:commandButton>
                 </h:panelGrid>
-                <p:commandButton value="select" action="#{scheduleBean.choosePatient}" />
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
                 <p:confirmDialog global="true" closeOnEscape="true">
                     <p:commandButton value="#{msgs['button.ok']}"

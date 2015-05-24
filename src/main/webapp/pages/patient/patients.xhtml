@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form id="patientsForm">
+                <h4>#{msgs['patients.header']}</h4>
+                <p:dataTable value="#{patientBean.patientModel}"
+                             var="patient"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             selectionMode="single"
+                             selection="#{patientBean.patient}"
+                             rowKey="#{patient.id}"
+                             rowSelectListener="#{patientBean.patientSelectListener}"
+                             lazy="true"
+                             rows="#{patientBean.rowCount}">
+                    <p:column headerText="#{msgs['patient.number']}" style="width: 10%">
+                        <h:outputText value="#{patient.number}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.surname']}" style="width: 16%">
+                        <h:outputText value="#{patient.surname}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.name']}" style="width: 16%">
+                        <h:outputText value="#{patient.name}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['person.patronymic']}" style="width: 16%">
+                        <h:outputText value="#{patient.patronymic}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['patient.address']}" style="width: 42%">
+                        <h:outputText value="#{patient.address}" />
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid columns="2" style="padding-top: 5px">
+                    <h:commandButton value="#{msgs['button.select']}"
+                                     action="#{patientBean.selectPatient}" />
+                    <h:commandButton value="#{msgs['button.cancel']}"
+                                     action="/pages/event/schedule-event?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

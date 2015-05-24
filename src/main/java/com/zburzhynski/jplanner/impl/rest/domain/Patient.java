@@ -1,8 +1,5 @@
 package com.zburzhynski.jplanner.impl.rest.domain;
 
-
-import com.zburzhynski.jplanner.api.domain.Gender;
-
 import java.io.Serializable;
 import java.util.Date;
 import javax.xml.bind.annotation.XmlType;
@@ -14,10 +11,12 @@ import javax.xml.bind.annotation.XmlType;
  *
  * @author Vladimir Zburzhynski
  */
-@XmlType(propOrder = {"id", "name", "surname", "patronymic", "birthday", "gender"})
+@XmlType(propOrder = {"id", "number", "name", "surname", "patronymic", "birthday", "gender", "address"})
 public class Patient implements Serializable {
 
     private String id;
+
+    private Integer number;
 
     private String name;
 
@@ -27,7 +26,9 @@ public class Patient implements Serializable {
 
     private Date birthday;
 
-    private Gender gender;
+    private String gender;
+
+    private String address;
 
     public String getId() {
         return id;
@@ -35,6 +36,14 @@ public class Patient implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Integer getNumber() {
+        return number;
+    }
+
+    public void setNumber(Integer number) {
+        this.number = number;
     }
 
     public String getName() {
@@ -45,11 +54,11 @@ public class Patient implements Serializable {
         this.name = name;
     }
 
-    public Gender getGender() {
+    public String getGender() {
         return gender;
     }
 
-    public void setGender(Gender gender) {
+    public void setGender(String gender) {
         this.gender = gender;
     }
 
@@ -75,6 +84,14 @@ public class Patient implements Serializable {
 
     public void setSurname(String surname) {
         this.surname = surname;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
 
 }
