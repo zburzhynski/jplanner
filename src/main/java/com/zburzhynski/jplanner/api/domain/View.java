@@ -12,8 +12,8 @@ public enum View {
     SCHEDULE_EVENTS("/pages/event/schedule-events?faces-redirect=true"),
     SCHEDULE_EVENT("/pages/event/schedule-event?faces-redirect=true"),
     ABOUT("/pages/help/about?faces-redirect=true"),
-    CABINETS("/pages/directory/cabinets?faces-redirect=true"),
-    CABINET("/pages/directory/cabinet?faces-redirect=true");
+    CABINETS("/pages/cabinet/cabinets?faces-redirect=true"),
+    CABINET("/pages/cabinet/cabinet?faces-redirect=true");
 
     private String path;
 
