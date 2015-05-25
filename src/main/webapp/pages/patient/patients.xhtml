@@ -20,6 +20,7 @@
                              rowKey="#{patient.id}"
                              rowSelectListener="#{patientBean.patientSelectListener}"
                              lazy="true"
+                             emptyMessage="#{msgs['patients.empty']}"
                              rows="#{patientBean.rowCount}">
                     <p:column headerText="#{msgs['patient.number']}" style="width: 10%">
                         <h:outputText value="#{patient.number}" />

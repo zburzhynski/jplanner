@@ -15,9 +15,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class PatientResponse implements Serializable {
 
-    private List<Patient> patients;
+    private List<Patient> patients = new ArrayList<>();
 
-    private Integer totalCount;
+    private int totalCount;
 
     /**
      * Adds patient to response.
@@ -25,9 +25,6 @@ public class PatientResponse implements Serializable {
      * @param patient patient to add
      */
     public void addPatient(Patient patient) {
-        if (patients == null) {
-            patients = new ArrayList<>();
-        }
         patients.add(patient);
     }
 
