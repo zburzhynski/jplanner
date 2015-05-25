@@ -1,7 +1,6 @@
 package com.zburzhynski.jplanner.impl.rest.client;
 
 import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
@@ -30,7 +29,7 @@ public class PatientRestClient implements IPatientRestClient {
         try {
             WebResource webResource = client.resource("http://localhost:8080/jdent/rest/patient/get-by-criteria");
             return webResource.accept(MediaType.APPLICATION_XML).post(PatientResponse.class, request);
-        } catch (UniformInterfaceException exception) {
+        } catch (Exception exception) {
             return new PatientResponse();
         }
     }
