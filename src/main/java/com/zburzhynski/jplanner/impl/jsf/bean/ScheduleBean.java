@@ -154,7 +154,7 @@ public class ScheduleBean implements Serializable {
         Date originalEndDate = schedule.getEndDate();
         schedule.setStartDate(scheduleEvent.getStartDate());
         schedule.setEndDate(scheduleEvent.getEndDate());
-        boolean valid = scheduleValidator.validateTimeAndDoctor(schedule);
+        boolean valid = scheduleValidator.validateAvailability(schedule);
         if (!valid) {
             schedule.setStartDate(originalStartDate);
             schedule.setEndDate(originalEndDate);
@@ -176,7 +176,7 @@ public class ScheduleBean implements Serializable {
         Schedule schedule = (Schedule) scheduleService.getById(scheduleEvent.getId());
         Date originalEndDate = schedule.getEndDate();
         schedule.setEndDate(scheduleEvent.getEndDate());
-        boolean valid = scheduleValidator.validateTimeAndDoctor(schedule);
+        boolean valid = scheduleValidator.validateAvailability(schedule);
         if (!valid) {
             schedule.setEndDate(originalEndDate);
             eventModel.updateEvent(schedule);

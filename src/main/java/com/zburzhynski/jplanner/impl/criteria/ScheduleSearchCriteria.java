@@ -22,6 +22,8 @@ public class ScheduleSearchCriteria {
 
     private Employee doctor;
 
+    private String patientId;
+
     public Date getStartDate() {
         return startDate;
     }
@@ -52,6 +54,14 @@ public class ScheduleSearchCriteria {
 
     public void setDoctor(Employee doctor) {
         this.doctor = doctor;
+    }
+
+    public String getPatientId() {
+        return patientId;
+    }
+
+    public void setPatientId(String patientId) {
+        this.patientId = patientId;
     }
 
 }

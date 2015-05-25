@@ -3,12 +3,14 @@ package com.zburzhynski.jplanner.impl.repository;
 import static com.zburzhynski.jplanner.impl.domain.Person.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_DOCTOR;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_END_DATE;
+import static com.zburzhynski.jplanner.impl.domain.Schedule.P_PATIENT_ID;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_PERSON;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_START_DATE;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_WORKPLACE;
 import com.zburzhynski.jplanner.api.repository.IScheduleRepository;
 import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Disjunction;
@@ -54,6 +56,9 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
         if (searchCriteria.getDoctor() != null) {
             criteria.add(Restrictions.eq(P_DOCTOR, searchCriteria.getDoctor()));
         }
+        if (StringUtils.isNotBlank(searchCriteria.getPatientId())) {
+            criteria.add(Restrictions.eq(P_PATIENT_ID, searchCriteria.getPatientId()));
+        }
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
@@ -81,6 +86,9 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
         }
         if (containCriteria.getDoctor() != null) {
             criteria.add(Restrictions.eq(P_DOCTOR, containCriteria.getDoctor()));
+        }
+        if (StringUtils.isNotBlank(containCriteria.getPatientId())) {
+            criteria.add(Restrictions.eq(P_PATIENT_ID, containCriteria.getPatientId()));
         }
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }

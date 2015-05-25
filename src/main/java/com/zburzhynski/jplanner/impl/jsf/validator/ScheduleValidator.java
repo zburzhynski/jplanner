@@ -26,6 +26,7 @@ public class ScheduleValidator extends BaseValidator {
     private static final String START_DATE_GREATER_THEN_END_DATE = "scheduleValidator.startDateGreaterThenEndDate";
     private static final String TIME_NOT_AVAILABLE = "scheduleValidator.timeNotAvailable";
     private static final String DOCTOR_NOT_AVAILABLE = "scheduleValidator.doctorNotAvailable";
+    private static final String PATIENT_NOT_AVAILABLE = "scheduleValidator.patientNotAvailable";
 
     @Autowired
     private IScheduleService scheduleService;
@@ -40,18 +41,22 @@ public class ScheduleValidator extends BaseValidator {
         Set<Boolean> result = new HashSet<>();
         result.add(checkRequiredFields(schedule));
         result.add(checkPeriod(schedule));
-        result.add(validateTimeAndDoctor(schedule));
+        result.add(validateAvailability(schedule));
         return !result.contains(false);
     }
 
     /**
-     * Validates time and doctor of schedule event.
+     * Validates time, patient and doctor of schedule event.
      *
      * @param schedule {@link Schedule}
      * @return true if valid, else false
      */
-    public boolean validateTimeAndDoctor(Schedule schedule) {
-        return checkIsTimeAvailable(schedule) ? checkIsDoctorAvailable(schedule) : false;
+    public boolean validateAvailability(Schedule schedule) {
+        if (checkIsTimeAvailable(schedule) && checkIsPatientAvailable(schedule)
+            && checkIsDoctorAvailable(schedule)) {
+            return true;
+        }
+        return false;
     }
 
     private boolean checkRequiredFields(Schedule schedule) {
@@ -81,6 +86,25 @@ public class ScheduleValidator extends BaseValidator {
             for (Schedule event : schedules) {
                 if (!StringUtils.equals(event.getId(), schedule.getId())) {
                     addMessage(TIME_NOT_AVAILABLE);
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean checkIsPatientAvailable(Schedule schedule) {
+        ScheduleSearchCriteria containCriteria = new ScheduleSearchCriteria();
+        containCriteria.setStartDate(schedule.getStartDate());
+        containCriteria.setEndDate(schedule.getEndDate());
+        containCriteria.setPatientId(schedule.getPatientId());
+        List<Schedule> schedules = scheduleService.containByCriteria(containCriteria);
+        if (CollectionUtils.isNotEmpty(schedules)) {
+            for (Schedule event : schedules) {
+                if (!StringUtils.equals(event.getId(), schedule.getId())) {
+                    Schedule exist = (Schedule) scheduleService.getById(event.getId());
+                    addMessage(PATIENT_NOT_AVAILABLE, exist.getPerson().getShortName(),
+                        exist.getWorkplace().getName());
                     return false;
                 }
             }
