@@ -94,18 +94,20 @@ public class ScheduleValidator extends BaseValidator {
     }
 
     private boolean checkIsPatientAvailable(Schedule schedule) {
-        ScheduleSearchCriteria containCriteria = new ScheduleSearchCriteria();
-        containCriteria.setStartDate(schedule.getStartDate());
-        containCriteria.setEndDate(schedule.getEndDate());
-        containCriteria.setPatientId(schedule.getPatientId());
-        List<Schedule> schedules = scheduleService.containByCriteria(containCriteria);
-        if (CollectionUtils.isNotEmpty(schedules)) {
-            for (Schedule event : schedules) {
-                if (!StringUtils.equals(event.getId(), schedule.getId())) {
-                    Schedule exist = (Schedule) scheduleService.getById(event.getId());
-                    addMessage(PATIENT_NOT_AVAILABLE, exist.getPerson().getShortName(),
-                        exist.getWorkplace().getName());
-                    return false;
+        if (StringUtils.isNotBlank(schedule.getPatientId())) {
+            ScheduleSearchCriteria containCriteria = new ScheduleSearchCriteria();
+            containCriteria.setStartDate(schedule.getStartDate());
+            containCriteria.setEndDate(schedule.getEndDate());
+            containCriteria.setPatientId(schedule.getPatientId());
+            List<Schedule> schedules = scheduleService.containByCriteria(containCriteria);
+            if (CollectionUtils.isNotEmpty(schedules)) {
+                for (Schedule event : schedules) {
+                    if (!StringUtils.equals(event.getId(), schedule.getId())) {
+                        Schedule exist = (Schedule) scheduleService.getById(event.getId());
+                        addMessage(PATIENT_NOT_AVAILABLE, exist.getPerson().getShortName(),
+                            exist.getWorkplace().getName());
+                        return false;
+                    }
                 }
             }
         }
