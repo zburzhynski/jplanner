@@ -4,6 +4,7 @@ import static com.zburzhynski.jplanner.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jplanner.api.domain.Gender.M;
 import com.zburzhynski.jplanner.api.domain.Gender;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -64,6 +65,11 @@ public class Person extends Domain {
             .append(DOT)
             .append(patronymic.substring(0, 1))
             .append(DOT).toString();
+    }
+
+    public boolean isEmpty() {
+        return StringUtils.isBlank(surname) && StringUtils.isBlank(name)
+            && StringUtils.isBlank(patronymic);
     }
 
     public String getName() {

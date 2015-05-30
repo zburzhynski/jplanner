@@ -54,11 +54,62 @@
                             initialDate="#{scheduleBean.initialDate}"
                             tooltip="true">
                     <p:ajax event="dateSelect" listener="#{scheduleBean.createEvent}" update="messages" />
-                    <p:ajax event="eventSelect" listener="#{scheduleBean.editEvent}" />
+                    <p:ajax event="eventSelect" listener="#{scheduleBean.selectEvent}" update="eventMenu" oncomplete="PF('menu').show();" />
                     <p:ajax event="eventMove" listener="#{scheduleBean.moveEvent}" update="messages,scheduler" />
                     <p:ajax event="eventResize" listener="#{scheduleBean.resizeEvent}" update="messages,scheduler" />
                     <p:ajax event="viewChange" listener="#{scheduleBean.selectViewListener}" />
                 </p:schedule>
+                <p:dialog id="eventMenu"
+                          widgetVar="menu"
+                          header="#{eventMenuBean.menuHeader}"
+                          resizable="false"
+                          closeOnEscape="true"
+                          styleClass="eventMenu">
+                    <h:panelGrid>
+                        <p:commandButton value="#{msgs['eventMenu.startEvent']}" action="#{scheduleBean.startEvent}"
+                                         oncomplete="PF('menu').hide();"
+                                         rendered="#{eventMenuBean.visibleStartEventButton}"
+                                         styleClass="eventMenuButton" />
+                        <p:commandButton value="#{msgs['eventMenu.finishEvent']}"
+                                         action="#{scheduleBean.finishEvent}"
+                                         rendered="#{eventMenuBean.visibleFinishEventButton}"
+                                         oncomplete="PF('menu').hide();"
+                                         styleClass="eventMenuButton" />
+                        <p:commandButton value="#{msgs['eventMenu.cancelEvent']}"
+                                         action="#{scheduleBean.cancelEvent}"
+                                         rendered="#{eventMenuBean.visibleCancelEventButton}"
+                                         oncomplete="PF('menu').hide();"
+                                         styleClass="eventMenuButton" />
+                        <p:commandButton value="#{msgs['eventMenu.goToCard']}"
+                                         action="#{scheduleBean.goToCard}"
+                                         rendered="#{eventMenuBean.visibleGoToCardButton}"
+                                         oncomplete="PF('menu').hide();"
+                                         styleClass="eventMenuButton" />
+                        <p:commandButton value="#{msgs['eventMenu.editEvent']}"
+                                         action="#{scheduleBean.editEvent}"
+                                         oncomplete="PF('menu').hide();"
+                                         styleClass="eventMenuButton" />
+                        <p:commandButton value="#{msgs['eventMenu.removeEvent']}"
+                                         action="#{scheduleBean.removeEvent}"
+                                         update="scheduler"
+                                         onstart="PF('menu').hide();"
+                                         styleClass="eventMenuButton">
+                            <p:confirm header="#{msgs['removeScheduleConfirm.header']}"
+                                       message="#{msgs['removeScheduleConfirm.message']}?"
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                </p:dialog>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
             </h:form>
         </p:panel>

@@ -8,6 +8,8 @@ import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import com.zburzhynski.jplanner.api.domain.Gender;
+import com.zburzhynski.jplanner.api.domain.ScheduleStatus;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
@@ -130,15 +132,14 @@ public class ScheduleBean implements Serializable {
     }
 
     /**
-     * Edits schedule event.
+     * Selects schedule event.
      *
      * @param selectEvent {@link SelectEvent}
      */
-    public void editEvent(SelectEvent selectEvent) {
+    public void selectEvent(SelectEvent selectEvent) {
         ScheduleEvent scheduleEvent = (ScheduleEvent) selectEvent.getObject();
         initialDate = scheduleEvent.getStartDate();
         event = (Schedule) scheduleService.getById(scheduleEvent.getId());
-        JsfUtils.redirect(SCHEDULE_EVENT.getPath());
     }
 
     /**
@@ -196,13 +197,8 @@ public class ScheduleBean implements Serializable {
         if (!valid) {
             return null;
         }
-        if (isBlank(event.getId())) {
-            eventModel.addEvent(event);
-        } else {
-            eventModel.updateEvent(event);
-        }
         prepareScheduleTitle(event);
-        scheduleService.saveOrUpdate(event);
+        saveModel();
         return SCHEDULE_EVENTS.getPath();
     }
 
@@ -213,6 +209,55 @@ public class ScheduleBean implements Serializable {
      */
     public String cancelUpdateEvent() {
         return SCHEDULE_EVENTS.getPath();
+    }
+
+    /**
+     * Starts schedule event.
+     *
+     * @return path for navigating
+     */
+    public String startEvent() {
+        event.setStatus(ScheduleStatus.STARTED);
+        saveModel();
+        return SCHEDULE_EVENTS.getPath();
+    }
+
+    /**
+     * Finish schedule event.
+     *
+     * @return path for navigating
+     */
+    public String finishEvent() {
+        event.setStatus(ScheduleStatus.FINISHED);
+        saveModel();
+        return SCHEDULE_EVENTS.getPath();
+    }
+
+    /**
+     * Cancels schedule event.
+     *
+     * @return path for navigating
+     */
+    public String cancelEvent() {
+        event.setStatus(ScheduleStatus.CANCELED);
+        saveModel();
+        return SCHEDULE_EVENTS.getPath();
+    }
+
+    /**
+     * Go to patient card.
+     */
+    public void goToCard() {
+
+    }
+
+    /**
+     * Edits schedule event.
+     *
+     * @return path for navigating
+     */
+    public String editEvent() {
+        return SCHEDULE_EVENT.getPath();
     }
 
     /**
@@ -232,6 +277,18 @@ public class ScheduleBean implements Serializable {
      */
     public String choosePatient() {
         return View.PATIENTS.getPath();
+    }
+
+    /**
+     * Clear patient.
+     */
+    public void clearPatient() {
+        event.setPatientId(null);
+        event.getPerson().setGender(Gender.M);
+        event.getPerson().setBirthday(new Date());
+        event.getPerson().setSurname(null);
+        event.getPerson().setName(null);
+        event.getPerson().setPatronymic(null);
     }
 
     /**
@@ -329,6 +386,15 @@ public class ScheduleBean implements Serializable {
 
     public void setMessageHelper(MessageHelper messageHelper) {
         this.messageHelper = messageHelper;
+    }
+
+    private void saveModel() {
+        if (isBlank(event.getId())) {
+            eventModel.addEvent(event);
+        } else {
+            eventModel.updateEvent(event);
+        }
+        scheduleService.saveOrUpdate(event);
     }
 
     private void prepareScheduleTitle(Schedule schedule) {

@@ -35,6 +35,7 @@
                                  value="#{scheduleBean.event.person.surname}"
                                  label="#{msgs['person.surname']}"
                                  maxlength="50"
+                                 readonly="#{not empty scheduleBean.event.patientId}"
                                  required="true"
                                  styleClass="inp" />
                     <p:spacer />
@@ -43,20 +44,27 @@
                                  value="#{scheduleBean.event.person.name}"
                                  label="#{msgs['person.name']}"
                                  maxlength="50"
+                                 readonly="#{not empty scheduleBean.event.patientId}"
                                  required="true"
                                  styleClass="inp" />
                     <p:commandButton action="#{scheduleBean.choosePatient}"
                                      immediate="true"
-                                     title="#{msgs['schedule.patient']}"
+                                     title="#{msgs['schedule.button.choosePatient']}"
                                      icon="ui-icon-person" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
                                  value="#{scheduleBean.event.person.patronymic}"
                                  label="#{msgs['person.patronymic']}"
                                  maxlength="50"
+                                 readonly="#{not empty scheduleBean.event.patientId}"
                                  required="true"
                                  styleClass="inp" />
-                    <p:spacer />
+                    <p:commandButton action="#{scheduleBean.clearPatient}"
+                                     title="#{msgs['schedule.button.clearPatient']}"
+                                     update="eventForm"
+                                     rendered="#{not empty scheduleBean.event.patientId}"
+                                     icon="ui-icon-trash" />
+                    <p:spacer rendered="#{empty scheduleBean.event.patientId}" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
                                 value="#{scheduleBean.event.person.birthday}"
@@ -65,13 +73,15 @@
                                 yearRange="1900:c"
                                 navigator="true"
                                 locale="ru"
+                                readonly="#{not empty scheduleBean.event.patientId}"
                                 required="true"
                                 styleClass="cal">
                     </p:calendar>
                     <p:spacer />
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
                     <p:selectOneRadio id="gender"
-                                      value="#{scheduleBean.event.person.gender}">
+                                      value="#{scheduleBean.event.person.gender}"
+                                      readonly="#{not empty scheduleBean.event.patientId}">
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
@@ -131,7 +141,7 @@
                                      styleClass="inp" />
                     <p:spacer />
                 </h:panelGrid>
-                <h:panelGrid columns="3">
+                <h:panelGrid columns="2">
                     <p:commandButton id="save"
                                      value="#{msgs['button.save']}"
                                      action="#{scheduleBean.saveEvent}"
@@ -142,28 +152,8 @@
                                      action="#{scheduleBean.cancelUpdateEvent}"
                                      immediate="true"
                                      icon="ui-icon-cancel" />
-                    <p:commandButton id="remove"
-                                     value="#{msgs['button.remove']}"
-                                     action="#{scheduleBean.removeEvent}"
-                                     rendered="#{not empty scheduleBean.event.id}"
-                                     icon="ui-icon-close"
-                                     style="margin-left: 37px">
-                        <p:confirm header="#{msgs['removeScheduleConfirm.header']}"
-                                   message="#{msgs['removeScheduleConfirm.message']}?"
-                                   icon="ui-icon-alert" />
-                    </p:commandButton>
                 </h:panelGrid>
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
-                <p:confirmDialog global="true" closeOnEscape="true">
-                    <p:commandButton value="#{msgs['button.ok']}"
-                                     type="button"
-                                     styleClass="ui-confirmdialog-yes"
-                                     icon="ui-icon-check" />
-                    <p:commandButton value="#{msgs['button.cancel']}"
-                                     type="button"
-                                     styleClass="ui-confirmdialog-no"
-                                     icon="ui-icon-close" />
-                </p:confirmDialog>
             </h:form>
         </p:panel>
     </ui:define>
