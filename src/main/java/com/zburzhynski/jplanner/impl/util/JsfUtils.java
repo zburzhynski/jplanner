@@ -1,8 +1,10 @@
 package com.zburzhynski.jplanner.impl.util;
 
+import java.io.IOException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 
 /**
@@ -28,6 +30,17 @@ public final class JsfUtils {
         NavigationHandler nav = context.getApplication().getNavigationHandler();
         nav.handleNavigation(context, null, url);
         context.renderResponse();
+    }
+
+    /**
+     * Redirects to external url.
+     *
+     * @param url external url to redirect
+     * @throws IOException if any
+     */
+    public static void externalRedirect(String url) throws IOException {
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        externalContext.redirect(url);
     }
 
     /**

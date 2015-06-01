@@ -30,7 +30,10 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -50,6 +53,8 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ScheduleBean implements Serializable {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleBean.class);
 
     private static final int MIN_EVENT_LENGTH = 30;
 
@@ -248,7 +253,12 @@ public class ScheduleBean implements Serializable {
      * Go to patient card.
      */
     public void goToCard() {
-
+        String url = "http://localhost:8080/jdent/pages/integration/card.xhtml?id=" + event.getPatientId();
+        try {
+            JsfUtils.externalRedirect(url);
+        } catch (IOException e) {
+            LOGGER.error("Can not redirect to url", url);
+        }
     }
 
     /**
