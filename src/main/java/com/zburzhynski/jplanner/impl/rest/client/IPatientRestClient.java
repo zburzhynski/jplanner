@@ -1,7 +1,9 @@
 package com.zburzhynski.jplanner.impl.rest.client;
 
-import com.zburzhynski.jplanner.impl.rest.domain.PatientResponse;
-import com.zburzhynski.jplanner.impl.rest.domain.PatientSearchRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
+import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientResponse;
 
 /**
  * Patient rest client interface.
@@ -15,9 +17,17 @@ public interface IPatientRestClient {
     /**
      * Gets patient by criteria.
      *
-     * @param request {@link PatientSearchRequest} search request
-     * @return {@link PatientResponse}
+     * @param request {@link SearchPatientRequest} search patient request
+     * @return {@link SearchPatientResponse} search patient response
      */
-    PatientResponse getByCriteria(PatientSearchRequest request);
+    SearchPatientResponse getByCriteria(SearchPatientRequest request);
+
+    /**
+     * Creates visit.
+     *
+     * @param request {@link CreateVisitRequest} create visit request
+     * @return {@link CreateVisitResponse}create visit response
+     */
+    CreateVisitResponse createVisit(CreateVisitRequest request);
 
 }

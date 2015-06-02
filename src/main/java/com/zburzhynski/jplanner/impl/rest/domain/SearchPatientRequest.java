@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
  * @author Vladimir Zburzhynski
  */
 @XmlRootElement
-public class PatientSearchRequest implements Serializable {
+public class SearchPatientRequest implements Serializable {
 
     private Integer cardNumber;
 

@@ -4,8 +4,8 @@ import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import com.zburzhynski.jplanner.api.domain.Gender;
 import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.Patient;
-import com.zburzhynski.jplanner.impl.rest.domain.PatientResponse;
-import com.zburzhynski.jplanner.impl.rest.domain.PatientSearchRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientResponse;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.model.LazyDataModel;
@@ -50,8 +50,8 @@ public class PatientBean implements Serializable {
             @Override
             public List<Patient> load(int first, int pageSize, String sortField, SortOrder sortOrder,
                                       Map<String, Object> filters) {
-                PatientSearchRequest searchRequest = buildPatientSearchRequest(first, pageSize);
-                PatientResponse response = patientRestClient.getByCriteria(searchRequest);
+                SearchPatientRequest searchRequest = buildPatientSearchRequest(first, pageSize);
+                SearchPatientResponse response = patientRestClient.getByCriteria(searchRequest);
                 patientModel.setRowCount(response.getTotalCount());
                 return response.getPatients();
             }
@@ -112,8 +112,8 @@ public class PatientBean implements Serializable {
         this.patientRestClient = patientRestClient;
     }
 
-    private PatientSearchRequest buildPatientSearchRequest(int first, int pageSize) {
-        PatientSearchRequest searchRequest = new PatientSearchRequest();
+    private SearchPatientRequest buildPatientSearchRequest(int first, int pageSize) {
+        SearchPatientRequest searchRequest = new SearchPatientRequest();
         searchRequest.setStart(Long.valueOf(first));
         searchRequest.setEnd(Long.valueOf(first + pageSize));
         return searchRequest;

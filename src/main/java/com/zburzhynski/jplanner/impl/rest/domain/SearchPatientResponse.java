@@ -6,14 +6,14 @@ import java.util.List;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Patient response.
+ * Search patient response.
  * <p/>
  * Date: 5/22/2015
  *
  * @author Vladimir Zburzhynski
  */
 @XmlRootElement
-public class PatientResponse implements Serializable {
+public class SearchPatientResponse implements Serializable {
 
     private List<Patient> patients = new ArrayList<>();
 

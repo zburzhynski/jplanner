@@ -18,6 +18,9 @@ import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
+import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
+import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.MessageHelper;
@@ -92,6 +95,9 @@ public class ScheduleBean implements Serializable {
 
     @ManagedProperty(value = "#{scheduleValidator}")
     private ScheduleValidator scheduleValidator;
+
+    @ManagedProperty(value = "#{patientRestClient}")
+    private IPatientRestClient patientRestClient;
 
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader propertyReader;
@@ -218,13 +224,26 @@ public class ScheduleBean implements Serializable {
 
     /**
      * Starts schedule event.
-     *
-     * @return path for navigating
      */
-    public String startEvent() {
+    public void startEvent() {
+        CreateVisitRequest request = new CreateVisitRequest();
+        request.setScheduleId(event.getId());
+        request.getPatient().setId(event.getPatientId());
+        request.getPatient().setSurname(event.getPerson().getSurname());
+        request.getPatient().setName(event.getPerson().getName());
+        request.getPatient().setPatronymic(event.getPerson().getPatronymic());
+        request.getPatient().setBirthday(event.getPerson().getBirthday());
+        request.getPatient().setGender(event.getPerson().getGender().name());
+        request.setDoctorId(event.getDoctor().getId());
+        request.setVisitDate(event.getStartDate());
+        request.setComplaint(event.getComplaint());
+        CreateVisitResponse response = patientRestClient.createVisit(request);
+        if (StringUtils.isNotBlank(response.getPatientId())) {
+            event.setPatientId(response.getPatientId());
+        }
         event.setStatus(ScheduleStatus.STARTED);
         saveModel();
-        return SCHEDULE_EVENTS.getPath();
+        goToCard();
     }
 
     /**
@@ -388,6 +407,10 @@ public class ScheduleBean implements Serializable {
 
     public void setScheduleValidator(ScheduleValidator scheduleValidator) {
         this.scheduleValidator = scheduleValidator;
+    }
+
+    public void setPatientRestClient(IPatientRestClient patientRestClient) {
+        this.patientRestClient = patientRestClient;
     }
 
     public void setPropertyReader(PropertyReader propertyReader) {
