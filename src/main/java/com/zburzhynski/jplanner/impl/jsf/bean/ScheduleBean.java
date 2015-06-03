@@ -243,7 +243,13 @@ public class ScheduleBean implements Serializable {
         }
         event.setStatus(ScheduleStatus.STARTED);
         saveModel();
-        goToCard();
+        String url = "http://localhost:8080/jdent/pages/integration/visit.xhtml?patientId="
+            + response.getPatientId() + "&visitId=" + response.getVisitId();
+        try {
+            JsfUtils.externalRedirect(url);
+        } catch (IOException e) {
+            LOGGER.error("Can not redirect to url", url);
+        }
     }
 
     /**
