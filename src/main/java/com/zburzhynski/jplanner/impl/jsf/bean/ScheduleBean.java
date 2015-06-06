@@ -105,6 +105,9 @@ public class ScheduleBean implements Serializable {
     @ManagedProperty(value = "#{messageHelper}")
     private MessageHelper messageHelper;
 
+    @ManagedProperty(value = "#{configBean}")
+    private ConfigBean configBean;
+
     /**
      * Inits bean state.
      */
@@ -226,29 +229,32 @@ public class ScheduleBean implements Serializable {
      * Starts schedule event.
      */
     public void startEvent() {
-        CreateVisitRequest request = new CreateVisitRequest();
-        request.setScheduleId(event.getId());
-        request.getPatient().setId(event.getPatientId());
-        request.getPatient().setSurname(event.getPerson().getSurname());
-        request.getPatient().setName(event.getPerson().getName());
-        request.getPatient().setPatronymic(event.getPerson().getPatronymic());
-        request.getPatient().setBirthday(event.getPerson().getBirthday());
-        request.getPatient().setGender(event.getPerson().getGender().name());
-        request.setDoctorId(event.getDoctor().getId());
-        request.setVisitDate(event.getStartDate());
-        request.setComplaint(event.getComplaint());
-        CreateVisitResponse response = patientRestClient.createVisit(request);
-        if (StringUtils.isNotBlank(response.getPatientId())) {
-            event.setPatientId(response.getPatientId());
-        }
         event.setStatus(ScheduleStatus.STARTED);
         saveModel();
-        String url = "http://localhost:8080/jdent/pages/integration/visit.xhtml?patientId="
-            + response.getPatientId() + "&visitId=" + response.getVisitId();
-        try {
-            JsfUtils.externalRedirect(url);
-        } catch (IOException e) {
-            LOGGER.error("Can not redirect to url", url);
+        if (configBean.isIntegrationEnabled()) {
+            CreateVisitRequest request = new CreateVisitRequest();
+            request.setScheduleId(event.getId());
+            request.getPatient().setId(event.getPatientId());
+            request.getPatient().setSurname(event.getPerson().getSurname());
+            request.getPatient().setName(event.getPerson().getName());
+            request.getPatient().setPatronymic(event.getPerson().getPatronymic());
+            request.getPatient().setBirthday(event.getPerson().getBirthday());
+            request.getPatient().setGender(event.getPerson().getGender().name());
+            request.setDoctorId(event.getDoctor().getId());
+            request.setVisitDate(event.getStartDate());
+            request.setComplaint(event.getComplaint());
+            CreateVisitResponse response = patientRestClient.createVisit(request);
+            String url = "http://localhost:8080/jdent/pages/integration/visit.xhtml?scheduleId=" + event.getId();
+            if (StringUtils.isNotBlank(response.getPatientId())) {
+                event.setPatientId(response.getPatientId());
+                saveModel();
+                url += "&patientId=" + response.getPatientId();
+            }
+            try {
+                JsfUtils.externalRedirect(url);
+            } catch (IOException e) {
+                LOGGER.error("Can not redirect to url", url);
+            }
         }
     }
 
@@ -278,7 +284,7 @@ public class ScheduleBean implements Serializable {
      * Go to patient card.
      */
     public void goToCard() {
-        String url = "http://localhost:8080/jdent/pages/integration/card.xhtml?id=" + event.getPatientId();
+        String url = "http://localhost:8080/jdent/pages/integration/card.xhtml?patientId=" + event.getPatientId();
         try {
             JsfUtils.externalRedirect(url);
         } catch (IOException e) {
@@ -425,6 +431,10 @@ public class ScheduleBean implements Serializable {
 
     public void setMessageHelper(MessageHelper messageHelper) {
         this.messageHelper = messageHelper;
+    }
+
+    public void setConfigBean(ConfigBean configBean) {
+        this.configBean = configBean;
     }
 
     private void saveModel() {

@@ -15,22 +15,12 @@ public class CreateVisitResponse implements Serializable {
 
     private String patientId;
 
-    private String visitId;
-
     public String getPatientId() {
         return patientId;
     }
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
-    }
-
-    public String getVisitId() {
-        return visitId;
-    }
-
-    public void setVisitId(String visitId) {
-        this.visitId = visitId;
     }
 
 }
