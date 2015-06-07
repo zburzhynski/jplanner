@@ -288,7 +288,7 @@ public class ScheduleBean implements Serializable {
         try {
             JsfUtils.externalRedirect(url);
         } catch (IOException e) {
-            LOGGER.error("Can not redirect to url", url);
+            LOGGER.error("Can not redirect to url {}", url);
         }
     }
 
