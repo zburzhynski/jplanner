@@ -231,7 +231,7 @@ public class ScheduleBean implements Serializable {
     public void startEvent() {
         event.setStatus(ScheduleStatus.STARTED);
         saveModel();
-        if (configBean.isIntegrationEnabled()) {
+        if (configBean.isJdentIntegrationEnabled()) {
             CreateVisitRequest request = new CreateVisitRequest();
             request.setScheduleId(event.getId());
             request.getPatient().setId(event.getPatientId());
@@ -255,6 +255,8 @@ public class ScheduleBean implements Serializable {
             } catch (IOException e) {
                 LOGGER.error("Can not redirect to url", url);
             }
+        } else {
+            JsfUtils.update(SCHEDULER_COMPONENT);
         }
     }
 

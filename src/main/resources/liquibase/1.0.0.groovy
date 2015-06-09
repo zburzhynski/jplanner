@@ -169,4 +169,48 @@ databaseChangeLog {
                 referencedTableName: 'employee', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
+    changeSet(id: '2015-06-09-1', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        createTable(schemaName: 'jplanner', tableName: 'setting', tablespace: 'jplanner_data', remarks: 'Application settings') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of setting') {
+                constraints(nullable: false)
+            }
+            column(name: 'category', type: 'VARCHAR(30)', remarks: 'The setting category') {
+                constraints(nullable: false)
+            }
+            column(name: 'name', type: 'VARCHAR(50)', remarks: 'The setting name') {
+                constraints(nullable: false)
+            }
+            column(name: 'value', type: 'VARCHAR(250)', remarks: 'The setting value') {
+                constraints(nullable: false)
+            }
+            column(name: 'type', type: 'VARCHAR(15)', remarks: 'The setting numeric') {
+                constraints(nullable: false)
+            }
+            column(name: 'sort_order', type: 'VARCHAR(15)', remarks: 'The setting sort order') {
+                constraints(nullable: false)
+            }
+        }
+        addPrimaryKey(schemaName: 'jplanner', tableName: 'setting', tablespace: 'jplanner_index',
+                columnNames: 'id', constraintName: 'PK_setting')
+    }
+
+    changeSet(id: '2015-06-09-2', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: 'a5e0e9f9-98b0-4cfa-a8ac-8adbe4c6afff')
+            column(name: 'category', value: 'JDENT')
+            column(name: 'name', value: 'jdent_integration_enabled')
+            column(name: 'value', value: 'false')
+            column(name: 'type', value: 'BOOLEAN')
+            column(name: 'sort_order', value: '1')
+        }
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '6bfc2406-e1cf-4992-91ce-989bcc5f4ff0')
+            column(name: 'category', value: 'JDENT')
+            column(name: 'name', value: 'jdent_url')
+            column(name: 'value', value: 'http://localhost:8080/jdent/')
+            column(name: 'type', value: 'STRING')
+            column(name: 'sort_order', value: '2')
+        }
+    }
+
 }
