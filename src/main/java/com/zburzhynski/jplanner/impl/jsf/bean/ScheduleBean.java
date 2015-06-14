@@ -1,7 +1,9 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.COLON;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.NEWLINE;
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.QUESTION_MARK;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
@@ -74,6 +76,14 @@ public class ScheduleBean implements Serializable {
     private static final String DOCTOR = "schedule.doctor";
 
     private static final String COMPLAINT = "schedule.complaint";
+
+    private static final String START_DENTAL_VISIT_URL = "pages/integration/visit.xhtml";
+
+    private static final String GO_TO_CARD_URL = "pages/integration/card.xhtml";
+
+    private static final String SCHEDULE_ID_PARAM = "scheduleId=";
+
+    private static final String PATIENT_ID_PARAM = "patientId=";
 
     private ScheduleModel eventModel;
 
@@ -244,11 +254,12 @@ public class ScheduleBean implements Serializable {
             request.setVisitDate(event.getStartDate());
             request.setComplaint(event.getComplaint());
             CreateVisitResponse response = patientRestClient.createVisit(request);
-            String url = "http://localhost:8080/jdent/pages/integration/visit.xhtml?scheduleId=" + event.getId();
+            String url = configBean.getJdentUrl() + START_DENTAL_VISIT_URL + QUESTION_MARK
+                + SCHEDULE_ID_PARAM + event.getId();
             if (StringUtils.isNotBlank(response.getPatientId())) {
                 event.setPatientId(response.getPatientId());
                 saveModel();
-                url += "&patientId=" + response.getPatientId();
+                url += AMPERSAND + PATIENT_ID_PARAM + response.getPatientId();
             }
             try {
                 JsfUtils.externalRedirect(url);
@@ -286,7 +297,8 @@ public class ScheduleBean implements Serializable {
      * Go to patient card.
      */
     public void goToCard() {
-        String url = "http://localhost:8080/jdent/pages/integration/card.xhtml?patientId=" + event.getPatientId();
+        String url = configBean.getJdentUrl() + GO_TO_CARD_URL + QUESTION_MARK
+            + PATIENT_ID_PARAM + event.getPatientId();
         try {
             JsfUtils.externalRedirect(url);
         } catch (IOException e) {
