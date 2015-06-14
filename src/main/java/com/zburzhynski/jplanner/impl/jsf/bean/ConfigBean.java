@@ -25,6 +25,7 @@ import javax.faces.bean.ManagedProperty;
 public class ConfigBean implements Serializable {
 
     private static final String P_JDENT_INTEGRATION_ENABLED = "jdent_integration_enabled";
+
     private static final String P_JDENT_URL = "jdent_url";
 
     private Map<String, Setting> settings = new HashMap();
@@ -57,7 +58,7 @@ public class ConfigBean implements Serializable {
      *
      * @return jdent integration url
      */
-    public String jdentUrl() {
+    public String getJdentUrl() {
         return settings.get(P_JDENT_URL).getValue();
     }
 
