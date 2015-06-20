@@ -48,6 +48,12 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
 
     @Override
     @Transactional(readOnly = false)
+    public void replicate(Employee employee) {
+        employeeRepository.replicate(employee);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public boolean delete(Employee employee) {
         boolean deleted = false;
         if (employee != null) {

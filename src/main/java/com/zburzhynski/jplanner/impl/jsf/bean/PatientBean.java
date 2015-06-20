@@ -3,7 +3,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import com.zburzhynski.jplanner.api.domain.Gender;
 import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
-import com.zburzhynski.jplanner.impl.rest.domain.Patient;
+import com.zburzhynski.jplanner.impl.rest.domain.PatientDto;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientResponse;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
@@ -32,9 +32,9 @@ public class PatientBean implements Serializable {
 
     private static final int PATIENT_PAGE_COUNT = 15;
 
-    private LazyDataModel<Patient> patientModel;
+    private LazyDataModel<PatientDto> patientModel;
 
-    private Patient patient;
+    private PatientDto patient;
 
     private Integer rowCount = PATIENT_PAGE_COUNT;
 
@@ -46,9 +46,9 @@ public class PatientBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        patientModel = new LazyDataModel<Patient>() {
+        patientModel = new LazyDataModel<PatientDto>() {
             @Override
-            public List<Patient> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+            public List<PatientDto> load(int first, int pageSize, String sortField, SortOrder sortOrder,
                                       Map<String, Object> filters) {
                 SearchPatientRequest searchRequest = buildPatientSearchRequest(first, pageSize);
                 SearchPatientResponse response = patientRestClient.getByCriteria(searchRequest);
@@ -57,10 +57,10 @@ public class PatientBean implements Serializable {
             }
 
             @Override
-            public Patient getRowData(String rowKey) {
-                List<Patient> wrapped = (List<Patient>) patientModel.getWrappedData();
+            public PatientDto getRowData(String rowKey) {
+                List<PatientDto> wrapped = (List<PatientDto>) patientModel.getWrappedData();
                 if (CollectionUtils.isNotEmpty(wrapped)) {
-                    for (Patient selected : wrapped) {
+                    for (PatientDto selected : wrapped) {
                         if (selected.getId().equals(rowKey)) {
                             return selected;
                         }
@@ -92,15 +92,15 @@ public class PatientBean implements Serializable {
         return SCHEDULE_EVENT.getPath();
     }
 
-    public LazyDataModel<Patient> getPatientModel() {
+    public LazyDataModel<PatientDto> getPatientModel() {
         return patientModel;
     }
 
-    public Patient getPatient() {
+    public PatientDto getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(PatientDto patient) {
         this.patient = patient;
     }
 

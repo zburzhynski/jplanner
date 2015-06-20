@@ -17,6 +17,13 @@ import java.util.List;
 public interface IEmployeeService<ID, T extends IDomain> extends IBaseService<ID, T> {
 
     /**
+     * Replicates employee.
+     *
+     * @param employee employee to replicate
+     */
+    void replicate(T employee);
+
+    /**
      * Gets employees by job position.
      *
      * @param positionType {@link PositionType}

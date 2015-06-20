@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
 import org.hibernate.Query;
+import org.hibernate.ReplicationMode;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -50,6 +51,15 @@ public abstract class AbstractBaseRepository<ID extends Serializable, T extends 
     public ID insert(T object) {
         sessionFactory.getCurrentSession().persist(object);
         return (ID) object.getId();
+    }
+
+    /**
+     * Replicates object.
+     *
+     * @param object object to replicate
+     */
+    public void replicate(T object) {
+        sessionFactory.getCurrentSession().replicate(object, ReplicationMode.EXCEPTION);
     }
 
     /**

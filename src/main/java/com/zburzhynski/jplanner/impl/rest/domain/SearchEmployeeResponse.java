@@ -15,24 +15,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SearchEmployeeResponse implements Serializable {
 
-    private List<Employee> employees = new ArrayList<>();
+    private List<EmployeeDto> employees = new ArrayList<>();
 
     private int totalCount;
 
     /**
      * Adds employee.
      *
-     * @param employee {@link Employee} employee to add
+     * @param employee {@link EmployeeDto} employee to add
      */
-    public void addEmployee(Employee employee) {
+    public void addEmployee(EmployeeDto employee) {
         employees.add(employee);
     }
 
-    public List<Employee> getEmployees() {
+    public List<EmployeeDto> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(List<Employee> employees) {
+    public void setEmployees(List<EmployeeDto> employees) {
         this.employees = employees;
     }
 

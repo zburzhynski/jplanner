@@ -15,7 +15,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 public class SearchPatientResponse implements Serializable {
 
-    private List<Patient> patients = new ArrayList<>();
+    private List<PatientDto> patients = new ArrayList<>();
 
     private int totalCount;
 
@@ -24,15 +24,15 @@ public class SearchPatientResponse implements Serializable {
      *
      * @param patient patient to add
      */
-    public void addPatient(Patient patient) {
+    public void addPatient(PatientDto patient) {
         patients.add(patient);
     }
 
-    public List<Patient> getPatients() {
+    public List<PatientDto> getPatients() {
         return patients;
     }
 
-    public void setPatients(List<Patient> patients) {
+    public void setPatients(List<PatientDto> patients) {
         this.patients = patients;
     }
 

@@ -41,6 +41,12 @@ public class PositionService implements IPositionService<String, Position> {
 
     @Override
     @Transactional(readOnly = false)
+    public void replicate(Position position) {
+        positionRepository.replicate(position);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
     public boolean delete(Position position) {
         boolean deleted = false;
         if (position != null) {

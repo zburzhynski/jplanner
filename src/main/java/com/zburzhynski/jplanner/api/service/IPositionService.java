@@ -14,6 +14,13 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
 public interface IPositionService<ID, T extends IDomain> extends IBaseService<ID, T> {
 
     /**
+     * Replicates position.
+     *
+     * @param position position to replicate
+     */
+    void replicate(T position);
+
+    /**
      * Checks is position used anywhere.
      *
      * @param  position position

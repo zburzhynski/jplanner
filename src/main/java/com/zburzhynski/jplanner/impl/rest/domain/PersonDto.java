@@ -9,7 +9,7 @@ import java.util.Date;
  *
  * @author Vladimir Zburzhynski
  */
-public class Person {
+public class PersonDto {
 
     private String name;
 

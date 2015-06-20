@@ -9,11 +9,11 @@ import java.io.Serializable;
  *
  * @author Vladimir Zburzhynski
  */
-public class Employee extends Person implements Serializable {
+public class EmployeeDto extends PersonDto implements Serializable {
 
     private String id;
 
-    private Position position;
+    private PositionDto position;
 
     private String email;
 
@@ -27,11 +27,11 @@ public class Employee extends Person implements Serializable {
         this.id = id;
     }
 
-    public Position getPosition() {
+    public PositionDto getPosition() {
         return position;
     }
 
-    public void setPosition(Position position) {
+    public void setPosition(PositionDto position) {
         this.position = position;
     }
 

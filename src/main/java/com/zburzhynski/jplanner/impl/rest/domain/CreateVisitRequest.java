@@ -16,7 +16,7 @@ public class CreateVisitRequest implements Serializable {
 
     private String scheduleId;
 
-    private Patient patient = new Patient();
+    private PatientDto patient = new PatientDto();
 
     private String doctorId;
 
@@ -32,11 +32,11 @@ public class CreateVisitRequest implements Serializable {
         this.scheduleId = scheduleId;
     }
 
-    public Patient getPatient() {
+    public PatientDto getPatient() {
         return patient;
     }
 
-    public void setPatient(Patient patient) {
+    public void setPatient(PatientDto patient) {
         this.patient = patient;
     }
 

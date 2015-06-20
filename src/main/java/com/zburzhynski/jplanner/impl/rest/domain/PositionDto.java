@@ -7,7 +7,7 @@ package com.zburzhynski.jplanner.impl.rest.domain;
  *
  * @author Vladimir Zburzhynski
  */
-public class Position {
+public class PositionDto {
 
     private String id;
 

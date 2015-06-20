@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author Vladimir Zburzhynski
  */
-public class Patient extends Person implements Serializable {
+public class PatientDto extends PersonDto implements Serializable {
 
     private String id;
 

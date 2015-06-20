@@ -26,6 +26,13 @@ public interface IBaseRepository<ID, T extends IDomain> {
     ID insert(T object);
 
     /**
+     * Replicates object.
+     *
+     * @param object object to replicate
+     */
+    void replicate(T object);
+
+    /**
      * Finds object by id.
      *
      * @param id object id
