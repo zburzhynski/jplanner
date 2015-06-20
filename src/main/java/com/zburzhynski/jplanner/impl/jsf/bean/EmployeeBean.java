@@ -13,6 +13,7 @@ import com.zburzhynski.jplanner.impl.rest.domain.SearchEmployeeResponse;
 import org.apache.commons.collections.CollectionUtils;
 
 import java.io.Serializable;
+import java.util.UUID;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -59,7 +60,9 @@ public class EmployeeBean implements Serializable {
                 if (employee == null) {
                     employee = new Employee();
                     employee.setId(employeeDto.getId());
+                    employee.getPerson().setId(UUID.randomUUID().toString());
                     updateEmployee(employee, employeeDto);
+                    employee.setPosition(position);
                     employeeService.replicate(employee);
                 } else {
                     updateEmployee(employee, employeeDto);

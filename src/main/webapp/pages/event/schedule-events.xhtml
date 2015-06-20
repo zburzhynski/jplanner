@@ -69,6 +69,7 @@
                     <h:panelGrid>
                         <p:commandButton value="#{msgs['eventMenu.startEvent']}"
                                          action="#{scheduleBean.startEvent}"
+                                         update="messages"
                                          oncomplete="PF('menu').hide();"
                                          rendered="#{eventMenuBean.visibleStartEventButton}"
                                          styleClass="eventMenuButton" />

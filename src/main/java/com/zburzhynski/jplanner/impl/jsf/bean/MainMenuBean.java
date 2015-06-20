@@ -2,10 +2,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.Serializable;
 import javax.enterprise.context.SessionScoped;
 import javax.faces.bean.ManagedBean;
@@ -21,8 +18,6 @@ import javax.faces.bean.ManagedProperty;
 @ManagedBean
 @SessionScoped
 public class MainMenuBean implements Serializable {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MainMenuBean.class);
 
     @ManagedProperty(value = "#{configBean}")
     private ConfigBean configBean;
@@ -41,11 +36,7 @@ public class MainMenuBean implements Serializable {
      */
     public void jdent() {
         String url = configBean.getJdentUrl();
-        try {
-            JsfUtils.externalRedirect(url);
-        } catch (IOException e) {
-            LOGGER.error("Can not redirect to url {}", url);
-        }
+        JsfUtils.externalRedirect(url);
     }
 
     /**

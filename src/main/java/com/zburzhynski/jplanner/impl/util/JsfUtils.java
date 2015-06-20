@@ -1,5 +1,8 @@
 package com.zburzhynski.jplanner.impl.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.IOException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
@@ -15,6 +18,8 @@ import javax.faces.context.FacesContext;
  * @author Vladimir Zburzhynski
  */
 public final class JsfUtils {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(JsfUtils.class);
 
     private JsfUtils() {
         throw new AssertionError();
@@ -36,11 +41,14 @@ public final class JsfUtils {
      * Redirects to external url.
      *
      * @param url external url to redirect
-     * @throws IOException if any
      */
-    public static void externalRedirect(String url) throws IOException {
-        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
-        externalContext.redirect(url);
+    public static void externalRedirect(String url) {
+        try {
+            ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+            externalContext.redirect(url);
+        } catch (IOException e) {
+            LOGGER.error("Can not redirect to url", url);
+        }
     }
 
     /**

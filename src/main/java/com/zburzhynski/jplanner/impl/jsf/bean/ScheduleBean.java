@@ -23,6 +23,9 @@ import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
 import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
+import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
+import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
+import com.zburzhynski.jplanner.impl.rest.exception.ScheduleEventAlreadyExistException;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.MessageHelper;
@@ -35,10 +38,7 @@ import org.primefaces.event.SelectEvent;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
@@ -58,8 +58,6 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ScheduleBean implements Serializable {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ScheduleBean.class);
 
     private static final int MIN_EVENT_LENGTH = 30;
 
@@ -238,9 +236,8 @@ public class ScheduleBean implements Serializable {
     /**
      * Starts schedule event.
      */
+    //TODO: error codes move to enum
     public void startEvent() {
-        event.setStatus(ScheduleStatus.STARTED);
-        saveModel();
         if (configBean.isJdentIntegrationEnabled()) {
             CreateVisitRequest request = new CreateVisitRequest();
             request.setScheduleId(event.getId());
@@ -253,20 +250,26 @@ public class ScheduleBean implements Serializable {
             request.setDoctorId(event.getDoctor().getId());
             request.setVisitDate(event.getStartDate());
             request.setComplaint(event.getComplaint());
-            CreateVisitResponse response = patientRestClient.createVisit(request);
-            String url = configBean.getJdentUrl() + START_DENTAL_VISIT_URL + QUESTION_MARK
-                + SCHEDULE_ID_PARAM + event.getId();
-            if (StringUtils.isNotBlank(response.getPatientId())) {
-                event.setPatientId(response.getPatientId());
-                saveModel();
-                url += AMPERSAND + PATIENT_ID_PARAM + response.getPatientId();
-            }
             try {
-                JsfUtils.externalRedirect(url);
-            } catch (IOException e) {
-                LOGGER.error("Can not redirect to url", url);
+                CreateVisitResponse response = patientRestClient.createVisit(request);
+                if (response != null) {
+                    event.setPatientId(response.getPatientId());
+                    event.setStatus(ScheduleStatus.STARTED);
+                    saveModel();
+                    String url = configBean.getJdentUrl() + START_DENTAL_VISIT_URL + QUESTION_MARK
+                        + SCHEDULE_ID_PARAM + event.getId() + AMPERSAND + PATIENT_ID_PARAM + event.getPatientId();
+                    JsfUtils.externalRedirect(url);
+                }
+            } catch (PatientNotFoundException e) {
+                messageHelper.addMessage("error.patientNotFound");
+            } catch (ScheduleEventAlreadyExistException e) {
+                messageHelper.addMessage("error.scheduleEventAlreadyExist");
+            } catch (EmployeeNotFoundException e) {
+                messageHelper.addMessage("error.employeeNotFound");
             }
         } else {
+            event.setStatus(ScheduleStatus.STARTED);
+            saveModel();
             JsfUtils.update(SCHEDULER_COMPONENT);
         }
     }
@@ -299,11 +302,7 @@ public class ScheduleBean implements Serializable {
     public void goToCard() {
         String url = configBean.getJdentUrl() + GO_TO_CARD_URL + QUESTION_MARK
             + PATIENT_ID_PARAM + event.getPatientId();
-        try {
-            JsfUtils.externalRedirect(url);
-        } catch (IOException e) {
-            LOGGER.error("Can not redirect to url {}", url);
-        }
+        JsfUtils.externalRedirect(url);
     }
 
     /**
