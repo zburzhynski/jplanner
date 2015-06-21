@@ -6,6 +6,7 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
+import com.zburzhynski.jplanner.api.domain.Error;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.domain.ErrorResponse;
@@ -56,13 +57,7 @@ public class PatientRestClient implements IPatientRestClient {
                 return response.getEntity(CreateVisitResponse.class);
             } else {
                 ErrorResponse errorResponse = response.getEntity(ErrorResponse.class);
-                if ("PatientNotFoundException".equals(errorResponse.getErrorId())) {
-                    throw new PatientNotFoundException();
-                } else if ("ScheduleEventAlreadyExistException".equals(errorResponse.getErrorId())) {
-                    throw new ScheduleEventAlreadyExistException();
-                } else if ("EmployeeNotFoundException".equals(errorResponse.getErrorId())) {
-                    throw new EmployeeNotFoundException();
-                }
+                Error.throwException(errorResponse.getErrorId());
                 return null;
             }
         } catch (ClientHandlerException exception) {

@@ -5,6 +5,10 @@ import static com.zburzhynski.jplanner.api.domain.CommonConstant.COLON;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.NEWLINE;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.QUESTION_MARK;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
+import static com.zburzhynski.jplanner.api.domain.Error.EMPLOYEE_NOT_FOUND_EXCEPTION;
+import static com.zburzhynski.jplanner.api.domain.Error.JDENT_UNAVAILABLE_EXCEPTION;
+import static com.zburzhynski.jplanner.api.domain.Error.PATIENT_NOT_FOUND_EXCEPTION;
+import static com.zburzhynski.jplanner.api.domain.Error.SCHEDULE_EVENT_ALREADY_EXIST_EXCEPTION;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -237,7 +241,6 @@ public class ScheduleBean implements Serializable {
     /**
      * Starts schedule event.
      */
-    //TODO: error codes move to enum
     public void startEvent() {
         if (configBean.isJdentIntegrationEnabled()) {
             CreateVisitRequest request = new CreateVisitRequest();
@@ -263,13 +266,13 @@ public class ScheduleBean implements Serializable {
                     JsfUtils.externalRedirect(url);
                 }
             } catch (PatientNotFoundException e) {
-                messageHelper.addMessage("error.patientNotFound");
+                messageHelper.addMessage(PATIENT_NOT_FOUND_EXCEPTION.getMessage());
             } catch (ScheduleEventAlreadyExistException e) {
-                messageHelper.addMessage("error.scheduleEventAlreadyExist");
+                messageHelper.addMessage(SCHEDULE_EVENT_ALREADY_EXIST_EXCEPTION.getMessage());
             } catch (EmployeeNotFoundException e) {
-                messageHelper.addMessage("error.employeeNotFound");
+                messageHelper.addMessage(EMPLOYEE_NOT_FOUND_EXCEPTION.getMessage());
             } catch (JdentUnavailableException e) {
-                messageHelper.addMessage("error.jdentUnavailable");
+                messageHelper.addMessage(JDENT_UNAVAILABLE_EXCEPTION.getMessage());
             }
         } else {
             event.setStatus(ScheduleStatus.STARTED);
