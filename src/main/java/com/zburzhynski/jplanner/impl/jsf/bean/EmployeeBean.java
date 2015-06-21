@@ -38,11 +38,14 @@ public class EmployeeBean implements Serializable {
     @ManagedProperty(value = "#{positionService}")
     private IPositionService positionService;
 
+    @ManagedProperty(value = "#{configBean}")
+    private ConfigBean configBean;
+
     /**
      * Refresh employee reference.
      */
     public void refresh() {
-        SearchEmployeeResponse response = employeeRestClient.getAll();
+        SearchEmployeeResponse response = employeeRestClient.getAll(configBean.getJdentUrl());
         if (response != null && CollectionUtils.isNotEmpty(response.getEmployees())) {
             for (EmployeeDto employeeDto : response.getEmployees()) {
                 PositionDto positionDto = employeeDto.getPosition();
@@ -83,6 +86,10 @@ public class EmployeeBean implements Serializable {
 
     public void setPositionService(IPositionService positionService) {
         this.positionService = positionService;
+    }
+
+    public void setConfigBean(ConfigBean configBean) {
+        this.configBean = configBean;
     }
 
     private void updatePosition(Position position, PositionDto positionDto) {

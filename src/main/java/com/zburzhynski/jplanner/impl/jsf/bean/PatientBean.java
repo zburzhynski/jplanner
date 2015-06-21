@@ -41,6 +41,9 @@ public class PatientBean implements Serializable {
     @ManagedProperty(value = "#{patientRestClient}")
     private IPatientRestClient patientRestClient;
 
+    @ManagedProperty(value = "#{configBean}")
+    private ConfigBean configBean;
+
     /**
      * Inits bean state.
      */
@@ -49,9 +52,10 @@ public class PatientBean implements Serializable {
         patientModel = new LazyDataModel<PatientDto>() {
             @Override
             public List<PatientDto> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-                                      Map<String, Object> filters) {
+                                         Map<String, Object> filters) {
                 SearchPatientRequest searchRequest = buildPatientSearchRequest(first, pageSize);
-                SearchPatientResponse response = patientRestClient.getByCriteria(searchRequest);
+                SearchPatientResponse response = patientRestClient.getByCriteria(searchRequest,
+                    configBean.getJdentUrl());
                 patientModel.setRowCount(response.getTotalCount());
                 return response.getPatients();
             }
@@ -110,6 +114,10 @@ public class PatientBean implements Serializable {
 
     public void setPatientRestClient(IPatientRestClient patientRestClient) {
         this.patientRestClient = patientRestClient;
+    }
+
+    public void setConfigBean(ConfigBean configBean) {
+        this.configBean = configBean;
     }
 
     private SearchPatientRequest buildPatientSearchRequest(int first, int pageSize) {

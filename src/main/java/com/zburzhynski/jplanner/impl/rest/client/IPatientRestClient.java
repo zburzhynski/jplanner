@@ -21,22 +21,24 @@ public interface IPatientRestClient {
     /**
      * Gets patient by criteria.
      *
-     * @param request {@link SearchPatientRequest} search patient request
+     * @param request  {@link SearchPatientRequest} search patient request
+     * @param jdentUrl jdent url
      * @return {@link SearchPatientResponse} search patient response
      */
-    SearchPatientResponse getByCriteria(SearchPatientRequest request);
+    SearchPatientResponse getByCriteria(SearchPatientRequest request, String jdentUrl);
 
     /**
      * Creates visit.
      *
-     * @param request {@link CreateVisitRequest} create visit request
+     * @param request  {@link CreateVisitRequest} create visit request
+     * @param jdentUrl jdent url
      * @return {@link CreateVisitResponse}create visit response
      * @throws PatientNotFoundException           if patient not found
      * @throws EmployeeNotFoundException          if employee not found
      * @throws ScheduleEventAlreadyExistException if schedule event already exist
-     * @throws JdentUnavailableException if jdent service not available
+     * @throws JdentUnavailableException          if jdent service not available
      */
-    CreateVisitResponse createVisit(CreateVisitRequest request)
+    CreateVisitResponse createVisit(CreateVisitRequest request, String jdentUrl)
         throws PatientNotFoundException, EmployeeNotFoundException,
         ScheduleEventAlreadyExistException, JdentUnavailableException;
 

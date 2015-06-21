@@ -252,12 +252,13 @@ public class ScheduleBean implements Serializable {
             request.setVisitDate(event.getStartDate());
             request.setComplaint(event.getComplaint());
             try {
-                CreateVisitResponse response = patientRestClient.createVisit(request);
+                String jdentUrl = configBean.getJdentUrl();
+                CreateVisitResponse response = patientRestClient.createVisit(request, jdentUrl);
                 if (response != null) {
                     event.setPatientId(response.getPatientId());
                     event.setStatus(ScheduleStatus.STARTED);
                     saveModel();
-                    String url = configBean.getJdentUrl() + START_DENTAL_VISIT_URL + QUESTION_MARK
+                    String url = jdentUrl + START_DENTAL_VISIT_URL + QUESTION_MARK
                         + SCHEDULE_ID_PARAM + event.getId() + AMPERSAND + PATIENT_ID_PARAM + event.getPatientId();
                     JsfUtils.externalRedirect(url);
                 }

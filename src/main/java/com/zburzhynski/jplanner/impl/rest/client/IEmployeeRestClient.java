@@ -14,8 +14,9 @@ public interface IEmployeeRestClient {
     /**
      * Gets all employees.
      *
+     * @param jdentUrl jdent url
      * @return {@link SearchEmployeeResponse} search employee response
      */
-    SearchEmployeeResponse getAll();
+    SearchEmployeeResponse getAll(String jdentUrl);
 
 }

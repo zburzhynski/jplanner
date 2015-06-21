@@ -5,7 +5,6 @@ import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
@@ -30,14 +29,16 @@ import javax.ws.rs.core.MediaType;
 @Component
 public class PatientRestClient implements IPatientRestClient {
 
-    private ClientConfig config = new DefaultClientConfig();
+    private static final String GET_BY_CRITERIA_URL = "rest/patient/get-by-criteria";
 
-    private Client client = Client.create(config);
+    private static final String CREATE_VISIT_URL = "rest/patient/create-visit";
+
+    private Client client = Client.create(new DefaultClientConfig());
 
     @Override
-    public SearchPatientResponse getByCriteria(SearchPatientRequest request) {
+    public SearchPatientResponse getByCriteria(SearchPatientRequest request, String jdentUrl) {
         try {
-            WebResource webResource = client.resource("http://localhost:8080/jdent/rest/patient/get-by-criteria");
+            WebResource webResource = client.resource(jdentUrl + GET_BY_CRITERIA_URL);
             return webResource.accept(MediaType.APPLICATION_XML).post(SearchPatientResponse.class, request);
         } catch (ClientHandlerException exception) {
             return new SearchPatientResponse();
@@ -45,11 +46,11 @@ public class PatientRestClient implements IPatientRestClient {
     }
 
     @Override
-    public CreateVisitResponse createVisit(CreateVisitRequest request)
+    public CreateVisitResponse createVisit(CreateVisitRequest request, String jdentUrl)
         throws PatientNotFoundException, EmployeeNotFoundException,
         ScheduleEventAlreadyExistException, JdentUnavailableException {
         try {
-            WebResource webResource = client.resource("http://localhost:8080/jdent/rest/patient/create-visit");
+            WebResource webResource = client.resource(jdentUrl + CREATE_VISIT_URL);
             ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, request);
             if (Status.OK.getStatusCode() == response.getStatus()) {
                 return response.getEntity(CreateVisitResponse.class);
