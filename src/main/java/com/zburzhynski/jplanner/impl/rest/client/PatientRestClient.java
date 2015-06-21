@@ -13,6 +13,7 @@ import com.zburzhynski.jplanner.impl.rest.domain.ErrorResponse;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientResponse;
 import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
+import com.zburzhynski.jplanner.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
 import com.zburzhynski.jplanner.impl.rest.exception.ScheduleEventAlreadyExistException;
 import org.springframework.stereotype.Component;
@@ -45,7 +46,8 @@ public class PatientRestClient implements IPatientRestClient {
 
     @Override
     public CreateVisitResponse createVisit(CreateVisitRequest request)
-        throws PatientNotFoundException, EmployeeNotFoundException, ScheduleEventAlreadyExistException {
+        throws PatientNotFoundException, EmployeeNotFoundException,
+        ScheduleEventAlreadyExistException, JdentUnavailableException {
         try {
             WebResource webResource = client.resource("http://localhost:8080/jdent/rest/patient/create-visit");
             ClientResponse response = webResource.accept(MediaType.APPLICATION_XML).post(ClientResponse.class, request);
@@ -63,7 +65,7 @@ public class PatientRestClient implements IPatientRestClient {
                 return null;
             }
         } catch (ClientHandlerException exception) {
-            return null;
+            throw new JdentUnavailableException("Jdent service not available");
         }
     }
 

@@ -24,6 +24,7 @@ import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
+import com.zburzhynski.jplanner.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
 import com.zburzhynski.jplanner.impl.rest.exception.ScheduleEventAlreadyExistException;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
@@ -266,6 +267,8 @@ public class ScheduleBean implements Serializable {
                 messageHelper.addMessage("error.scheduleEventAlreadyExist");
             } catch (EmployeeNotFoundException e) {
                 messageHelper.addMessage("error.employeeNotFound");
+            } catch (JdentUnavailableException e) {
+                messageHelper.addMessage("error.jdentUnavailable");
             }
         } else {
             event.setStatus(ScheduleStatus.STARTED);

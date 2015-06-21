@@ -5,6 +5,7 @@ import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientResponse;
 import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
+import com.zburzhynski.jplanner.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
 import com.zburzhynski.jplanner.impl.rest.exception.ScheduleEventAlreadyExistException;
 
@@ -33,8 +34,10 @@ public interface IPatientRestClient {
      * @throws PatientNotFoundException           if patient not found
      * @throws EmployeeNotFoundException          if employee not found
      * @throws ScheduleEventAlreadyExistException if schedule event already exist
+     * @throws JdentUnavailableException if jdent service not available
      */
     CreateVisitResponse createVisit(CreateVisitRequest request)
-        throws PatientNotFoundException, EmployeeNotFoundException, ScheduleEventAlreadyExistException;
+        throws PatientNotFoundException, EmployeeNotFoundException,
+        ScheduleEventAlreadyExistException, JdentUnavailableException;
 
 }
