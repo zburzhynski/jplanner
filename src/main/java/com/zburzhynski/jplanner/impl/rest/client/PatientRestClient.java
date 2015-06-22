@@ -4,6 +4,7 @@ import static javax.ws.rs.core.Response.Status;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zburzhynski.jplanner.api.domain.Error;
@@ -41,7 +42,7 @@ public class PatientRestClient implements IPatientRestClient {
         try {
             WebResource webResource = client.resource(jdentUrl + GET_BY_CRITERIA_URL);
             return webResource.accept(MediaType.APPLICATION_XML).post(SearchPatientResponse.class, request);
-        } catch (ClientHandlerException exception) {
+        } catch (UniformInterfaceException | ClientHandlerException exception) {
             return new SearchPatientResponse();
         }
     }
@@ -60,7 +61,7 @@ public class PatientRestClient implements IPatientRestClient {
                 Error.throwException(errorResponse.getErrorId());
                 return null;
             }
-        } catch (ClientHandlerException exception) {
+        } catch (UniformInterfaceException | ClientHandlerException exception) {
             throw new JdentUnavailableException("Jdent service not available");
         }
     }
