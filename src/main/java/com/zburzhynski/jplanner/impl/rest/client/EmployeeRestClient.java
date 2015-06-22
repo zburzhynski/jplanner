@@ -1,6 +1,8 @@
 package com.zburzhynski.jplanner.impl.rest.client;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientHandlerException;
+import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchEmployeeResponse;
@@ -27,7 +29,7 @@ public class EmployeeRestClient implements IEmployeeRestClient {
         try {
             WebResource webResource = client.resource(jdentUrl + GET_ALL_URL);
             return webResource.accept(MediaType.APPLICATION_XML).post(SearchEmployeeResponse.class);
-        } catch (Exception exception) {
+        } catch (UniformInterfaceException | ClientHandlerException exception) {
             return new SearchEmployeeResponse();
         }
     }
