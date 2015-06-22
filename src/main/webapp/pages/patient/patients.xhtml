@@ -38,6 +38,14 @@
                         <h:outputText value="#{patient.address}" />
                     </p:column>
                 </p:dataTable>
+                <h:panelGrid columns="2">
+                    <h:commandButton action="#{patientBean.showSearchPatientForm}"
+                                     image="/resources/css/css-images/search.png"
+                                     title="#{msgs['button.search']}" />
+                    <h:commandButton action="#{patientBean.cancelSearchPatient}"
+                                     image="/resources/css/css-images/cancel.gif"
+                                     title="#{msgs['button.cancel']}" />
+                </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px">
                     <h:commandButton value="#{msgs['button.select']}"
                                      action="#{patientBean.selectPatient}" />

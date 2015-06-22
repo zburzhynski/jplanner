@@ -14,7 +14,8 @@ public enum View {
     ABOUT("/pages/help/about?faces-redirect=true"),
     CABINETS("/pages/cabinet/cabinets?faces-redirect=true"),
     CABINET("/pages/cabinet/cabinet?faces-redirect=true"),
-    PATIENTS("/pages/patient/patients?faces-redirect=true");
+    PATIENTS("/pages/patient/patients?faces-redirect=true"),
+    PATIENT_SEARCH("/pages/patient/search?faces-redirect=true");
 
     private String path;
 

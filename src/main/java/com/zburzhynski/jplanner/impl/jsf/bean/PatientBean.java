@@ -1,5 +1,7 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.View.PATIENTS;
+import static com.zburzhynski.jplanner.api.domain.View.PATIENT_SEARCH;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import com.zburzhynski.jplanner.api.domain.Gender;
 import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
@@ -8,6 +10,7 @@ import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientResponse;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -35,6 +38,10 @@ public class PatientBean implements Serializable {
     private LazyDataModel<PatientDto> patientModel;
 
     private PatientDto patient;
+
+    private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
+
+    private SearchPatientRequest beforeSearchPatientRequest;
 
     private Integer rowCount = PATIENT_PAGE_COUNT;
 
@@ -76,6 +83,62 @@ public class PatientBean implements Serializable {
     }
 
     /**
+     * Searches patient by criteria.
+     *
+     * @return path for navigation
+     */
+    public String searchPatient() {
+//        searched = true;
+//        patients = new LazyDataModel<IPatient>() {
+//            @Override
+//            public List<IPatient> load(int first, int pageSize, SortCriteria[] sortCriteria,
+//                                       Map<String, String> filters) {
+//                return patientService.getByCriteria(patientSearchCriteria, Long.valueOf(first),
+//                    Long.valueOf(first + pageSize));
+//            }
+//        };
+//        patients.setRowCount(patientService.countByCriteria(patientSearchCriteria));
+//        return PATIENTS_VIEW.getPath();
+        return null;
+    }
+
+    /**
+     * Cancels patient search.
+     */
+    public void cancelSearchPatient() {
+//        searched = false;
+//        clearSearchFilter();
+//        init();
+    }
+
+    /**
+     * Clears  patient search.
+     */
+    public void clearSearchFilter() {
+        searchPatientRequest = new SearchPatientRequest();
+    }
+
+    /**
+     * Shows search patient form.
+     *
+     * @return path for navigation
+     */
+    public String showSearchPatientForm() {
+        beforeSearchPatientRequest = SerializationUtils.clone(searchPatientRequest);
+        return PATIENT_SEARCH.getPath();
+    }
+
+    /**
+     * Hides search patient form.
+     *
+     * @return path for navigation
+     */
+    public String hideSearchPatientForm() {
+        searchPatientRequest = beforeSearchPatientRequest;
+        return PATIENTS.getPath();
+    }
+
+    /**
      * Selects patients.
      *
      * @return path for navigating
@@ -89,8 +152,7 @@ public class PatientBean implements Serializable {
                 scheduleBean.getEvent().getPerson().setName(patient.getName());
                 scheduleBean.getEvent().getPerson().setPatronymic(patient.getPatronymic());
                 scheduleBean.getEvent().getPerson().setBirthday(patient.getBirthday());
-                scheduleBean.getEvent().getPerson().setGender(patient.getGender().equals(Gender.M.name())
-                    ? Gender.M : Gender.F);
+                scheduleBean.getEvent().getPerson().setGender(Gender.valueOf(patient.getGender()));
             }
         }
         return SCHEDULE_EVENT.getPath();
@@ -106,6 +168,14 @@ public class PatientBean implements Serializable {
 
     public void setPatient(PatientDto patient) {
         this.patient = patient;
+    }
+
+    public SearchPatientRequest getSearchPatientRequest() {
+        return searchPatientRequest;
+    }
+
+    public void setSearchPatientRequest(SearchPatientRequest searchPatientRequest) {
+        this.searchPatientRequest = searchPatientRequest;
     }
 
     public Integer getRowCount() {
