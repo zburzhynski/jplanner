@@ -20,7 +20,7 @@ import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 
 /**
  * Patient bean.
@@ -30,7 +30,7 @@ import javax.faces.bean.ViewScoped;
  * @author Vladimir Zburzhynski
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class PatientBean implements Serializable {
 
     private static final int PATIENT_PAGE_COUNT = 15;
@@ -88,18 +88,32 @@ public class PatientBean implements Serializable {
      * @return path for navigation
      */
     public String searchPatient() {
-//        searched = true;
-//        patients = new LazyDataModel<IPatient>() {
-//            @Override
-//            public List<IPatient> load(int first, int pageSize, SortCriteria[] sortCriteria,
-//                                       Map<String, String> filters) {
-//                return patientService.getByCriteria(patientSearchCriteria, Long.valueOf(first),
-//                    Long.valueOf(first + pageSize));
-//            }
-//        };
-//        patients.setRowCount(patientService.countByCriteria(patientSearchCriteria));
-//        return PATIENTS_VIEW.getPath();
-        return null;
+        patientModel = new LazyDataModel<PatientDto>() {
+            @Override
+            public List<PatientDto> load(int first, int pageSize, String sortField, SortOrder sortOrder,
+                                         Map<String, Object> filters) {
+                searchPatientRequest.setStart(Long.valueOf(first));
+                searchPatientRequest.setEnd(Long.valueOf(first + pageSize));
+                SearchPatientResponse response = patientRestClient.getByCriteria(searchPatientRequest,
+                    configBean.getJdentUrl());
+                patientModel.setRowCount(response.getTotalCount());
+                return response.getPatients();
+            }
+
+            @Override
+            public PatientDto getRowData(String rowKey) {
+                List<PatientDto> wrapped = (List<PatientDto>) patientModel.getWrappedData();
+                if (CollectionUtils.isNotEmpty(wrapped)) {
+                    for (PatientDto selected : wrapped) {
+                        if (selected.getId().equals(rowKey)) {
+                            return selected;
+                        }
+                    }
+                }
+                return null;
+            }
+        };
+        return PATIENTS.getPath();
     }
 
     /**
