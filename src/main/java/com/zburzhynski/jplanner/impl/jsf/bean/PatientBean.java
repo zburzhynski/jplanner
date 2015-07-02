@@ -1,22 +1,16 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.View.PATIENTS;
-import static com.zburzhynski.jplanner.api.domain.View.PATIENT_SEARCH;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import com.zburzhynski.jplanner.api.domain.Gender;
+import com.zburzhynski.jplanner.impl.jsf.loader.PatientLazyDataLoader;
 import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.PatientDto;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
-import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientResponse;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.model.LazyDataModel;
-import org.primefaces.model.SortOrder;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -41,8 +35,6 @@ public class PatientBean implements Serializable {
 
     private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
 
-    private SearchPatientRequest beforeSearchPatientRequest;
-
     private Integer rowCount = PATIENT_PAGE_COUNT;
 
     @ManagedProperty(value = "#{patientRestClient}")
@@ -56,30 +48,7 @@ public class PatientBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        patientModel = new LazyDataModel<PatientDto>() {
-            @Override
-            public List<PatientDto> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-                                         Map<String, Object> filters) {
-                SearchPatientRequest searchRequest = buildPatientSearchRequest(first, pageSize);
-                SearchPatientResponse response = patientRestClient.getByCriteria(searchRequest,
-                    configBean.getJdentUrl());
-                patientModel.setRowCount(response.getTotalCount());
-                return response.getPatients();
-            }
-
-            @Override
-            public PatientDto getRowData(String rowKey) {
-                List<PatientDto> wrapped = (List<PatientDto>) patientModel.getWrappedData();
-                if (CollectionUtils.isNotEmpty(wrapped)) {
-                    for (PatientDto selected : wrapped) {
-                        if (selected.getId().equals(rowKey)) {
-                            return selected;
-                        }
-                    }
-                }
-                return null;
-            }
-        };
+        patientModel = new PatientLazyDataLoader(patientRestClient, configBean, searchPatientRequest);
     }
 
     /**
@@ -88,31 +57,7 @@ public class PatientBean implements Serializable {
      * @return path for navigation
      */
     public String searchPatient() {
-        patientModel = new LazyDataModel<PatientDto>() {
-            @Override
-            public List<PatientDto> load(int first, int pageSize, String sortField, SortOrder sortOrder,
-                                         Map<String, Object> filters) {
-                searchPatientRequest.setStart(Long.valueOf(first));
-                searchPatientRequest.setEnd(Long.valueOf(first + pageSize));
-                SearchPatientResponse response = patientRestClient.getByCriteria(searchPatientRequest,
-                    configBean.getJdentUrl());
-                patientModel.setRowCount(response.getTotalCount());
-                return response.getPatients();
-            }
-
-            @Override
-            public PatientDto getRowData(String rowKey) {
-                List<PatientDto> wrapped = (List<PatientDto>) patientModel.getWrappedData();
-                if (CollectionUtils.isNotEmpty(wrapped)) {
-                    for (PatientDto selected : wrapped) {
-                        if (selected.getId().equals(rowKey)) {
-                            return selected;
-                        }
-                    }
-                }
-                return null;
-            }
-        };
+        init();
         return PATIENTS.getPath();
     }
 
@@ -120,9 +65,8 @@ public class PatientBean implements Serializable {
      * Cancels patient search.
      */
     public void cancelSearchPatient() {
-//        searched = false;
-//        clearSearchFilter();
-//        init();
+        searchPatientRequest = new SearchPatientRequest();
+        init();
     }
 
     /**
@@ -130,26 +74,6 @@ public class PatientBean implements Serializable {
      */
     public void clearSearchFilter() {
         searchPatientRequest = new SearchPatientRequest();
-    }
-
-    /**
-     * Shows search patient form.
-     *
-     * @return path for navigation
-     */
-    public String showSearchPatientForm() {
-        beforeSearchPatientRequest = SerializationUtils.clone(searchPatientRequest);
-        return PATIENT_SEARCH.getPath();
-    }
-
-    /**
-     * Hides search patient form.
-     *
-     * @return path for navigation
-     */
-    public String hideSearchPatientForm() {
-        searchPatientRequest = beforeSearchPatientRequest;
-        return PATIENTS.getPath();
     }
 
     /**
@@ -202,13 +126,6 @@ public class PatientBean implements Serializable {
 
     public void setConfigBean(ConfigBean configBean) {
         this.configBean = configBean;
-    }
-
-    private SearchPatientRequest buildPatientSearchRequest(int first, int pageSize) {
-        SearchPatientRequest searchRequest = new SearchPatientRequest();
-        searchRequest.setStart(Long.valueOf(first));
-        searchRequest.setEnd(Long.valueOf(first + pageSize));
-        return searchRequest;
     }
 
 }

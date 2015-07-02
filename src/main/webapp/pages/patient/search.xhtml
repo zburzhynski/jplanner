@@ -92,21 +92,23 @@
                                 style="width:56%">
                     </p:calendar>
                     <h:outputText value="#{msgs['person.gender']}:" />
-                    <p:selectOneRadio partialSubmit="true" style="border: 0"
+                    <p:selectOneRadio style="border: 0"
                                         value="#{patientBean.searchPatientRequest.gender}">
+                        <p:ajax partialSubmit="true" update="socialStatus" />
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
                     <h:outputText value="#{msgs['patientSearch.socialStatus']}:" />
-                    <h:selectOneMenu value="#{patientBean.searchPatientRequest.socialStatus}"
+                    <h:selectOneMenu id="socialStatus"
+                                     value="#{patientBean.searchPatientRequest.socialStatus}"
                                      styleClass="ui-inputfield ui-state-default ui-corner-all selectMenu">
-                        <c:if test="#{patientBean.searchPatientRequest.gender.value=='gender.male'}">
+                        <c:if test="#{patientBean.searchPatientRequest.gender=='M'}">
                             <f:selectItem itemLabel="" noSelectionOption="true" />
                             <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
                                            itemValue="#{status}"
                                            itemLabel="#{msgs[status.male]}" />
                         </c:if>
-                        <c:if test="#{patientBean.searchPatientRequest.gender.value=='gender.female'}">
+                        <c:if test="#{patientBean.searchPatientRequest.gender=='F'}">
                             <f:selectItem itemLabel="" noSelectionOption="true" />
                             <f:selectItems value="#{socialStatusBean.socialStatuses}" var="status"
                                            itemValue="#{status}"
@@ -179,7 +181,7 @@
                     <h:commandButton id="search" value="#{msgs['button.find']}"
                                      action="#{patientBean.searchPatient}" />
                     <h:commandButton id="clear" value="#{msgs['button.clear']}" action="#{patientBean.clearSearchFilter}" update="patientSearchForm" />
-                    <h:commandButton id="cancelSearch" value="#{msgs['button.cancel']}" action="#{patientBean.hideSearchPatientForm}"
+                    <h:commandButton id="cancelSearch" value="#{msgs['button.cancel']}" action="/pages/patient/patients?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>
             </h:form>

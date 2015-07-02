@@ -39,7 +39,7 @@
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid columns="2">
-                    <h:commandButton action="#{patientBean.showSearchPatientForm}"
+                    <h:commandButton action="/pages/patient/search?faces-redirect=true"
                                      image="/resources/css/css-images/search.png"
                                      title="#{msgs['button.search']}" />
                     <h:commandButton action="#{patientBean.cancelSearchPatient}"

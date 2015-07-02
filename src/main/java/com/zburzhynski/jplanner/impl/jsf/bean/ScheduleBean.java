@@ -27,6 +27,7 @@ import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
 import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
+import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
 import com.zburzhynski.jplanner.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
@@ -337,6 +338,11 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String choosePatient() {
+        PatientBean patientBean = JsfUtils.getBean("patientBean");
+        if (patientBean != null) {
+            patientBean.setSearchPatientRequest(new SearchPatientRequest());
+            patientBean.init();
+        }
         return View.PATIENTS.getPath();
     }
 
