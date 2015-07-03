@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.api.service;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.api.domain.PositionType;
+import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 
 import java.util.List;
 
@@ -24,6 +25,14 @@ public interface IEmployeeService<ID, T extends IDomain> extends IBaseService<ID
     void replicate(T employee);
 
     /**
+     * Gets employee by login.
+     *
+     * @param login user login
+     * @return employee
+     */
+    T getByLogin(String login);
+
+    /**
      * Gets employees by job position.
      *
      * @param positionType {@link PositionType}
@@ -32,12 +41,20 @@ public interface IEmployeeService<ID, T extends IDomain> extends IBaseService<ID
     List<T> getByPosition(PositionType positionType);
 
     /**
-     * Gets employee by login.
+     * Gets employees by criteria.
      *
-     * @param login user login
-     * @return employee
+     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
+     * @return employees
      */
-    T getByLogin(String login);
+    List<T> getByCriteria(EmployeeSearchCriteria searchCriteria);
+
+    /**
+     * Counts employees by criteria.
+     *
+     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
+     * @return employees count
+     */
+    int countByCriteria(EmployeeSearchCriteria searchCriteria);
 
     /**
      * Checks is employee used anywhere.

@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.repository.IPositionRepository;
 import com.zburzhynski.jplanner.api.service.IPositionService;
+import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -56,15 +57,15 @@ public class PositionService implements IPositionService<String, Position> {
         return deleted;
     }
 
-//    @Override
-//    public List<Position> getRange(Long start, Long end, SortCriteria[] sortCriteria, Map<String, String> filters) {
-//        return positionRepository.findRange(start, end, sortCriteria, filters);
-//    }
-//
-//    @Override
-//    public Integer countByRange(Map<String, String> filters) {
-//        return positionRepository.countByRange(filters);
-//    }
+    @Override
+    public List<Position> getByCriteria(PositionSearchCriteria criteria) {
+        return positionRepository.findByCriteria(criteria);
+    }
+
+    @Override
+    public int countByCriteria(PositionSearchCriteria searchCriteria) {
+        return positionRepository.countByCriteria(searchCriteria);
+    }
 
     @Override
     public List<Position> getAll() {

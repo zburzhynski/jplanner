@@ -1,6 +1,9 @@
 package com.zburzhynski.jplanner.api.repository;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
+import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
+
+import java.util.List;
 
 /**
  * Job position repository interface.
@@ -12,6 +15,22 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
  * @author Vladimir Zburzhynski
  */
 public interface IPositionRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
+
+    /**
+     * Finds positions by criteria.
+     *
+     * @param searchCriteria {@link PositionSearchCriteria} position search criteria
+     * @return positions
+     */
+    List<T> findByCriteria(PositionSearchCriteria searchCriteria);
+
+    /**
+     * Counts positions by criteria.
+     *
+     * @param searchCriteria {@link PositionSearchCriteria} position search criteria
+     * @return positions count
+     */
+    int countByCriteria(PositionSearchCriteria searchCriteria);
 
     /**
      * Checks is position used.

@@ -197,10 +197,8 @@ public abstract class AbstractBaseRepository<ID extends Serializable, T extends 
                                    ProjectionList projections, Map<String, Boolean> orders,
                                    Map<String, FetchMode> fetchModes, List<Criterion> criteria) {
         Criteria criterion = buildCriteria(null, null, aliases, projections, orders, fetchModes, criteria);
-        if (criterion.uniqueResult() == null) {
-            return 0;
-        }
-        return ((Number) criterion.uniqueResult()).intValue();
+        Object uniqueResult = criterion.uniqueResult();
+        return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();
     }
 
     /**

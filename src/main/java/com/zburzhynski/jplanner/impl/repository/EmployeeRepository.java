@@ -10,11 +10,14 @@ import static com.zburzhynski.jplanner.impl.domain.Person.P_SURNAME;
 import static com.zburzhynski.jplanner.impl.domain.Position.P_POSITION_TYPE;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
+import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.CriteriaAlias;
 import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -50,6 +53,17 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
     }
 
     @Override
+    public Employee findByLogin(String login) {
+//        Criterion loginCriteria = Restrictions.eq(LOGIN, login);
+//        List<Criterion> criteria = new ArrayList<>();
+//        criteria.add(loginCriteria);
+//        List<CriteriaAlias> aliases = new ArrayList<>();
+//        aliases.add(new CriteriaAlias(USER, USER_ALIAS));
+//        return findUniqueByCriteria(null, null, aliases, null, null, null, criteria);
+        return new Employee();
+    }
+
+    @Override
     public List<Employee> findByPosition(PositionType positionType) {
         Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(getDomainClass());
         criteria.createAlias(P_PERSON, P_PERSON);
@@ -62,39 +76,19 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
     }
 
     @Override
-    public Employee findByLogin(String login) {
-//        Criterion loginCriteria = Restrictions.eq(LOGIN, login);
-//        List<Criterion> criteria = new ArrayList<>();
-//        criteria.add(loginCriteria);
-//        List<CriteriaAlias> aliases = new ArrayList<>();
-//        aliases.add(new CriteriaAlias(USER, USER_ALIAS));
-//        return findUniqueByCriteria(null, null, aliases, null, null, null, criteria);
-        return new Employee();
+    public List<Employee> findByCriteria(EmployeeSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
+        return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    public List<Employee> findRange(Long start, Long end, SortCriteria[] sortCriteria, Map<String, String> filters) {
-//        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Employee.class);
-//        criteria.add(Restrictions.ne(ID, DEVELOPER_EMPLOYEE_ID));
-//        Map<String, JavaType> types = new HashMap<>();
-//        types.put(P_BIRTHDAY, JavaType.DATE);
-//        return findRange(start, end, buildAliases(), types, sortCriteria, filters, criteria);
-//    }
-
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    public Integer countByRange(Map<String, String> filters) {
-//        Criteria criteria = getSessionFactory().getCurrentSession().createCriteria(Employee.class);
-//        criteria.add(Restrictions.ne(ID, DEVELOPER_EMPLOYEE_ID));
-//        Map<String, JavaType> types = new HashMap<>();
-//        types.put(BIRTHDAY, JavaType.DATE);
-//        return countByRange(buildAliases(), types, filters, criteria);
-//    }
+    @Override
+    public int countByCriteria(EmployeeSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.setProjection(Projections.id());
+        Object uniqueResult = criteria.uniqueResult();
+        return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();
+    }
 
     @Override
     public List<Employee> findAll() {

@@ -2,10 +2,15 @@ package com.zburzhynski.jplanner.impl.repository;
 
 import static com.zburzhynski.jplanner.impl.domain.Position.P_NAME;
 import com.zburzhynski.jplanner.api.repository.IPositionRepository;
+import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Position;
+import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -18,6 +23,21 @@ import java.util.Map;
 @Repository("positionRepository")
 public class PositionRepository extends AbstractBaseRepository<String, Position>
     implements IPositionRepository<String, Position> {
+
+    @Override
+    public List<Position> findByCriteria(PositionSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
+        return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+    }
+
+    @Override
+    public int countByCriteria(PositionSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.setProjection(Projections.id());
+        Object uniqueResult = criteria.uniqueResult();
+        return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();
+    }
 
     @Override
     public boolean isUsed(Position position) {

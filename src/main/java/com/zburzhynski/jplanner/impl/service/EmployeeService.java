@@ -3,6 +3,7 @@ package com.zburzhynski.jplanner.impl.service;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
+import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,22 +64,6 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
         return deleted;
     }
 
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    public List<Employee> getRange(Long start, Long end, SortCriteria[] sortCriteria, Map<String, String> filters) {
-//        return employeeRepository.findRange(start, end, sortCriteria, filters);
-//    }
-
-//    /**
-//     * {@inheritDoc}
-//     */
-//    @Override
-//    public Integer countByRange(Map<String, String> filters) {
-//        return employeeRepository.countByRange(filters);
-//    }
-
     @Override
     public Employee getByLogin(String login) {
         return (Employee) employeeRepository.findByLogin(login);
@@ -87,6 +72,16 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
     @Override
     public List<Employee> getByPosition(PositionType positionType) {
         return employeeRepository.findByPosition(positionType);
+    }
+
+    @Override
+    public List<Employee> getByCriteria(EmployeeSearchCriteria searchCriteria) {
+        return employeeRepository.findByCriteria(searchCriteria);
+    }
+
+    @Override
+    public int countByCriteria(EmployeeSearchCriteria searchCriteria) {
+        return employeeRepository.countByCriteria(searchCriteria);
     }
 
     @Override

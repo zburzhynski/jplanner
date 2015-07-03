@@ -17,6 +17,7 @@
                     <p:submenu id="mSettings" label="#{msgs['mainMenu.settings']}" icon="ui-icon ui-icon-gear">
                         <p:menuitem id="smSettings" value="#{msgs['mainMenu.settings']}" />
                         <p:menuitem id="smEmployees" value="#{msgs['mainMenu.settings.employees']}" action="#{employeeBean.refresh}" />
+                        <p:menuitem id="smPositions" value="#{msgs['mainMenu.settings.positions']}" action="#{mainMenuBean.positions}" />
                         <p:menuitem id="smCabinets" value="#{msgs['mainMenu.settings.cabinets']}" action="#{mainMenuBean.cabinets}"/>
                         <p:menuitem id="smInsertData" value="#{msgs['mainMenu.settings.insertData']}" actionListener="#{insertDataBean.insertData}" />
                     </p:submenu>

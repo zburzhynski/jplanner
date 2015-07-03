@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.api.repository;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.api.domain.PositionType;
+import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 
 import java.util.List;
 
@@ -17,6 +18,14 @@ import java.util.List;
 public interface IEmployeeRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
 
     /**
+     * Finds employee by login.
+     *
+     * @param login user login
+     * @return employee
+     */
+    public T findByLogin(String login);
+
+    /**
      * Finds employees by job position.
      *
      * @param positionType {@link PositionType}
@@ -25,12 +34,20 @@ public interface IEmployeeRepository<ID, T extends IDomain> extends IBaseReposit
     List<T> findByPosition(PositionType positionType);
 
     /**
-     * Finds employee by login.
+     * Gets employees by criteria.
      *
-     * @param login user login
-     * @return employee
+     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
+     * @return employees
      */
-    public T findByLogin(String login);
+    List<T> findByCriteria(EmployeeSearchCriteria searchCriteria);
+
+    /**
+     * Counts employees by criteria.
+     *
+     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
+     * @return employees count
+     */
+    int countByCriteria(EmployeeSearchCriteria searchCriteria);
 
     /**
      * Checks is employee used.

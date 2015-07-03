@@ -58,6 +58,15 @@ public class MainMenuBean implements Serializable {
     }
 
     /**
+     * Redirects to positions.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String positions() {
+        return View.POSITIONS.getPath();
+    }
+
+    /**
      * Sets config bean.
      *
      * @param configBean {@link ConfigBean} config bean to set
