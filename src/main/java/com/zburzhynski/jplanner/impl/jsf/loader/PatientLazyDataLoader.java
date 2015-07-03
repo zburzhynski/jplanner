@@ -36,6 +36,9 @@ public class PatientLazyDataLoader extends LazyDataModel<PatientDto> {
      */
     public PatientLazyDataLoader(IPatientRestClient patientRestClient, ConfigBean configBean,
                                  SearchPatientRequest searchRequest) {
+        if (patientRestClient == null || configBean == null || searchRequest == null) {
+            throw new IllegalArgumentException();
+        }
         this.patientRestClient = patientRestClient;
         this.configBean = configBean;
         this.searchRequest = searchRequest;
