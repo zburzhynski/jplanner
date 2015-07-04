@@ -6,6 +6,7 @@ import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Position;
 import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.springframework.stereotype.Repository;
 
@@ -28,13 +29,14 @@ public class PositionRepository extends AbstractBaseRepository<String, Position>
     public List<Position> findByCriteria(PositionSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
+        criteria.addOrder(Order.asc(P_NAME));
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
     @Override
     public int countByCriteria(PositionSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
-        criteria.setProjection(Projections.id());
+        criteria.setProjection(Projections.rowCount());
         Object uniqueResult = criteria.uniqueResult();
         return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();
     }

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form id="positionForm">
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="name" value="#{msgs['position.name']}:" styleClass="b" />
+                    <p:inputTextarea id="name" value="#{positionBean.position.name}" required="true" />
+                    <p:message for="name" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="savePosition" value="#{msgs['button.save']}"
+                                     action="#{positionBean.savePosition}" />
+                    <h:commandButton id="cancelUpdatePosition" value="#{msgs['button.cancel']}"
+                                     action="/pages/position/positions?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

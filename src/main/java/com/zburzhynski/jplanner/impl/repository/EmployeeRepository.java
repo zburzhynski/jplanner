@@ -85,7 +85,7 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
     @Override
     public int countByCriteria(EmployeeSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
-        criteria.setProjection(Projections.id());
+        criteria.setProjection(Projections.rowCount());
         Object uniqueResult = criteria.uniqueResult();
         return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();
     }
