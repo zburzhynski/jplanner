@@ -8,13 +8,25 @@
                 template="/pages/template/layout_template.xhtml">
 
     <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 20%;
+            }
+            .val {
+                width: 40%;
+            }
+            .msg {
+                width: 35%;
+            }
+        </style>
         <p:panel>
             <h:form id="positionForm">
-                <h:panelGrid columns="3">
-                    <h:outputLabel for="name" value="#{msgs['position.name']}:" styleClass="b" />
-                    <p:inputTextarea id="name" value="#{positionBean.position.name}" required="true" />
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="55%">
+                    <h:outputLabel for="name" value="#{msgs['position.name']}:" />
+                    <p:inputTextarea id="name" value="#{positionBean.position.name}" required="true" style="width: 97%" />
                     <p:message for="name" />
-                    <h:outputLabel for="positionType" value="#{msgs['position.positionType']}:" styleClass="b" />
+                    <h:outputLabel for="positionType" value="#{msgs['position.positionType']}:" />
                     <p:selectOneMenu id="positionType"
                                      value="#{positionBean.position.positionType}"
                                      style="width: 100%">
