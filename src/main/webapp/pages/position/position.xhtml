@@ -14,6 +14,15 @@
                     <h:outputLabel for="name" value="#{msgs['position.name']}:" styleClass="b" />
                     <p:inputTextarea id="name" value="#{positionBean.position.name}" required="true" />
                     <p:message for="name" />
+                    <h:outputLabel for="positionType" value="#{msgs['position.positionType']}:" styleClass="b" />
+                    <p:selectOneMenu id="positionType"
+                                     value="#{positionBean.position.positionType}"
+                                     style="width: 100%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{positionTypeBean.positionTypes}" var="positionType" itemValue="#{positionType}"
+                                       itemLabel="#{positionType}" />
+                    </p:selectOneMenu>
+                    <p:message for="positionType" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:commandButton id="savePosition" value="#{msgs['button.save']}"
