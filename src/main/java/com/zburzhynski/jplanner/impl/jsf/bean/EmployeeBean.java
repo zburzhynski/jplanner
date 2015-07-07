@@ -1,8 +1,11 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEE;
+import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
 import com.zburzhynski.jplanner.api.domain.Gender;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.api.service.IPositionService;
+import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Position;
 import com.zburzhynski.jplanner.impl.rest.client.IEmployeeRestClient;
@@ -11,12 +14,17 @@ import com.zburzhynski.jplanner.impl.rest.domain.JobPosition;
 import com.zburzhynski.jplanner.impl.rest.domain.PositionDto;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchEmployeeResponse;
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.model.LazyDataModel;
+import org.primefaces.model.SortOrder;
 
 import java.io.Serializable;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.ViewScoped;
+import javax.faces.bean.SessionScoped;
 
 /**
  * Employee bean.
@@ -26,8 +34,16 @@ import javax.faces.bean.ViewScoped;
  * @author Vladimir Zburzhynski
  */
 @ManagedBean
-@ViewScoped
+@SessionScoped
 public class EmployeeBean implements Serializable {
+
+    private static final int PATIENT_PAGE_COUNT = 15;
+
+    private Employee employee;
+
+    private LazyDataModel<Employee> employeeModel;
+
+    private Integer rowCount = PATIENT_PAGE_COUNT;
 
     @ManagedProperty(value = "#{employeeRestClient}")
     private IEmployeeRestClient employeeRestClient;
@@ -42,6 +58,65 @@ public class EmployeeBean implements Serializable {
     private ConfigBean configBean;
 
     /**
+     * Inits bean state.
+     */
+    @PostConstruct
+    public void init() {
+        employeeModel = new LazyDataModel<Employee>() {
+            @Override
+            public List<Employee> load(int first, int pageSize, String sortField,
+                                       SortOrder sortOrder, Map<String, Object> filters) {
+                EmployeeSearchCriteria searchCriteria = new EmployeeSearchCriteria();
+                searchCriteria.setStart(Long.valueOf(first));
+                searchCriteria.setEnd(Long.valueOf(first + pageSize));
+                List<Employee> employees = employeeService.getByCriteria(searchCriteria);
+                int count = employeeService.countByCriteria(searchCriteria);
+                setRowCount(count);
+                return employees;
+            }
+        };
+    }
+
+    /**
+     * Adds employee.
+     *
+     * @return path for navigating
+     */
+    public String addEmployee() {
+        employee = new Employee();
+        return EMPLOYEE.getPath();
+    }
+
+    /**
+     * Edits employee.
+     *
+     * @return path for navigating
+     */
+    public String editEmployee() {
+        return EMPLOYEE.getPath();
+    }
+
+    /**
+     * Saves employee.
+     *
+     * @return path for navigating
+     */
+    public String saveEmployee() {
+        employeeService.saveOrUpdate(employee);
+        return EMPLOYEES.getPath();
+    }
+
+    /**
+     * Removes employee.
+     *
+     * @return path for navigating
+     */
+    public String removeEmployee() {
+        employeeService.delete(employee);
+        return EMPLOYEES.getPath();
+    }
+
+    /**
      * Refresh employee reference.
      */
     public void refresh() {
@@ -49,31 +124,47 @@ public class EmployeeBean implements Serializable {
         if (response != null && CollectionUtils.isNotEmpty(response.getEmployees())) {
             for (EmployeeDto employeeDto : response.getEmployees()) {
                 PositionDto positionDto = employeeDto.getPosition();
-                Position position = (Position) positionService.getById(positionDto.getId());
-                if (position == null) {
-                    position = new Position();
-                    position.setId(positionDto.getId());
-                    updatePosition(position, positionDto);
-                    positionService.replicate(position);
+                Position positionSrc = (Position) positionService.getById(positionDto.getId());
+                if (positionSrc == null) {
+                    positionSrc = new Position();
+                    positionSrc.setId(positionDto.getId());
+                    updatePosition(positionSrc, positionDto);
+                    positionService.replicate(positionSrc);
                 } else {
-                    updatePosition(position, positionDto);
-                    positionService.saveOrUpdate(position);
+                    updatePosition(positionSrc, positionDto);
+                    positionService.saveOrUpdate(positionSrc);
                 }
-                Employee employee = (Employee) employeeService.getById(employeeDto.getId());
-                if (employee == null) {
-                    employee = new Employee();
-                    employee.setId(employeeDto.getId());
-                    employee.getPerson().setId(UUID.randomUUID().toString());
-                    updateEmployee(employee, employeeDto);
-                    employee.setPosition(position);
-                    employeeService.replicate(employee);
+                Employee employeeSrc = (Employee) employeeService.getById(employeeDto.getId());
+                if (employeeSrc == null) {
+                    employeeSrc = new Employee();
+                    employeeSrc.setId(employeeDto.getId());
+                    employeeSrc.getPerson().setId(UUID.randomUUID().toString());
+                    updateEmployee(employeeSrc, employeeDto);
+                    employeeSrc.setPosition(positionSrc);
+                    employeeService.replicate(employeeSrc);
                 } else {
-                    updateEmployee(employee, employeeDto);
-                    employee.setPosition(position);
-                    employeeService.saveOrUpdate(employee);
+                    updateEmployee(employeeSrc, employeeDto);
+                    employeeSrc.setPosition(positionSrc);
+                    employeeService.saveOrUpdate(employeeSrc);
                 }
             }
         }
+    }
+
+    public Employee getEmployee() {
+        return employee;
+    }
+
+    public void setEmployee(Employee employee) {
+        this.employee = employee;
+    }
+
+    public LazyDataModel<Employee> getEmployeeModel() {
+        return employeeModel;
+    }
+
+    public Integer getRowCount() {
+        return rowCount;
     }
 
     public void setEmployeeRestClient(IEmployeeRestClient employeeRestClient) {
@@ -92,20 +183,20 @@ public class EmployeeBean implements Serializable {
         this.configBean = configBean;
     }
 
-    private void updatePosition(Position position, PositionDto positionDto) {
-        position.setName(positionDto.getName());
-        position.setPositionType(JobPosition.getById(positionDto.getId()));
+    private void updatePosition(Position positionSrc, PositionDto positionDto) {
+        positionSrc.setName(positionDto.getName());
+        positionSrc.setPositionType(JobPosition.getById(positionDto.getId()));
     }
 
-    private void updateEmployee(Employee employee, EmployeeDto employeeDto) {
-        employee.getPerson().setName(employeeDto.getName());
-        employee.getPerson().setSurname(employeeDto.getSurname());
-        employee.getPerson().setPatronymic(employeeDto.getPatronymic());
-        employee.getPerson().setBirthday(employeeDto.getBirthday());
-        employee.getPerson().setGender(employeeDto.getGender().equals(Gender.M.name())
+    private void updateEmployee(Employee employeeSrc, EmployeeDto employeeDto) {
+        employeeSrc.getPerson().setName(employeeDto.getName());
+        employeeSrc.getPerson().setSurname(employeeDto.getSurname());
+        employeeSrc.getPerson().setPatronymic(employeeDto.getPatronymic());
+        employeeSrc.getPerson().setBirthday(employeeDto.getBirthday());
+        employeeSrc.getPerson().setGender(employeeDto.getGender().equals(Gender.M.name())
             ? Gender.M : Gender.F);
-        employee.setEmail(employeeDto.getEmail());
-        employee.setAdditionalInfo(employeeDto.getAdditionalInformation());
+        employeeSrc.setEmail(employeeDto.getEmail());
+        employeeSrc.setAdditionalInfo(employeeDto.getAdditionalInformation());
     }
 
 }

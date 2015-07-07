@@ -78,7 +78,12 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
     @Override
     public List<Employee> findByCriteria(EmployeeSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.createAlias(P_PERSON, P_PERSON);
+        criteria.createAlias(P_POSITION, P_POSITION);
         CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
+        criteria.addOrder(Order.asc(P_PERSON + DOT + P_SURNAME));
+        criteria.addOrder(Order.asc(P_PERSON + DOT + P_NAME));
+        criteria.addOrder(Order.asc(P_PERSON + DOT + P_PATRONYMIC));
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 

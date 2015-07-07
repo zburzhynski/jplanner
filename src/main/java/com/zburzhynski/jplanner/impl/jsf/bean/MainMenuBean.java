@@ -1,6 +1,10 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import com.zburzhynski.jplanner.api.domain.View;
+import static com.zburzhynski.jplanner.api.domain.View.ABOUT;
+import static com.zburzhynski.jplanner.api.domain.View.CABINETS;
+import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
+import static com.zburzhynski.jplanner.api.domain.View.POSITIONS;
+import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
@@ -28,7 +32,7 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String schedules() {
-        return View.SCHEDULE_EVENTS.getPath();
+        return SCHEDULE_EVENTS.getPath();
     }
 
     /**
@@ -45,7 +49,7 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String about() {
-        return View.ABOUT.getPath();
+        return ABOUT.getPath();
     }
 
     /**
@@ -54,7 +58,7 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String cabinets() {
-        return View.CABINETS.getPath();
+        return CABINETS.getPath();
     }
 
     /**
@@ -63,7 +67,16 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String positions() {
-        return View.POSITIONS.getPath();
+        return POSITIONS.getPath();
+    }
+
+    /**
+     * Redirects to employees.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String employees() {
+        return EMPLOYEES.getPath();
     }
 
     /**
