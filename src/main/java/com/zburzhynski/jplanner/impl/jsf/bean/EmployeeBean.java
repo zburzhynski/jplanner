@@ -37,13 +37,11 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class EmployeeBean implements Serializable {
 
-    private static final int PATIENT_PAGE_COUNT = 15;
+    private static final int EMPLOYEE_PAGE_COUNT = 15;
 
     private Employee employee;
 
     private LazyDataModel<Employee> employeeModel;
-
-    private Integer rowCount = PATIENT_PAGE_COUNT;
 
     @ManagedProperty(value = "#{employeeRestClient}")
     private IEmployeeRestClient employeeRestClient;
@@ -164,7 +162,7 @@ public class EmployeeBean implements Serializable {
     }
 
     public Integer getRowCount() {
-        return rowCount;
+        return EMPLOYEE_PAGE_COUNT;
     }
 
     public void setEmployeeRestClient(IEmployeeRestClient employeeRestClient) {
