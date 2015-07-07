@@ -22,6 +22,7 @@
         </style>
         <p:panel>
             <h:form id="positionForm">
+                <p:focus />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="55%">
                     <h:outputLabel for="name" value="#{msgs['position.name']}:" />
                     <p:inputTextarea id="name" value="#{positionBean.position.name}" required="true" style="width: 97%" />
