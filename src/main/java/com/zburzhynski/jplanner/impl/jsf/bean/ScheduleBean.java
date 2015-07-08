@@ -67,6 +67,8 @@ public class ScheduleBean implements Serializable {
 
     private static final int MIN_EVENT_LENGTH = 30;
 
+    private static final int FIRTH_HOUR = 8;
+
     private static final String SCHEDULER_COMPONENT = "eventsForm:scheduler";
 
     private static final String WORKPLACE_NOT_SELECTED = "schedule.workplaceNotSelected";
@@ -100,6 +102,8 @@ public class ScheduleBean implements Serializable {
     private String scheduleView = "agendaWeek";
 
     private Date initialDate = new Date();
+
+    private int firstHour = FIRTH_HOUR;
 
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
@@ -152,6 +156,7 @@ public class ScheduleBean implements Serializable {
     public void createEvent(SelectEvent selectEvent) {
         if (cabinet != null && CollectionUtils.isNotEmpty(cabinet.getWorkplaces())) {
             initialDate = (Date) selectEvent.getObject();
+            firstHour = DateUtils.extractHour(initialDate);
             event = buildScheduleEvent(selectEvent);
             JsfUtils.redirect(SCHEDULE_EVENT.getPath());
         } else {
@@ -167,6 +172,7 @@ public class ScheduleBean implements Serializable {
     public void selectEvent(SelectEvent selectEvent) {
         ScheduleEvent scheduleEvent = (ScheduleEvent) selectEvent.getObject();
         initialDate = scheduleEvent.getStartDate();
+        firstHour = DateUtils.extractHour(initialDate);
         event = (Schedule) scheduleService.getById(scheduleEvent.getId());
     }
 
@@ -433,6 +439,14 @@ public class ScheduleBean implements Serializable {
 
     public void setInitialDate(Date initialDate) {
         this.initialDate = initialDate;
+    }
+
+    public int getFirstHour() {
+        return firstHour;
+    }
+
+    public void setFirstHour(int firstHour) {
+        this.firstHour = firstHour;
     }
 
     public void setScheduleService(IScheduleService scheduleService) {
