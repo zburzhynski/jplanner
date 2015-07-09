@@ -6,13 +6,18 @@ import static com.zburzhynski.jplanner.impl.domain.Cabinet.P_WORKPLACES;
 import static com.zburzhynski.jplanner.impl.domain.Domain.P_ID;
 import static org.hibernate.sql.JoinType.LEFT_OUTER_JOIN;
 import com.zburzhynski.jplanner.api.repository.ICabinetRepository;
+import com.zburzhynski.jplanner.impl.criteria.CabinetSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
+import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
 import org.hibernate.Criteria;
 import org.hibernate.FetchMode;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,6 +38,23 @@ public class CabinetRepository extends AbstractBaseRepository<String, Cabinet>
         criteria.setFetchMode(P_WORKPLACES, FetchMode.JOIN);
         criteria.add(Restrictions.eq(P_ID, id));
         return (Cabinet) criteria.uniqueResult();
+    }
+
+    @Override
+    public List<Cabinet> findByCriteria(CabinetSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
+        criteria.addOrder(Order.asc(Cabinet.P_NUMBER));
+        criteria.addOrder(Order.asc(Cabinet.P_NAME));
+        return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+    }
+
+    @Override
+    public int countByCriteria(CabinetSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.setProjection(Projections.rowCount());
+        Object uniqueResult = criteria.uniqueResult();
+        return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();
     }
 
     @Override

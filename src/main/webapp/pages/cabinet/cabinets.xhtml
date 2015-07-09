@@ -10,11 +10,55 @@
     <ui:define name="content">
         <p:panel>
             <h:form id="cabinetsForm">
-                <h:commandButton value="#{msgs['button.add']}"
-                                 action="/pages/cabinet/cabinet?faces-redirect=true" />
-                <h:commandButton value="#{msgs['button.cancel']}"
-                                 action="/pages/event/schedule-events?faces-redirect=true"
-                                 immediate="true" />
+                <h4>#{msgs['cabinets.header']}</h4>
+                <p:dataTable value="#{cabinetBean.cabinetModel}"
+                             var="cabinet"
+                             paginator="true"
+                             paginatorPosition="bottom"
+                             paginatorAlwaysVisible="false"
+                             lazy="true"
+                             emptyMessage="#{msgs['cabinets.empty']}"
+                             rows="#{cabinetBean.rowCount}">
+                    <p:column headerText="#{msgs['cabinet.number']}" width="10%">
+                        <h:outputText value="#{cabinet.number}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['cabinet.name']}" width="84%">
+                        <h:outputText value="#{cabinet.name}" />
+                    </p:column>
+                    <p:column width="6%">
+                        <h:panelGroup>
+                            <p:commandLink action="#{cabinetBean.editCabinet}"
+                                           style="padding-right: 5px">
+                                <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                                <f:setPropertyActionListener
+                                        target="#{cabinetBean.cabinet}" value="#{cabinet}" />
+                            </p:commandLink>
+                            <p:commandLink action="#{cabinetBean.removeCabinet}">
+                                <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                                <p:confirm header="#{msgs['removeCabinetConfirm.header']}"
+                                           message="#{msgs['removeCabinetConfirm.message']}?"
+                                           icon="ui-icon-alert" />
+                                <f:setPropertyActionListener
+                                        target="#{cabinetBean.cabinet}" value="#{cabinet}" />
+                            </p:commandLink>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid style="padding-top: 5px">
+                    <h:commandButton action="#{cabinetBean.addCabinet}"
+                                     image="/resources/css/css-images/add.gif"
+                                     title="#{msgs['button.add']}" />
+                </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>
         </p:panel>
     </ui:define>

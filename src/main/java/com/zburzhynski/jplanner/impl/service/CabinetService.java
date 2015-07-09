@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.repository.ICabinetRepository;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
+import com.zburzhynski.jplanner.impl.criteria.CabinetSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,16 @@ public class CabinetService implements ICabinetService<String, Cabinet> {
             deleted = true;
         }
         return deleted;
+    }
+
+    @Override
+    public List<Cabinet> getByCriteria(CabinetSearchCriteria searchCriteria) {
+        return cabinetRepository.findByCriteria(searchCriteria);
+    }
+
+    @Override
+    public int countByCriteria(CabinetSearchCriteria searchCriteria) {
+        return cabinetRepository.countByCriteria(searchCriteria);
     }
 
     @Override
