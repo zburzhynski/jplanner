@@ -2,8 +2,8 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.View.POSITION;
 import static com.zburzhynski.jplanner.api.domain.View.POSITIONS;
+import com.zburzhynski.jplanner.api.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.api.service.IPositionService;
-import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Position;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;

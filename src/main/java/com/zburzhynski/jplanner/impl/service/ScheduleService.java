@@ -1,8 +1,8 @@
 package com.zburzhynski.jplanner.impl.service;
 
+import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IScheduleRepository;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
-import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

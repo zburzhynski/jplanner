@@ -1,7 +1,7 @@
 package com.zburzhynski.jplanner.api.service;
 
+import com.zburzhynski.jplanner.api.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
-import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package com.zburzhynski.jplanner.impl.criteria;
+package com.zburzhynski.jplanner.api.criteria;
 
 /**
  * Position search criteria.

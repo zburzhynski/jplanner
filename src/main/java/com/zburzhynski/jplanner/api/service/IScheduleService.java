@@ -1,7 +1,7 @@
 package com.zburzhynski.jplanner.api.service;
 
+import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
-import com.zburzhynski.jplanner.impl.criteria.ScheduleSearchCriteria;
 
 import java.util.List;
 

@@ -2,10 +2,10 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEE;
 import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
+import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.Gender;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.api.service.IPositionService;
-import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Position;
 import com.zburzhynski.jplanner.impl.rest.client.IEmployeeRestClient;

@@ -1,8 +1,8 @@
 package com.zburzhynski.jplanner.impl.service;
 
+import com.zburzhynski.jplanner.api.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IPositionRepository;
 import com.zburzhynski.jplanner.api.service.IPositionService;
-import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Position;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

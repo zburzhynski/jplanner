@@ -1,7 +1,7 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import com.zburzhynski.jplanner.api.criteria.CabinetSearchCriteria;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
-import com.zburzhynski.jplanner.impl.criteria.CabinetSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;

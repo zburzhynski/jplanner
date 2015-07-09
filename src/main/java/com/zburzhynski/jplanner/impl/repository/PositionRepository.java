@@ -1,8 +1,8 @@
 package com.zburzhynski.jplanner.impl.repository;
 
 import static com.zburzhynski.jplanner.impl.domain.Position.P_NAME;
+import com.zburzhynski.jplanner.api.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IPositionRepository;
-import com.zburzhynski.jplanner.impl.criteria.PositionSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Position;
 import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
 import org.hibernate.Criteria;

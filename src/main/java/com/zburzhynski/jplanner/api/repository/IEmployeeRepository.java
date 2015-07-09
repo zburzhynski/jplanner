@@ -1,8 +1,8 @@
 package com.zburzhynski.jplanner.api.repository;
 
+import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.api.domain.PositionType;
-import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 
 import java.util.List;
 

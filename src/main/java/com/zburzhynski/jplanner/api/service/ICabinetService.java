@@ -1,7 +1,7 @@
 package com.zburzhynski.jplanner.api.service;
 
+import com.zburzhynski.jplanner.api.criteria.CabinetSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
-import com.zburzhynski.jplanner.impl.criteria.CabinetSearchCriteria;
 
 import java.util.List;
 

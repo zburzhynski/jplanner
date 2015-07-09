@@ -1,9 +1,9 @@
 package com.zburzhynski.jplanner.impl.service;
 
+import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
-import com.zburzhynski.jplanner.impl.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
