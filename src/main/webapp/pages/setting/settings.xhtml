@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <p:panel>
+            <h:form id="settingsForm">
+                <h4>#{msgs['settings.header']}</h4>
+                <p:tabView>
+                    <p:tab id="common" title="#{msgs['settings.common']}">
+                        <ui:include src="common_settings.xhtml" />
+                    </p:tab>
+                    <p:tab id="view" title="#{msgs['settings.view']}">
+                        <ui:include src="view_settings.xhtml" />
+                    </p:tab>
+                    <p:tab id="jdent" title="#{msgs['settings.jdent']}">
+                        <ui:include src="jdent_settings.xhtml" />
+                    </p:tab>
+                </p:tabView>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

@@ -27,14 +27,15 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class PositionBean implements Serializable {
 
-    private static final int POSITION_PAGE_COUNT = 15;
-
     private Position position;
 
     private LazyDataModel<Position> positionModel;
 
     @ManagedProperty(value = "#{positionService}")
     private IPositionService positionService;
+
+    @ManagedProperty(value = "#{configBean}")
+    private ConfigBean configBean;
 
     /**
      * Inits bean state.
@@ -108,11 +109,15 @@ public class PositionBean implements Serializable {
     }
 
     public Integer getRowCount() {
-        return POSITION_PAGE_COUNT;
+        return configBean.getPositionsPerPageCount();
     }
 
     public void setPositionService(IPositionService positionService) {
         this.positionService = positionService;
+    }
+
+    public void setConfigBean(ConfigBean configBean) {
+        this.configBean = configBean;
     }
 
 }

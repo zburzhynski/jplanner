@@ -27,15 +27,11 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class PatientBean implements Serializable {
 
-    private static final int PATIENT_PAGE_COUNT = 15;
-
     private LazyDataModel<PatientDto> patientModel;
 
     private PatientDto patient;
 
     private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
-
-    private Integer rowCount = PATIENT_PAGE_COUNT;
 
     @ManagedProperty(value = "#{patientRestClient}")
     private IPatientRestClient patientRestClient;
@@ -117,7 +113,7 @@ public class PatientBean implements Serializable {
     }
 
     public Integer getRowCount() {
-        return rowCount;
+        return configBean.getPatientsPerPageCount();
     }
 
     public void setPatientRestClient(IPatientRestClient patientRestClient) {

@@ -15,7 +15,7 @@
                     <p:menuitem id="mJdent" value="#{msgs['mainMenu.jdent']}" action="#{mainMenuBean.jdent}" rendered="#{configBean.jdentIntegrationEnabled}" />
                     <p:menuitem id="mReports" value="#{msgs['mainMenu.reports']}" icon="ui-icon ui-icon-copy" />
                     <p:submenu id="mSettings" label="#{msgs['mainMenu.settings']}" icon="ui-icon ui-icon-gear">
-                        <p:menuitem id="smSettings" value="#{msgs['mainMenu.settings']}" />
+                        <p:menuitem id="smSettings" value="#{msgs['mainMenu.settings']}" action="#{mainMenuBean.settings}" />
                         <p:menuitem id="smEmployees" value="#{msgs['mainMenu.settings.employees']}" action="#{mainMenuBean.employees}" />
                         <p:menuitem id="smCabinets" value="#{msgs['mainMenu.settings.cabinets']}" action="#{mainMenuBean.cabinets}"/>
                         <p:menuitem id="smPositions" value="#{msgs['mainMenu.settings.positions']}" action="#{mainMenuBean.positions}" />

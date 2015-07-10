@@ -11,6 +11,8 @@ public enum SettingCategory {
 
     COMMON,
 
+    VIEW,
+
     BACKUP,
 
     JDENT,

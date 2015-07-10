@@ -4,9 +4,11 @@ import static com.zburzhynski.jplanner.impl.domain.Setting.P_SORT_ORDER;
 import com.zburzhynski.jplanner.api.repository.ISettingRepository;
 import com.zburzhynski.jplanner.impl.domain.Setting;
 import com.zburzhynski.jplanner.impl.domain.SettingCategory;
+import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,10 @@ public class SettingRepository extends AbstractBaseRepository<String, Setting>
 
     @Override
     public List<Setting> findByCategory(SettingCategory category) {
-        return new ArrayList<>();
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.add(Restrictions.eq(Setting.P_CATEGORY, category));
+        criteria.addOrder(Order.asc(Setting.P_SORT_ORDER));
+        return criteria.list();
     }
 
     @Override

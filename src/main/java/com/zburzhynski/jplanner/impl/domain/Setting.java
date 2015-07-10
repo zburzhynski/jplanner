@@ -26,6 +26,7 @@ public class Setting extends Domain {
     public static final String P_VALUE = "value";
     public static final String P_TYPE = "type";
     public static final String P_SORT_ORDER = "sortOrder";
+    public static final String P_DESCRIPTION = "description";
 
     @Column(name = "name")
     private String name;
@@ -40,6 +41,9 @@ public class Setting extends Domain {
     @Column(name = "type")
     @Enumerated(value = EnumType.STRING)
     private SettingType type;
+
+    @Column(name = "description")
+    private String description;
 
     @Column(name = "sort_order")
     private Integer sortOrder;
@@ -76,6 +80,14 @@ public class Setting extends Domain {
         this.type = type;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Integer getSortOrder() {
         return sortOrder;
     }
@@ -101,6 +113,7 @@ public class Setting extends Domain {
             .append(category, that.category)
             .append(value, that.value)
             .append(type, that.type)
+            .append(description, that.description)
             .append(sortOrder, that.sortOrder)
             .isEquals();
     }
@@ -113,6 +126,7 @@ public class Setting extends Domain {
             .append(category)
             .append(value)
             .append(type)
+            .append(description)
             .append(sortOrder)
             .toHashCode();
     }
@@ -125,6 +139,7 @@ public class Setting extends Domain {
             .append("category", category)
             .append("value", value)
             .append("type", type)
+            .append("description", description)
             .append("sortOrder", sortOrder)
             .toString();
     }

@@ -37,8 +37,6 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class EmployeeBean implements Serializable {
 
-    private static final int EMPLOYEE_PAGE_COUNT = 15;
-
     private Employee employee;
 
     private LazyDataModel<Employee> employeeModel;
@@ -162,7 +160,7 @@ public class EmployeeBean implements Serializable {
     }
 
     public Integer getRowCount() {
-        return EMPLOYEE_PAGE_COUNT;
+        return configBean.getEmployeesPerPageCount();
     }
 
     public void setEmployeeRestClient(IEmployeeRestClient employeeRestClient) {

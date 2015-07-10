@@ -5,6 +5,7 @@ import static com.zburzhynski.jplanner.api.domain.View.CABINETS;
 import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
 import static com.zburzhynski.jplanner.api.domain.View.POSITIONS;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
+import static com.zburzhynski.jplanner.api.domain.View.SETTINGS;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
@@ -77,6 +78,15 @@ public class MainMenuBean implements Serializable {
      */
     public String employees() {
         return EMPLOYEES.getPath();
+    }
+
+    /**
+     * Redirects to settings.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String settings() {
+        return SETTINGS.getPath();
     }
 
     /**

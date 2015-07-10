@@ -186,6 +186,9 @@ databaseChangeLog {
             column(name: 'type', type: 'VARCHAR(15)', remarks: 'The setting numeric') {
                 constraints(nullable: false)
             }
+            column(name: 'description', type: 'VARCHAR(300)', remarks: 'The setting description') {
+                constraints(nullable: false)
+            }
             column(name: 'sort_order', type: 'VARCHAR(15)', remarks: 'The setting sort order') {
                 constraints(nullable: false)
             }
@@ -201,6 +204,7 @@ databaseChangeLog {
             column(name: 'name', value: 'jdent_integration_enabled')
             column(name: 'value', value: 'false')
             column(name: 'type', value: 'BOOLEAN')
+            column(name: 'description', value: 'Интеграция с jDent')
             column(name: 'sort_order', value: '1')
         }
         insert(schemaName: 'jplanner', tableName: 'setting') {
@@ -209,7 +213,44 @@ databaseChangeLog {
             column(name: 'name', value: 'jdent_url')
             column(name: 'value', value: 'http://localhost:8080/jdent/')
             column(name: 'type', value: 'STRING')
+            column(name: 'description', value: 'Ссылка на jDent')
             column(name: 'sort_order', value: '2')
+        }
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '5728e886-d578-4409-bcd6-f255dc9b030d')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'patients_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'NUMERIC')
+            column(name: 'description', value: 'Количество пациентов на странице')
+            column(name: 'sort_order', value: '1')
+        }
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '56e55e4d-36c6-4805-94b2-e35b024b1eeb')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'employees_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'NUMERIC')
+            column(name: 'description', value: 'Количество сотрудников на странице')
+            column(name: 'sort_order', value: '2')
+        }
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '7e578ea3-b260-42c3-b148-19d8ee18bae5')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'cabinets_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'NUMERIC')
+            column(name: 'description', value: 'Количество кабинетов на странице')
+            column(name: 'sort_order', value: '3')
+        }
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '594be841-a8f3-4ffa-83bc-51149240465a')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'job_positions_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'NUMERIC')
+            column(name: 'description', value: 'Количество должностей на странице')
+            column(name: 'sort_order', value: '4')
         }
     }
 

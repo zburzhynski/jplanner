@@ -25,12 +25,13 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class CabinetBean implements Serializable {
 
-    private static final int CABINET_PAGE_COUNT = 15;
-
     private LazyDataModel<Cabinet> cabinetModel;
 
     @ManagedProperty(value = "#{cabinetService}")
     private ICabinetService cabinetService;
+
+    @ManagedProperty(value = "#{configBean}")
+    private ConfigBean configBean;
 
     /**
      * Inits bean state.
@@ -57,11 +58,15 @@ public class CabinetBean implements Serializable {
     }
 
     public Integer getRowCount() {
-        return CABINET_PAGE_COUNT;
+        return configBean.getCabinetsPerPageCount();
     }
 
     public void setCabinetService(ICabinetService cabinetService) {
         this.cabinetService = cabinetService;
+    }
+
+    public void setConfigBean(ConfigBean configBean) {
+        this.configBean = configBean;
     }
 
 }

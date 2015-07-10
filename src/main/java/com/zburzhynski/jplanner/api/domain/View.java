@@ -19,7 +19,9 @@ public enum View {
     EMPLOYEES("/pages/employee/employees?faces-redirect=true"),
     EMPLOYEE("/pages/employee/employee?faces-redirect=true"),
     PATIENTS("/pages/patient/patients?faces-redirect=true"),
-    PATIENT_SEARCH("/pages/patient/search?faces-redirect=true");
+    PATIENT_SEARCH("/pages/patient/search?faces-redirect=true"),
+    SETTINGS("/pages/setting/settings?faces-redirect=true"),
+    SETTING("/pages/setting/setting?faces-redirect=true");
 
     private String path;
 
