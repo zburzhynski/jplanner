@@ -77,13 +77,12 @@
     <!--</error-page>-->
 
     <!-- Custom functions, components -->
-    <!--<context-param>-->
-        <!--<param-name>javax.faces.FACELETS_LIBRARIES</param-name>-->
-        <!--<param-value>-->
-            <!--/WEB-INF/functions.taglib.xml;-->
-            <!--/WEB-INF/components.taglib.xml-->
-        <!--</param-value>-->
-    <!--</context-param>-->
+    <context-param>
+        <param-name>javax.faces.FACELETS_LIBRARIES</param-name>
+        <param-value>
+            /WEB-INF/component.taglib.xml
+        </param-value>
+    </context-param>
 
     <!--<filter>-->
         <!--<display-name>MultipartFilter</display-name>-->

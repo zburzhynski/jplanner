@@ -3,6 +3,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static com.zburzhynski.jplanner.impl.domain.SettingCategory.COMMON;
 import static com.zburzhynski.jplanner.impl.domain.SettingCategory.JDENT;
 import static com.zburzhynski.jplanner.impl.domain.SettingCategory.VIEW;
+import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.ISettingService;
 import com.zburzhynski.jplanner.impl.domain.Setting;
 import org.apache.commons.lang.BooleanUtils;
@@ -39,6 +40,8 @@ public class ConfigBean implements Serializable {
 
     private static final String P_JDENT_URL = "jdent_url";
 
+    private Setting setting;
+
     private Map<String, Setting> settings = new HashMap();
 
     private List<Setting> commonSettings;
@@ -46,6 +49,8 @@ public class ConfigBean implements Serializable {
     private List<Setting> viewSettings;
 
     private List<Setting> jdentSettings;
+
+    private int tabIndex;
 
     @ManagedProperty(value = "#{settingService}")
     private ISettingService settingService;
@@ -56,38 +61,84 @@ public class ConfigBean implements Serializable {
     @PostConstruct
     public void init() {
         List<Setting> all = settingService.getAll();
-        for (Setting setting : all) {
-            settings.put(setting.getName(), setting);
+        for (Setting item : all) {
+            settings.put(item.getName(), item);
         }
         commonSettings = settingService.getByCategory(COMMON);
         viewSettings = settingService.getByCategory(VIEW);
         jdentSettings = settingService.getByCategory(JDENT);
     }
 
+    /**
+     * Saves setting.
+     *
+     * @return path for navigating
+     */
+    public String saveSetting() {
+        settingService.saveOrUpdate(setting);
+        init();
+        return View.SETTINGS.getPath();
+    }
+
+    /**
+     * Gets common settings.
+     *
+     * @return common settings
+     */
     public List<Setting> getCommonSettings() {
         return commonSettings;
     }
 
+    /**
+     * Gets view settings.
+     *
+     * @return view settings
+     */
     public List<Setting> getViewSettings() {
         return viewSettings;
     }
 
+    /**
+     * Gets jdent integration settings.
+     *
+     * @return jdent integration settings
+     */
     public List<Setting> getJdentSettings() {
         return jdentSettings;
     }
 
+    /**
+     * Gets patients per page count.
+     *
+     * @return patients per page count
+     */
     public int getPatientsPerPageCount() {
         return Integer.parseInt(settings.get(P_PATIENTS_PER_PAGE).getValue());
     }
 
+    /**
+     * Gets employees per page count.
+     *
+     * @return employees per page count
+     */
     public int getEmployeesPerPageCount() {
         return Integer.parseInt(settings.get(P_EMPLOYEES_PER_PAGE).getValue());
     }
 
+    /**
+     * Gets cabinets per page count.
+     *
+     * @return cabinets per page count
+     */
     public int getCabinetsPerPageCount() {
         return Integer.parseInt(settings.get(P_CABINETS_PER_PAGE).getValue());
     }
 
+    /**
+     * Gets positions per page count.
+     *
+     * @return positions per page count
+     */
     public int getPositionsPerPageCount() {
         return Integer.parseInt(settings.get(P_POSITIONS_PER_PAGE).getValue());
     }
@@ -108,6 +159,22 @@ public class ConfigBean implements Serializable {
      */
     public String getJdentUrl() {
         return settings.get(P_JDENT_URL).getValue();
+    }
+
+    public Setting getSetting() {
+        return setting;
+    }
+
+    public void setSetting(Setting setting) {
+        this.setting = setting;
+    }
+
+    public int getTabIndex() {
+        return tabIndex;
+    }
+
+    public void setTabIndex(int tabIndex) {
+        this.tabIndex = tabIndex;
     }
 
     public void setSettingService(ISettingService settingService) {

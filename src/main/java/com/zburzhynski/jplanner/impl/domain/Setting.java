@@ -40,7 +40,7 @@ public class Setting extends Domain {
 
     @Column(name = "type")
     @Enumerated(value = EnumType.STRING)
-    private SettingType type;
+    private SettingValueType type;
 
     @Column(name = "description")
     private String description;
@@ -72,11 +72,11 @@ public class Setting extends Domain {
         this.value = value;
     }
 
-    public SettingType getType() {
+    public SettingValueType getType() {
         return type;
     }
 
-    public void setType(SettingType type) {
+    public void setType(SettingValueType type) {
         this.type = type;
     }
 

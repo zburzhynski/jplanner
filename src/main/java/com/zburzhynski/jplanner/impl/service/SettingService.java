@@ -31,6 +31,7 @@ public class SettingService implements ISettingService<String, Setting> {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean saveOrUpdate(Setting setting) {
         boolean result = false;
         if (setting != null) {
@@ -46,6 +47,7 @@ public class SettingService implements ISettingService<String, Setting> {
     }
 
     @Override
+    @Transactional(readOnly = false)
     public boolean delete(Setting setting) {
         boolean deleted = false;
         if (setting != null) {

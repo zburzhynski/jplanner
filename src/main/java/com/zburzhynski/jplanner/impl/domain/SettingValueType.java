@@ -1,17 +1,19 @@
 package com.zburzhynski.jplanner.impl.domain;
 
 /**
- * Setting type.
+ * Setting value type.
  * <p/>
  * Date: 09.06.15
  *
  * @author Vladimir Zburzhynski
  */
-public enum SettingType {
+public enum SettingValueType {
 
     STRING,
 
-    NUMERIC,
+    INTEGER,
+
+    FLOAT,
 
     BOOLEAN
 

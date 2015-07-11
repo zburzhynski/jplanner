@@ -183,7 +183,7 @@ databaseChangeLog {
             column(name: 'value', type: 'VARCHAR(250)', remarks: 'The setting value') {
                 constraints(nullable: false)
             }
-            column(name: 'type', type: 'VARCHAR(15)', remarks: 'The setting numeric') {
+            column(name: 'type', type: 'VARCHAR(15)', remarks: 'The setting value type') {
                 constraints(nullable: false)
             }
             column(name: 'description', type: 'VARCHAR(300)', remarks: 'The setting description') {
@@ -221,7 +221,7 @@ databaseChangeLog {
             column(name: 'category', value: 'VIEW')
             column(name: 'name', value: 'patients_per_page')
             column(name: 'value', value: '20')
-            column(name: 'type', value: 'NUMERIC')
+            column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Количество пациентов на странице')
             column(name: 'sort_order', value: '1')
         }
@@ -230,7 +230,7 @@ databaseChangeLog {
             column(name: 'category', value: 'VIEW')
             column(name: 'name', value: 'employees_per_page')
             column(name: 'value', value: '20')
-            column(name: 'type', value: 'NUMERIC')
+            column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Количество сотрудников на странице')
             column(name: 'sort_order', value: '2')
         }
@@ -239,7 +239,7 @@ databaseChangeLog {
             column(name: 'category', value: 'VIEW')
             column(name: 'name', value: 'cabinets_per_page')
             column(name: 'value', value: '20')
-            column(name: 'type', value: 'NUMERIC')
+            column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Количество кабинетов на странице')
             column(name: 'sort_order', value: '3')
         }
@@ -248,7 +248,7 @@ databaseChangeLog {
             column(name: 'category', value: 'VIEW')
             column(name: 'name', value: 'job_positions_per_page')
             column(name: 'value', value: '20')
-            column(name: 'type', value: 'NUMERIC')
+            column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Количество должностей на странице')
             column(name: 'sort_order', value: '4')
         }
