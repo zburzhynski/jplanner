@@ -186,7 +186,7 @@ databaseChangeLog {
             column(name: 'type', type: 'VARCHAR(15)', remarks: 'The setting value type') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(300)', remarks: 'The setting description') {
+            column(name: 'description', type: 'VARCHAR(500)', remarks: 'The setting description') {
                 constraints(nullable: false)
             }
             column(name: 'sort_order', type: 'VARCHAR(15)', remarks: 'The setting sort order') {
