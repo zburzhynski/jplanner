@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import com.zburzhynski.jplanner.api.criteria.CabinetSearchCriteria;
+import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import org.primefaces.model.LazyDataModel;
@@ -24,6 +25,8 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class CabinetBean implements Serializable {
+
+    private Cabinet cabinet;
 
     private LazyDataModel<Cabinet> cabinetModel;
 
@@ -51,6 +54,53 @@ public class CabinetBean implements Serializable {
                 return cabinets;
             }
         };
+    }
+
+    /**
+     * Adds cabinet.
+     *
+     * @return path for navigating
+     */
+    public String addCabinet() {
+        cabinet = new Cabinet();
+        return View.CABINET.getPath();
+    }
+
+    /**
+     * Edits cabinet.
+     *
+     * @return path for navigating
+     */
+    public String editCabinet() {
+        return View.CABINET.getPath();
+    }
+
+    /**
+     * Saves cabinet.
+     *
+     * @return path for navigating
+     */
+    public String saveCabinet() {
+        cabinetService.saveOrUpdate(cabinet);
+        return View.CABINETS.getPath();
+    }
+
+    /**
+     * Removes cabinet.
+     *
+     * @return path for navigating
+     */
+    public String removeCabinet() {
+        cabinetService.delete(cabinet);
+        return View.CABINETS.getPath();
+    }
+
+    public Cabinet getCabinet() {
+        return cabinet;
+    }
+
+    public void setCabinet(Cabinet cabinet) {
+        this.cabinet = cabinet;
     }
 
     public LazyDataModel<Cabinet> getCabinetModel() {
