@@ -25,7 +25,7 @@
                 <p:focus />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="55%">
                     <h:outputLabel for="name" value="#{msgs['position.name']}:" />
-                    <p:inputTextarea id="name" value="#{positionBean.position.name}" required="true" style="width: 97%" />
+                    <p:inputTextarea id="name" value="#{positionBean.position.name}" required="true" maxlength="500" style="width: 97%" />
                     <p:message for="name" />
                     <h:outputLabel for="positionType" value="#{msgs['position.positionType']}:" />
                     <p:selectOneMenu id="positionType"

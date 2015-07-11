@@ -31,6 +31,7 @@
                     <p:inputTextarea id="stringValue"
                                      value="#{configBean.setting.value}"
                                      required="true"
+                                     maxlength="250"
                                      style="width: 97%" />
                     <p:message for="stringValue" />
                 </c:if>
@@ -38,6 +39,7 @@
                     <p:inputText id="integerValue"
                                      value="#{configBean.setting.value}"
                                      required="true"
+                                     maxlength="250"
                                      style="width: 97%">
                         <f:convertNumber integerOnly="true" />
                     </p:inputText>

@@ -28,13 +28,13 @@
                 <p:focus />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="60%">
                     <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
-                    <p:inputTextarea id="surname" value="#{employeeBean.employee.person.surname}" required="true" style="width: 97%" />
+                    <p:inputTextarea id="surname" value="#{employeeBean.employee.person.surname}" required="true" maxlength="50" style="width: 97%" />
                     <p:message for="surname" />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
-                    <p:inputTextarea id="name" value="#{employeeBean.employee.person.name}" required="true" style="width: 97%" />
+                    <p:inputTextarea id="name" value="#{employeeBean.employee.person.name}" required="true" maxlength="50" style="width: 97%" />
                     <p:message for="name" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
-                    <p:inputTextarea id="patronymic" value="#{employeeBean.employee.person.patronymic}" required="true" style="width: 97%" />
+                    <p:inputTextarea id="patronymic" value="#{employeeBean.employee.person.patronymic}" required="true" maxlength="50" style="width: 97%" />
                     <p:message for="patronymic" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"

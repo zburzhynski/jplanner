@@ -25,13 +25,13 @@
                 <p:focus />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="60%">
                     <h:outputLabel for="number" value="#{msgs['cabinet.number']}:" />
-                    <p:inputText id="number" value="#{cabinetBean.cabinet.number}" required="true" style="width: 97%" />
+                    <p:inputText id="number" value="#{cabinetBean.cabinet.number}" required="true" maxlength="20" style="width: 97%" />
                     <p:message for="number" />
                     <h:outputLabel for="name" value="#{msgs['cabinet.name']}:" />
-                    <p:inputText id="name" value="#{cabinetBean.cabinet.name}" required="true" style="width: 97%" />
+                    <p:inputText id="name" value="#{cabinetBean.cabinet.name}" required="true" maxlength="100" style="width: 97%" />
                     <p:message for="name" />
                     <h:outputLabel for="description" value="#{msgs['cabinet.description']}:" />
-                    <p:inputTextarea id="description" value="#{cabinetBean.cabinet.description}" style="width: 97%" />
+                    <p:inputTextarea id="description" value="#{cabinetBean.cabinet.description}" maxlength="500" style="width: 97%" />
                     <p:message for="description" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
