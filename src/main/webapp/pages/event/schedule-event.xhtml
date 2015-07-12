@@ -33,19 +33,19 @@
                 <h:panelGrid columns="3" columnClasses="name,val,btn" width="50%">
                     <h:outputLabel for="surname" value="#{msgs['person.surname']}:" />
                     <p:inputText id="surname"
-                                 value="#{scheduleBean.event.person.surname}"
+                                 value="#{scheduleBean.event.patient.person.surname}"
                                  label="#{msgs['person.surname']}"
                                  maxlength="50"
-                                 readonly="#{not empty scheduleBean.event.patientId}"
+                                 readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
                                  required="true"
                                  styleClass="inp" />
                     <p:spacer />
                     <h:outputLabel for="name" value="#{msgs['person.name']}:" />
                     <p:inputText id="name"
-                                 value="#{scheduleBean.event.person.name}"
+                                 value="#{scheduleBean.event.patient.person.name}"
                                  label="#{msgs['person.name']}"
                                  maxlength="50"
-                                 readonly="#{not empty scheduleBean.event.patientId}"
+                                 readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
                                  required="true"
                                  styleClass="inp" />
                     <p:commandButton action="#{scheduleBean.choosePatient}"
@@ -54,36 +54,36 @@
                                      icon="ui-icon-person" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
-                                 value="#{scheduleBean.event.person.patronymic}"
+                                 value="#{scheduleBean.event.patient.person.patronymic}"
                                  label="#{msgs['person.patronymic']}"
                                  maxlength="50"
-                                 readonly="#{not empty scheduleBean.event.patientId}"
+                                 readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
                                  required="true"
                                  styleClass="inp" />
                     <p:commandButton action="#{scheduleBean.clearPatient}"
                                      title="#{msgs['schedule.button.clearPatient']}"
                                      immediate="true"
                                      update="eventForm"
-                                     rendered="#{not empty scheduleBean.event.patientId}"
+                                     rendered="#{not empty scheduleBean.event.patient.jdentPatientId}"
                                      icon="ui-icon-trash" />
-                    <p:spacer rendered="#{empty scheduleBean.event.patientId}" />
+                    <p:spacer rendered="#{empty scheduleBean.event.patient.jdentPatientId}" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
-                                value="#{scheduleBean.event.person.birthday}"
+                                value="#{scheduleBean.event.patient.person.birthday}"
                                 label="#{msgs['person.birthday']}"
                                 pattern="dd/MM/yyyy"
                                 yearRange="1900:c"
                                 navigator="true"
                                 locale="ru"
-                                readonly="#{not empty scheduleBean.event.patientId}"
+                                readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
                                 required="true"
                                 styleClass="cal">
                     </p:calendar>
                     <p:spacer />
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
                     <p:selectOneRadio id="gender"
-                                      value="#{scheduleBean.event.person.gender}"
-                                      readonly="#{not empty scheduleBean.event.patientId}">
+                                      value="#{scheduleBean.event.patient.person.gender}"
+                                      readonly="#{not empty scheduleBean.event.patient.jdentPatientId}">
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
@@ -132,13 +132,13 @@
                     <p:spacer />
                     <h:outputLabel for="complaint" value="#{msgs['schedule.complaint']}:" />
                     <p:inputTextarea id="complaint"
-                                     value="#{scheduleBean.event.complaint}"
+                                     value="#{scheduleBean.event.patient.complaint}"
                                      maxlength="1000"
                                      styleClass="inp" />
                     <p:spacer />
                     <h:outputLabel for="additionalInfo" value="#{msgs['schedule.additionalInfo']}:" />
                     <p:inputTextarea id="additionalInfo"
-                                     value="#{scheduleBean.event.additionalInfo}"
+                                     value="#{scheduleBean.event.patient.additionalInfo}"
                                      maxlength="1000"
                                      styleClass="inp" />
                     <p:spacer />

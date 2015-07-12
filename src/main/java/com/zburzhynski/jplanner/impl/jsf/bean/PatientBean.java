@@ -81,12 +81,12 @@ public class PatientBean implements Serializable {
         if (patient != null) {
             ScheduleBean scheduleBean = JsfUtils.getBean("scheduleBean");
             if (scheduleBean != null) {
-                scheduleBean.getEvent().setPatientId(patient.getId());
-                scheduleBean.getEvent().getPerson().setSurname(patient.getSurname());
-                scheduleBean.getEvent().getPerson().setName(patient.getName());
-                scheduleBean.getEvent().getPerson().setPatronymic(patient.getPatronymic());
-                scheduleBean.getEvent().getPerson().setBirthday(patient.getBirthday());
-                scheduleBean.getEvent().getPerson().setGender(Gender.valueOf(patient.getGender()));
+                scheduleBean.getEvent().getPatient().setJdentPatientId(patient.getId());
+                scheduleBean.getEvent().getPatient().getPerson().setSurname(patient.getSurname());
+                scheduleBean.getEvent().getPatient().getPerson().setName(patient.getName());
+                scheduleBean.getEvent().getPatient().getPerson().setPatronymic(patient.getPatronymic());
+                scheduleBean.getEvent().getPatient().getPerson().setBirthday(patient.getBirthday());
+                scheduleBean.getEvent().getPatient().getPerson().setGender(Gender.valueOf(patient.getGender()));
             }
         }
         return SCHEDULE_EVENT.getPath();

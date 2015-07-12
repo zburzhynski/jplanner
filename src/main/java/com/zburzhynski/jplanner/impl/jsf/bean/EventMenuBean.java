@@ -26,15 +26,18 @@ public class EventMenuBean implements Serializable {
     @ManagedProperty(value = "#{scheduleBean}")
     private ScheduleBean scheduleBean;
 
+    @ManagedProperty(value = "#{configBean}")
+    private ConfigBean configBean;
+
     /**
      * Gets event menu header.
      *
      * @return event menu header
      */
     public String getMenuHeader() {
-        if (scheduleBean.getEvent() != null && scheduleBean.getEvent().getPerson() != null
-            && !scheduleBean.getEvent().getPerson().isEmpty()) {
-            return scheduleBean.getEvent().getPerson().getShortName();
+        if (scheduleBean.getEvent() != null && scheduleBean.getEvent().getPatient().getPerson() != null
+            && !scheduleBean.getEvent().getPatient().getPerson().isEmpty()) {
+            return scheduleBean.getEvent().getPatient().getPerson().getShortName();
         }
         return null;
     }
@@ -72,9 +75,11 @@ public class EventMenuBean implements Serializable {
      * @return true if visible, else false
      */
     public boolean isVisibleGoToCardButton() {
-        if (scheduleBean.getEvent() != null) {
-            if (StringUtils.isNotBlank(scheduleBean.getEvent().getPatientId())) {
-                return true;
+        if (configBean.isJdentIntegrationEnabled()) {
+            if (scheduleBean.getEvent() != null) {
+                if (StringUtils.isNotBlank(scheduleBean.getEvent().getPatient().getJdentPatientId())) {
+                    return true;
+                }
             }
         }
         return false;
@@ -96,6 +101,15 @@ public class EventMenuBean implements Serializable {
      */
     public void setScheduleBean(ScheduleBean scheduleBean) {
         this.scheduleBean = scheduleBean;
+    }
+
+    /**
+     * Sets config bean.
+     *
+     * @param configBean config bean to set
+     */
+    public void setConfigBean(ConfigBean configBean) {
+        this.configBean = configBean;
     }
 
 }

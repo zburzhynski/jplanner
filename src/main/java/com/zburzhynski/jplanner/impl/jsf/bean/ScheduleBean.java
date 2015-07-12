@@ -252,24 +252,24 @@ public class ScheduleBean implements Serializable {
         if (configBean.isJdentIntegrationEnabled()) {
             CreateVisitRequest request = new CreateVisitRequest();
             request.setScheduleId(event.getId());
-            request.getPatient().setId(event.getPatientId());
-            request.getPatient().setSurname(event.getPerson().getSurname());
-            request.getPatient().setName(event.getPerson().getName());
-            request.getPatient().setPatronymic(event.getPerson().getPatronymic());
-            request.getPatient().setBirthday(event.getPerson().getBirthday());
-            request.getPatient().setGender(event.getPerson().getGender().name());
+            request.getPatient().setId(event.getPatient().getJdentPatientId());
+            request.getPatient().setSurname(event.getPatient().getPerson().getSurname());
+            request.getPatient().setName(event.getPatient().getPerson().getName());
+            request.getPatient().setPatronymic(event.getPatient().getPerson().getPatronymic());
+            request.getPatient().setBirthday(event.getPatient().getPerson().getBirthday());
+            request.getPatient().setGender(event.getPatient().getPerson().getGender().name());
             request.setDoctorId(event.getDoctor().getId());
             request.setVisitDate(event.getStartDate());
-            request.setComplaint(event.getComplaint());
+            request.setComplaint(event.getPatient().getComplaint());
             try {
                 String jdentUrl = configBean.getJdentUrl();
                 CreateVisitResponse response = patientRestClient.createVisit(request, jdentUrl);
                 if (response != null) {
-                    event.setPatientId(response.getPatientId());
+                    event.getPatient().setJdentPatientId(response.getPatientId());
                     event.setStatus(ScheduleStatus.STARTED);
                     saveModel();
-                    String url = jdentUrl + START_DENTAL_VISIT_URL + QUESTION_MARK
-                        + SCHEDULE_ID_PARAM + event.getId() + AMPERSAND + PATIENT_ID_PARAM + event.getPatientId();
+                    String url = jdentUrl + START_DENTAL_VISIT_URL + QUESTION_MARK + SCHEDULE_ID_PARAM
+                        + event.getId() + AMPERSAND + PATIENT_ID_PARAM + event.getPatient().getJdentPatientId();
                     JsfUtils.externalRedirect(url);
                 }
             } catch (PatientNotFoundException e) {
@@ -315,7 +315,7 @@ public class ScheduleBean implements Serializable {
      */
     public void goToCard() {
         String url = configBean.getJdentUrl() + GO_TO_CARD_URL + QUESTION_MARK
-            + PATIENT_ID_PARAM + event.getPatientId();
+            + PATIENT_ID_PARAM + event.getPatient().getJdentPatientId();
         JsfUtils.externalRedirect(url);
     }
 
@@ -347,6 +347,7 @@ public class ScheduleBean implements Serializable {
         PatientBean patientBean = JsfUtils.getBean("patientBean");
         if (patientBean != null) {
             patientBean.setSearchPatientRequest(new SearchPatientRequest());
+            patientBean.setPatient(null);
             patientBean.init();
         }
         return View.PATIENTS.getPath();
@@ -356,12 +357,12 @@ public class ScheduleBean implements Serializable {
      * Clear patient.
      */
     public void clearPatient() {
-        event.setPatientId(null);
-        event.getPerson().setGender(Gender.M);
-        event.getPerson().setBirthday(new Date());
-        event.getPerson().setSurname(null);
-        event.getPerson().setName(null);
-        event.getPerson().setPatronymic(null);
+        event.getPatient().setJdentPatientId(null);
+        event.getPatient().getPerson().setGender(Gender.M);
+        event.getPatient().getPerson().setBirthday(new Date());
+        event.getPatient().getPerson().setSurname(null);
+        event.getPatient().getPerson().setName(null);
+        event.getPatient().getPerson().setPatronymic(null);
     }
 
     /**
@@ -490,16 +491,16 @@ public class ScheduleBean implements Serializable {
         StringBuilder builder = new StringBuilder();
         builder.append(propertyReader.readProperty(PATIENT));
         builder.append(COLON + SPACE);
-        builder.append(schedule.getPerson().getFullName());
+        builder.append(schedule.getPatient().getPerson().getFullName());
         builder.append(NEWLINE);
         builder.append(propertyReader.readProperty(DOCTOR));
         builder.append(COLON + SPACE);
         builder.append(schedule.getDoctor().getPerson().getFullName());
-        if (StringUtils.isNotBlank(schedule.getComplaint())) {
+        if (StringUtils.isNotBlank(schedule.getPatient().getComplaint())) {
             builder.append(NEWLINE);
             builder.append(propertyReader.readProperty(COMPLAINT));
             builder.append(COLON + SPACE);
-            builder.append(schedule.getComplaint());
+            builder.append(schedule.getPatient().getComplaint());
         }
         schedule.setTitle(builder.toString());
     }

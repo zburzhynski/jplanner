@@ -29,8 +29,7 @@ import javax.persistence.Table;
 public class Schedule extends Domain implements ScheduleEvent {
 
     public static final String P_WORKPLACE = "workplace";
-    public static final String P_PATIENT_ID = "patientId";
-    public static final String P_PERSON = "person";
+    public static final String P_PATIENT = "patient";
     public static final String P_STATUS = "status";
     public static final String P_DOCTOR = "doctor";
     public static final String P_START_DATE = "startDate";
@@ -40,12 +39,9 @@ public class Schedule extends Domain implements ScheduleEvent {
     @JoinColumn(name = "workplace_id")
     private Workplace workplace;
 
-    @Column(name = "patient_id")
-    private String patientId;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "person_id")
-    private Person person = new Person();
+    @JoinColumn(name = "patient_id")
+    private Patient patient = new Patient();
 
     @Column(name = "schedule_status")
     @Enumerated(value = EnumType.STRING)
@@ -63,12 +59,6 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Column(name = "title")
     private String title;
-
-    @Column(name = "complaint")
-    private String complaint;
-
-    @Column(name = "additional_info")
-    private String additionalInfo;
 
     /**
      * Default constructor.
@@ -97,20 +87,12 @@ public class Schedule extends Domain implements ScheduleEvent {
         this.workplace = workplace;
     }
 
-    public String getPatientId() {
-        return patientId;
+    public Patient getPatient() {
+        return patient;
     }
 
-    public void setPatientId(String patientId) {
-        this.patientId = patientId;
-    }
-
-    public Person getPerson() {
-        return person;
-    }
-
-    public void setPerson(Person person) {
-        this.person = person;
+    public void setPatient(Patient patient) {
+        this.patient = patient;
     }
 
     public ScheduleStatus getStatus() {
@@ -156,22 +138,6 @@ public class Schedule extends Domain implements ScheduleEvent {
         this.title = title;
     }
 
-    public String getComplaint() {
-        return complaint;
-    }
-
-    public void setComplaint(String complaint) {
-        this.complaint = complaint;
-    }
-
-    public String getAdditionalInfo() {
-        return additionalInfo;
-    }
-
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
-    }
-
     @Override
     public String getDescription() {
         return title;
@@ -211,15 +177,12 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(workplace, that.workplace)
-            .append(patientId, that.patientId)
-            .append(person, that.person)
+            .append(patient, that.patient)
             .append(status, that.status)
             .append(doctor, that.doctor)
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
             .append(title, that.title)
-            .append(complaint, that.complaint)
-            .append(additionalInfo, that.additionalInfo)
             .isEquals();
     }
 
@@ -228,15 +191,12 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
             .append(workplace)
-            .append(patientId)
-            .append(person)
+            .append(patient)
             .append(status)
             .append(doctor)
             .append(startDate)
             .append(endDate)
             .append(title)
-            .append(complaint)
-            .append(additionalInfo)
             .toHashCode();
     }
 
@@ -245,15 +205,12 @@ public class Schedule extends Domain implements ScheduleEvent {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
             .append("workplace", workplace)
-            .append("patientId", patientId)
-            .append("person", person)
+            .append("patient", patient)
             .append("status", status)
             .append("doctor", doctor)
             .append("startDate", startDate)
             .append("endDate", endDate)
             .append("title", title)
-            .append("complaint", complaint)
-            .append("additionalInfo", additionalInfo)
             .toString();
     }
 

@@ -118,6 +118,28 @@ databaseChangeLog {
     }
 
     changeSet(id: '2015-04-30-10', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        createTable(schemaName: 'jplanner', tableName: 'patient', tablespace: 'jplanner_data', remarks: 'Patient of clinic') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of patient') {
+                constraints(nullable: false)
+            }
+            column(name: 'jdent_patient_id', type: 'VARCHAR(128)', remarks: 'The reference to the patient table of jdent project')
+            column(name: 'person_id', type: 'VARCHAR(128)', remarks: 'The reference to the person table') {
+                constraints(nullable: false)
+            }
+            column(name: 'complaint', type: 'VARCHAR(1000)', defaultValue: '', remarks: 'Complaint of patient')
+            column(name: 'additional_info', type: 'VARCHAR(1000)', defaultValue: '', remarks: 'Additional information of schedule event')
+        }
+        addPrimaryKey(schemaName: 'jplanner', tableName: 'patient', tablespace: 'jplanner_index',
+                columnNames: 'id', constraintName: 'PK_patient')
+    }
+
+    changeSet(id: '2015-04-30-11', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        addForeignKeyConstraint(constraintName: 'FK_patient_2_person',
+                baseTableName: 'patient', baseTableSchemaName: 'jplanner', baseColumnNames: 'person_id',
+                referencedTableName: 'person', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2015-04-30-12', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
         createTable(schemaName: 'jplanner', tableName: 'schedule', tablespace: 'jplanner_data', remarks: 'Contains schedule events') {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of schedule event') {
                 constraints(nullable: false)
@@ -125,8 +147,7 @@ databaseChangeLog {
             column(name: 'workplace_id', type: 'VARCHAR(128)', remarks: 'The reference to the workplace table') {
                 constraints(nullable: false)
             }
-            column(name: 'patient_id', type: 'VARCHAR(128)', remarks: 'The reference to the patient table')
-            column(name: 'person_id', type: 'VARCHAR(128)', remarks: 'The reference to the person table') {
+            column(name: 'patient_id', type: 'VARCHAR(128)', remarks: 'The reference to the patient table') {
                 constraints(nullable: false)
             }
             column(name: 'schedule_status', type: 'VARCHAR(10)', defaultValue: '', remarks: 'Schedule status') {
@@ -144,26 +165,24 @@ databaseChangeLog {
             column(name: 'title', type: 'VARCHAR(1100)', defaultValue: '', remarks: 'Title of schedule event') {
                 constraints(nullable: false)
             }
-            column(name: 'complaint', type: 'VARCHAR(1000)', defaultValue: '', remarks: 'Complaint of patient')
-            column(name: 'additional_info', type: 'VARCHAR(1000)', defaultValue: '', remarks: 'Additional information of schedule event')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'schedule', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_schedule')
     }
 
-    changeSet(id: '2015-04-30-11', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+    changeSet(id: '2015-04-30-13', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
         addForeignKeyConstraint(constraintName: 'FK_schedule_2_workplace',
                 baseTableName: 'schedule', baseTableSchemaName: 'jplanner', baseColumnNames: 'workplace_id',
                 referencedTableName: 'workplace', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
-    changeSet(id: '2015-04-30-12', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
-        addForeignKeyConstraint(constraintName: 'FK_schedule_2_person',
-                baseTableName: 'schedule', baseTableSchemaName: 'jplanner', baseColumnNames: 'person_id',
-                referencedTableName: 'person', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
+    changeSet(id: '2015-04-30-14', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        addForeignKeyConstraint(constraintName: 'FK_schedule_2_patient',
+                baseTableName: 'schedule', baseTableSchemaName: 'jplanner', baseColumnNames: 'patient_id',
+                referencedTableName: 'patient', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
-    changeSet(id: '2015-04-30-13', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+    changeSet(id: '2015-04-30-15', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
         addForeignKeyConstraint(constraintName: 'FK_doctor_2_employee',
                 baseTableName: 'schedule', baseTableSchemaName: 'jplanner', baseColumnNames: 'doctor_id',
                 referencedTableName: 'employee', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')

@@ -1,10 +1,12 @@
 package com.zburzhynski.jplanner.impl.repository;
 
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.DOT;
+import static com.zburzhynski.jplanner.impl.domain.Patient.P_JDENT_PATIENT_ID;
+import static com.zburzhynski.jplanner.impl.domain.Patient.P_PERSON;
 import static com.zburzhynski.jplanner.impl.domain.Person.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_DOCTOR;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_END_DATE;
-import static com.zburzhynski.jplanner.impl.domain.Schedule.P_PATIENT_ID;
-import static com.zburzhynski.jplanner.impl.domain.Schedule.P_PERSON;
+import static com.zburzhynski.jplanner.impl.domain.Schedule.P_PATIENT;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_START_DATE;
 import static com.zburzhynski.jplanner.impl.domain.Schedule.P_WORKPLACE;
 import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
@@ -35,7 +37,8 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
     public Schedule findById(String id) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_WORKPLACE, P_WORKPLACE);
-        criteria.createAlias(P_PERSON, P_PERSON);
+        criteria.createAlias(P_PATIENT, P_PATIENT);
+        criteria.createAlias(P_PATIENT + DOT + P_PERSON, P_PERSON);
         criteria.createAlias(P_DOCTOR, P_DOCTOR);
         criteria.add(Restrictions.eq(P_ID, id));
         return (Schedule) criteria.uniqueResult();
@@ -57,7 +60,8 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
             criteria.add(Restrictions.eq(P_DOCTOR, searchCriteria.getDoctor()));
         }
         if (StringUtils.isNotBlank(searchCriteria.getPatientId())) {
-            criteria.add(Restrictions.eq(P_PATIENT_ID, searchCriteria.getPatientId()));
+            criteria.createAlias(P_PATIENT, P_PATIENT);
+            criteria.add(Restrictions.eq(P_PATIENT + DOT + P_JDENT_PATIENT_ID, searchCriteria.getPatientId()));
         }
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
@@ -88,7 +92,8 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
             criteria.add(Restrictions.eq(P_DOCTOR, containCriteria.getDoctor()));
         }
         if (StringUtils.isNotBlank(containCriteria.getPatientId())) {
-            criteria.add(Restrictions.eq(P_PATIENT_ID, containCriteria.getPatientId()));
+            criteria.createAlias(P_PATIENT, P_PATIENT);
+            criteria.add(Restrictions.eq(P_PATIENT + DOT + P_JDENT_PATIENT_ID, containCriteria.getPatientId()));
         }
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
