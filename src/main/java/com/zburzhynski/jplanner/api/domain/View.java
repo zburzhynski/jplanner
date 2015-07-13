@@ -14,6 +14,7 @@ public enum View {
     ABOUT("/pages/help/about?faces-redirect=true"),
     CABINETS("/pages/cabinet/cabinets?faces-redirect=true"),
     CABINET("/pages/cabinet/cabinet?faces-redirect=true"),
+    WORKPLACE("/pages/cabinet/workplace?faces-redirect=true"),
     POSITIONS("/pages/position/positions?faces-redirect=true"),
     POSITION("/pages/position/position?faces-redirect=true"),
     EMPLOYEES("/pages/employee/employees?faces-redirect=true"),

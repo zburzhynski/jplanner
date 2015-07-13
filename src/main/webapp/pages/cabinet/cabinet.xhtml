@@ -23,6 +23,7 @@
         <p:panel>
             <h:form id="cabinetForm">
                 <p:focus />
+                <p:messages id="messages" />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="60%">
                     <h:outputLabel for="number" value="#{msgs['cabinet.number']}:" />
                     <p:inputText id="number" value="#{cabinetBean.cabinet.number}" required="true" maxlength="20" style="width: 97%" />
@@ -34,6 +35,41 @@
                     <p:inputTextarea id="description" value="#{cabinetBean.cabinet.description}" maxlength="500" style="width: 97%" />
                     <p:message for="description" />
                 </h:panelGrid>
+                <h:panelGrid width="100%">
+                    <p:dataTable value="#{cabinetBean.cabinet.workplaces}"
+                                 var="workplace"
+                                 emptyMessage="#{msgs['workplace.empty']}" style="width: 100%">
+                        <p:column headerText="#{msgs['workplace.name']}" width="30%">
+                            <h:outputText value="#{workplace.name}" />
+                        </p:column>
+                        <p:column headerText="#{msgs['workplace.description']}" width="64%">
+                            <h:outputText value="#{workplace.description}" />
+                        </p:column>
+                        <p:column width="6%">
+                            <h:panelGroup>
+                                <p:commandLink action="#{cabinetBean.editWorkplace}"
+                                               style="padding-right: 5px">
+                                    <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                                    <f:setPropertyActionListener
+                                            target="#{cabinetBean.workplace}" value="#{workplace}" />
+                                </p:commandLink>
+                                <p:commandLink action="#{cabinetBean.removeWorkplace}">
+                                    <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                                    <p:confirm header="#{msgs['removeWorkplaceConfirm.header']}"
+                                               message="#{msgs['removeWorkplaceConfirm.message']}?"
+                                               icon="ui-icon-alert" />
+                                    <f:setPropertyActionListener
+                                            target="#{cabinetBean.workplace}" value="#{workplace}" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </p:column>
+                    </p:dataTable>
+                    <h:panelGrid style="padding-top: 5px">
+                        <h:commandButton action="#{cabinetBean.addWorkplace}"
+                                         image="/resources/css/css-images/add.gif"
+                                         title="#{msgs['button.add']}" />
+                    </h:panelGrid>
+                </h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:commandButton id="saveCabinet" value="#{msgs['button.save']}"
                                      action="#{cabinetBean.saveCabinet}" />
@@ -41,6 +77,16 @@
                                      action="/pages/cabinet/cabinets?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>
         </p:panel>
     </ui:define>

@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 20%;
+            }
+            .val {
+                width: 40%;
+            }
+            .msg {
+                width: 35%;
+            }
+        </style>
+        <p:panel>
+            <h:form id="workplaceForm">
+                <p:focus />
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="55%">
+                    <h:outputLabel for="name" value="#{msgs['workplace.name']}:" />
+                    <p:inputTextarea id="name" value="#{cabinetBean.workplace.name}" required="true" maxlength="100" style="width: 97%" />
+                    <p:message for="name" />
+                    <h:outputLabel for="description" value="#{msgs['workplace.description']}:" />
+                    <p:inputTextarea id="description" value="#{cabinetBean.workplace.description}" maxlength="500" style="width: 97%" />
+                    <p:message for="description" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="saveWorkplace" value="#{msgs['button.save']}"
+                                     action="#{cabinetBean.saveWorkplace}" />
+                    <h:commandButton id="cancelUpdateWorkplace" value="#{msgs['button.cancel']}"
+                                     action="/pages/cabinet/cabinet?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

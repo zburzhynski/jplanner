@@ -30,11 +30,9 @@
                     </p:column>
                     <p:column width="6%">
                         <h:panelGroup>
-                            <p:commandLink action="#{cabinetBean.editCabinet}"
+                            <p:commandLink action="#{cabinetBean.editCabinet(cabinet.id)}"
                                            style="padding-right: 5px">
                                 <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
-                                <f:setPropertyActionListener
-                                        target="#{cabinetBean.cabinet}" value="#{cabinet}" />
                             </p:commandLink>
                             <p:commandLink action="#{cabinetBean.removeCabinet}">
                                 <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
