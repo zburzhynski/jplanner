@@ -133,7 +133,7 @@ public class ScheduleBean implements Serializable {
     public void init() {
         List<Cabinet> cabinets = cabinetService.getAll();
         if (isNotEmpty(cabinets)) {
-            cabinet = (Cabinet) cabinetService.getById(cabinets.get(0).getId());
+            cabinet = cabinets.get(0);
             if (isNotEmpty(cabinet.getWorkplaces())) {
                 workplace = cabinet.getWorkplaces().get(0);
             }
@@ -378,7 +378,6 @@ public class ScheduleBean implements Serializable {
      * Select cabinet listener.
      */
     public void selectCabinetListener() {
-        cabinet = (Cabinet) cabinetService.getById(cabinet.getId());
         workplace = isNotEmpty(cabinet.getWorkplaces()) ? cabinet.getWorkplaces().get(0) : null;
         JsfUtils.update(SCHEDULER_COMPONENT);
     }

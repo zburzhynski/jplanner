@@ -33,6 +33,10 @@ public class MainMenuBean implements Serializable {
      * @return path to redirect
      */
     public String schedules() {
+        ScheduleBean scheduleBean = JsfUtils.getBean("scheduleBean");
+        if (scheduleBean != null) {
+            scheduleBean.init();
+        }
         return SCHEDULE_EVENTS.getPath();
     }
 
