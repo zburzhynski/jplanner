@@ -42,7 +42,7 @@
                 <br/>
                 <p:schedule id="scheduler"
                             value="#{scheduleBean.eventModel}"
-                            slotMinutes="15"
+                            slotMinutes="#{configBean.schedulerPrecision}"
                             locale="ru"
                             axisFormat="H:mm"
                             timeFormat="H:mm"

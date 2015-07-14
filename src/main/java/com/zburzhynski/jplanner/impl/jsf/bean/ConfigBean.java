@@ -28,6 +28,10 @@ import javax.faces.bean.ManagedProperty;
 @ApplicationScoped
 public class ConfigBean implements Serializable {
 
+    private static final String P_SCHEDULER_PRECISION = "scheduler_precision";
+
+    private static final String P_EVENT_DURATION = "event_duration";
+
     private static final String P_PATIENTS_PER_PAGE = "patients_per_page";
 
     private static final String P_EMPLOYEES_PER_PAGE = "employees_per_page";
@@ -105,6 +109,24 @@ public class ConfigBean implements Serializable {
      */
     public List<Setting> getJdentSettings() {
         return jdentSettings;
+    }
+
+    /**
+     * Gets scheduler precision.
+     *
+     * @return scheduler precision
+     */
+    public int getSchedulerPrecision() {
+        return Integer.parseInt(settings.get(P_SCHEDULER_PRECISION).getValue());
+    }
+
+    /**
+     * Gets schedule event duration.
+     *
+     * @return schedule event duration
+     */
+    public int getEventDuration() {
+        return Integer.parseInt(settings.get(P_EVENT_DURATION).getValue());
     }
 
     /**

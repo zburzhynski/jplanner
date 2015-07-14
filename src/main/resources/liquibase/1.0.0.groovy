@@ -218,6 +218,24 @@ databaseChangeLog {
 
     changeSet(id: '2015-06-09-2', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
         insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '7b117fbb-e8a5-4960-b58a-663925a0ada1')
+            column(name: 'category', value: 'COMMON')
+            column(name: 'name', value: 'scheduler_precision')
+            column(name: 'value', value: '15')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Точность планировщика, минут')
+            column(name: 'sort_order', value: '1')
+        }
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '22ed2a71-1087-420a-963b-6d02ab7cd5ab')
+            column(name: 'category', value: 'COMMON')
+            column(name: 'name', value: 'event_duration')
+            column(name: 'value', value: '30')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Продолжительность приема, минут')
+            column(name: 'sort_order', value: '2')
+        }
+        insert(schemaName: 'jplanner', tableName: 'setting') {
             column(name: 'id', value: 'a5e0e9f9-98b0-4cfa-a8ac-8adbe4c6afff')
             column(name: 'category', value: 'JDENT')
             column(name: 'name', value: 'jdent_integration_enabled')

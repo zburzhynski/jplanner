@@ -65,8 +65,6 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class ScheduleBean implements Serializable {
 
-    private static final int MIN_EVENT_LENGTH = 30;
-
     private static final int FIRTH_HOUR = 8;
 
     private static final String SCHEDULER_COMPONENT = "eventsForm:scheduler";
@@ -506,7 +504,7 @@ public class ScheduleBean implements Serializable {
 
     private Schedule buildScheduleEvent(SelectEvent selectEvent) {
         Date startDate = (Date) selectEvent.getObject();
-        Date endDate = DateUtils.addMinuteToDate(startDate, MIN_EVENT_LENGTH);
+        Date endDate = DateUtils.addMinuteToDate(startDate, configBean.getEventDuration());
         Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
         scheduleEvent.setWorkplace(workplace);
         return scheduleEvent;
