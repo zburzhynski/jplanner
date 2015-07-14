@@ -40,6 +40,7 @@ public class CabinetRepository extends AbstractBaseRepository<String, Cabinet>
         criteria.createAlias(P_WORKPLACES, P_WORKPLACE, LEFT_OUTER_JOIN);
         criteria.setFetchMode(P_WORKPLACES, FetchMode.JOIN);
         criteria.add(Restrictions.eq(P_ID, id));
+        criteria.addOrder(Order.asc(P_WORKPLACE + DOT + Workplace.P_NAME));
         return (Cabinet) criteria.uniqueResult();
     }
 
