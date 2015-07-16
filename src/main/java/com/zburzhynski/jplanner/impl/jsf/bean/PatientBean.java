@@ -8,6 +8,8 @@ import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.PatientDto;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import org.primefaces.event.SelectEvent;
+import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
 
 import java.io.Serializable;
@@ -90,6 +92,24 @@ public class PatientBean implements Serializable {
             }
         }
         return SCHEDULE_EVENT.getPath();
+    }
+
+    /**
+     * Select patient listener.
+     *
+     * @param event {@link SelectEvent} select event
+     */
+    public void selectPatientListener(SelectEvent event) {
+        patient = (PatientDto) event.getObject();
+    }
+
+    /**
+     * Unselect patient listener.
+     *
+     * @param event {@link UnselectEvent} unselect event
+     */
+    public void unselectPatientListener(UnselectEvent event) {
+        patient = null;
     }
 
     public LazyDataModel<PatientDto> getPatientModel() {

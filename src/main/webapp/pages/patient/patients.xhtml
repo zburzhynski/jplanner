@@ -19,10 +19,11 @@
                              selectionMode="single"
                              selection="#{patientBean.patient}"
                              rowKey="#{patient.id}"
-                             rowSelectListener="#{patientBean.patientSelectListener}"
                              lazy="true"
                              emptyMessage="#{msgs['patients.empty']}"
                              rows="#{patientBean.rowCount}">
+                    <p:ajax event="rowSelect" listener="#{patientBean.selectPatientListener}" update="@form" />
+                    <p:ajax event="rowUnselect" listener="#{patientBean.unselectPatientListener}" update="@form" />
                     <p:column headerText="#{msgs['patient.number']}" style="width: 10%">
                         <h:outputText value="#{patient.number}" />
                     </p:column>
@@ -49,7 +50,8 @@
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px">
                     <h:commandButton value="#{msgs['button.select']}"
-                                     action="#{patientBean.selectPatient}" />
+                                     action="#{patientBean.selectPatient}"
+                                     rendered="#{not empty patientBean.patient}" />
                     <h:commandButton value="#{msgs['button.cancel']}"
                                      action="/pages/event/schedule-event?faces-redirect=true"
                                      immediate="true" />
