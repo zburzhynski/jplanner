@@ -24,7 +24,7 @@ import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
-import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
+import com.zburzhynski.jplanner.impl.rest.client.IVisitRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
@@ -112,8 +112,8 @@ public class ScheduleBean implements Serializable {
     @ManagedProperty(value = "#{scheduleValidator}")
     private ScheduleValidator scheduleValidator;
 
-    @ManagedProperty(value = "#{patientRestClient}")
-    private IPatientRestClient patientRestClient;
+    @ManagedProperty(value = "#{visitRestClient}")
+    private IVisitRestClient visitRestClient;
 
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader propertyReader;
@@ -261,7 +261,7 @@ public class ScheduleBean implements Serializable {
             request.setComplaint(event.getPatient().getComplaint());
             try {
                 String jdentUrl = configBean.getJdentUrl();
-                CreateVisitResponse response = patientRestClient.createVisit(request, jdentUrl);
+                CreateVisitResponse response = visitRestClient.createVisit(request, jdentUrl);
                 if (response != null) {
                     event.getPatient().setJdentPatientId(response.getPatientId());
                     event.setStatus(ScheduleStatus.STARTED);
@@ -459,8 +459,8 @@ public class ScheduleBean implements Serializable {
         this.scheduleValidator = scheduleValidator;
     }
 
-    public void setPatientRestClient(IPatientRestClient patientRestClient) {
-        this.patientRestClient = patientRestClient;
+    public void setVisitRestClient(IVisitRestClient visitRestClient) {
+        this.visitRestClient = visitRestClient;
     }
 
     public void setPropertyReader(PropertyReader propertyReader) {
