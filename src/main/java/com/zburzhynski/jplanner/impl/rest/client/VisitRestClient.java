@@ -9,6 +9,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.domain.ErrorResponse;
+import com.zburzhynski.jplanner.impl.rest.domain.SearchVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
 import com.zburzhynski.jplanner.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
@@ -28,9 +29,21 @@ import javax.ws.rs.core.Response;
 @Component
 public class VisitRestClient implements IVisitRestClient {
 
+    private static final String GET_BY_SCHEDULE_ID = "rest/visit/get-by-schedule-id";
+
     private static final String CREATE_VISIT_URL = "rest/visit/create-visit";
 
     private Client client = Client.create(new DefaultClientConfig());
+
+    @Override
+    public SearchVisitResponse getByScheduleId(String scheduleId, String jdentUrl) throws JdentUnavailableException {
+        try {
+            WebResource webResource = client.resource(jdentUrl + GET_BY_SCHEDULE_ID);
+            return webResource.accept(MediaType.APPLICATION_XML).post(SearchVisitResponse.class, scheduleId);
+        } catch (UniformInterfaceException | ClientHandlerException exception) {
+            throw new JdentUnavailableException("Jdent service not available");
+        }
+    }
 
     @Override
     public CreateVisitResponse createVisit(CreateVisitRequest request, String jdentUrl)

@@ -28,6 +28,7 @@ import com.zburzhynski.jplanner.impl.rest.client.IVisitRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.SearchVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
 import com.zburzhynski.jplanner.impl.rest.exception.JdentUnavailableException;
 import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
@@ -259,8 +260,8 @@ public class ScheduleBean implements Serializable {
             request.setDoctorId(event.getDoctor().getId());
             request.setVisitDate(event.getStartDate());
             request.setComplaint(event.getPatient().getComplaint());
+            String jdentUrl = configBean.getJdentUrl();
             try {
-                String jdentUrl = configBean.getJdentUrl();
                 CreateVisitResponse response = visitRestClient.createVisit(request, jdentUrl);
                 if (response != null) {
                     event.getPatient().setJdentPatientId(response.getPatientId());
@@ -323,7 +324,21 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String editEvent() {
-        return SCHEDULE_EVENT.getPath();
+        if (configBean.isJdentIntegrationEnabled()) {
+            try {
+                SearchVisitResponse response = visitRestClient.getByScheduleId(event.getId(), configBean.getJdentUrl());
+                if (CollectionUtils.isNotEmpty(response.getVisits())) {
+                    messageHelper.addMessage(SCHEDULE_EVENT_ALREADY_EXIST_EXCEPTION.getMessage());
+                    return null;
+                }
+                return SCHEDULE_EVENT.getPath();
+            } catch (JdentUnavailableException e) {
+                messageHelper.addMessage(JDENT_UNAVAILABLE_EXCEPTION.getMessage());
+                return null;
+            }
+        } else {
+            return SCHEDULE_EVENT.getPath();
+        }
     }
 
     /**
@@ -332,8 +347,23 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String removeEvent() {
-        scheduleService.delete(event);
-        return SCHEDULE_EVENTS.getPath();
+        if (configBean.isJdentIntegrationEnabled()) {
+            try {
+                SearchVisitResponse response = visitRestClient.getByScheduleId(event.getId(), configBean.getJdentUrl());
+                if (CollectionUtils.isNotEmpty(response.getVisits())) {
+                    messageHelper.addMessage(SCHEDULE_EVENT_ALREADY_EXIST_EXCEPTION.getMessage());
+                    return null;
+                }
+                scheduleService.delete(event);
+                return SCHEDULE_EVENTS.getPath();
+            } catch (JdentUnavailableException e) {
+                messageHelper.addMessage(JDENT_UNAVAILABLE_EXCEPTION.getMessage());
+                return null;
+            }
+        } else {
+            scheduleService.delete(event);
+            return SCHEDULE_EVENTS.getPath();
+        }
     }
 
     /**

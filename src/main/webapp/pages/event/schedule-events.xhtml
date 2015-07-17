@@ -90,11 +90,12 @@
                                          styleClass="eventMenuButton" />
                         <p:commandButton value="#{msgs['eventMenu.editEvent']}"
                                          action="#{scheduleBean.editEvent}"
+                                         update="messages"
                                          oncomplete="PF('menu').hide();"
                                          styleClass="eventMenuButton" />
                         <p:commandButton value="#{msgs['eventMenu.removeEvent']}"
                                          action="#{scheduleBean.removeEvent}"
-                                         update="scheduler"
+                                         update="messages"
                                          onstart="PF('menu').hide();"
                                          styleClass="eventMenuButton">
                             <p:confirm header="#{msgs['removeScheduleConfirm.header']}"

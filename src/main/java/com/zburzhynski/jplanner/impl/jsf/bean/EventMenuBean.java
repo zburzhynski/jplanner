@@ -66,7 +66,7 @@ public class EventMenuBean implements Serializable {
      * @return true if visible, else false
      */
     public boolean isVisibleCancelEventButton() {
-        return CANCELED != getEventStatus() && FINISHED != getEventStatus();
+        return PLANNED == getEventStatus();
     }
 
     /**
