@@ -66,6 +66,7 @@
                           closeOnEscape="true"
                           modal="true"
                           styleClass="eventMenu">
+                    <p:focus for="eventMenu" />
                     <h:panelGrid>
                         <p:commandButton value="#{msgs['eventMenu.startEvent']}"
                                          action="#{scheduleBean.startEvent}"
