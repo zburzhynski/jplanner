@@ -35,9 +35,9 @@ public class EventMenuBean implements Serializable {
      * @return event menu header
      */
     public String getMenuHeader() {
-        if (scheduleBean.getEvent() != null && scheduleBean.getEvent().getPatient().getPerson() != null
-            && !scheduleBean.getEvent().getPatient().getPerson().isEmpty()) {
-            return scheduleBean.getEvent().getPatient().getPerson().getShortName();
+        if (scheduleBean.getEvent() != null && scheduleBean.getEvent().getClient().getPerson() != null
+            && !scheduleBean.getEvent().getClient().getPerson().isEmpty()) {
+            return scheduleBean.getEvent().getClient().getPerson().getShortName();
         }
         return null;
     }
@@ -77,7 +77,7 @@ public class EventMenuBean implements Serializable {
     public boolean isVisibleGoToCardButton() {
         if (configBean.isJdentIntegrationEnabled()) {
             if (scheduleBean.getEvent() != null) {
-                if (StringUtils.isNotBlank(scheduleBean.getEvent().getPatient().getJdentPatientId())) {
+                if (StringUtils.isNotBlank(scheduleBean.getEvent().getClient().getJdentPatientId())) {
                     return true;
                 }
             }

@@ -13,15 +13,15 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Patient of clinic.
+ * Client of clinic.
  * <p/>
  * Date: 12.07.2015
  *
  * @author Vladimir Zburzhynski
  */
 @Entity
-@Table(name = "patient")
-public class Patient extends Domain {
+@Table(name = "client")
+public class Client extends Domain {
 
     public static final String P_JDENT_PATIENT_ID = "jdentPatientId";
     public static final String P_PERSON = "person";
@@ -33,8 +33,8 @@ public class Patient extends Domain {
     @JoinColumn(name = "person_id")
     private Person person = new Person();
 
-    @Column(name = "complaint")
-    private String complaint;
+    @Column(name = "reason")
+    private String reason;
 
     @Column(name = "additional_info")
     private String additionalInfo;
@@ -55,12 +55,12 @@ public class Patient extends Domain {
         this.person = person;
     }
 
-    public String getComplaint() {
-        return complaint;
+    public String getReason() {
+        return reason;
     }
 
-    public void setComplaint(String complaint) {
-        this.complaint = complaint;
+    public void setReason(String reason) {
+        this.reason = reason;
     }
 
     public String getAdditionalInfo() {
@@ -77,16 +77,16 @@ public class Patient extends Domain {
             return true;
         }
 
-        if (!(o instanceof Patient)) {
+        if (!(o instanceof Client)) {
             return false;
         }
 
-        Patient that = (Patient) o;
+        Client that = (Client) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(jdentPatientId, that.jdentPatientId)
             .append(person, that.person)
-            .append(complaint, that.complaint)
+            .append(reason, that.reason)
             .append(additionalInfo, that.additionalInfo)
             .isEquals();
     }
@@ -97,7 +97,7 @@ public class Patient extends Domain {
             .appendSuper(super.hashCode())
             .append(jdentPatientId)
             .append(person)
-            .append(complaint)
+            .append(reason)
             .append(additionalInfo)
             .toHashCode();
     }
@@ -108,7 +108,7 @@ public class Patient extends Domain {
             .appendSuper(super.toString())
             .append("jdentPatientId", jdentPatientId)
             .append("person", person)
-            .append("complaint", complaint)
+            .append("reason", reason)
             .append("additionalInfo", additionalInfo)
             .toString();
     }
