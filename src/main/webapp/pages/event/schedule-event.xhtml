@@ -36,7 +36,8 @@
                                  value="#{scheduleBean.event.patient.person.surname}"
                                  label="#{msgs['person.surname']}"
                                  maxlength="50"
-                                 readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
+                                 readonly="#{configBean.jdentIntegrationEnabled
+                                    and (not empty scheduleBean.event.patient.jdentPatientId)}"
                                  required="true"
                                  styleClass="inp" />
                     <p:spacer />
@@ -45,28 +46,34 @@
                                  value="#{scheduleBean.event.patient.person.name}"
                                  label="#{msgs['person.name']}"
                                  maxlength="50"
-                                 readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
+                                 readonly="#{configBean.jdentIntegrationEnabled
+                                    and (not empty scheduleBean.event.patient.jdentPatientId)}"
                                  required="true"
                                  styleClass="inp" />
                     <p:commandButton action="#{scheduleBean.choosePatient}"
                                      immediate="true"
                                      title="#{msgs['schedule.button.choosePatient']}"
+                                     rendered="#{configBean.jdentIntegrationEnabled}"
                                      icon="ui-icon-person" />
+                    <p:spacer rendered="#{not configBean.jdentIntegrationEnabled}" />
                     <h:outputLabel for="patronymic" value="#{msgs['person.patronymic']}:" />
                     <p:inputText id="patronymic"
                                  value="#{scheduleBean.event.patient.person.patronymic}"
                                  label="#{msgs['person.patronymic']}"
                                  maxlength="50"
-                                 readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
+                                 readonly="#{configBean.jdentIntegrationEnabled
+                                    and (not empty scheduleBean.event.patient.jdentPatientId)}"
                                  required="true"
                                  styleClass="inp" />
                     <p:commandButton action="#{scheduleBean.clearPatient}"
                                      title="#{msgs['schedule.button.clearPatient']}"
                                      immediate="true"
                                      update="eventForm"
-                                     rendered="#{not empty scheduleBean.event.patient.jdentPatientId}"
+                                     rendered="#{configBean.jdentIntegrationEnabled
+                                        and (not empty scheduleBean.event.patient.jdentPatientId)}"
                                      icon="ui-icon-trash" />
-                    <p:spacer rendered="#{empty scheduleBean.event.patient.jdentPatientId}" />
+                    <p:spacer rendered="#{not configBean.jdentIntegrationEnabled
+                        or (empty scheduleBean.event.patient.jdentPatientId)}" />
                     <h:outputLabel for="birthday" value="#{msgs['person.birthday']}:" />
                     <p:calendar id="birthday"
                                 value="#{scheduleBean.event.patient.person.birthday}"
@@ -75,7 +82,8 @@
                                 yearRange="1900:c"
                                 navigator="true"
                                 locale="ru"
-                                readonly="#{not empty scheduleBean.event.patient.jdentPatientId}"
+                                readonly="#{configBean.jdentIntegrationEnabled
+                                    and (not empty scheduleBean.event.patient.jdentPatientId)}"
                                 required="true"
                                 styleClass="cal">
                     </p:calendar>
@@ -83,7 +91,8 @@
                     <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
                     <p:selectOneRadio id="gender"
                                       value="#{scheduleBean.event.patient.person.gender}"
-                                      readonly="#{not empty scheduleBean.event.patient.jdentPatientId}">
+                                      readonly="#{configBean.jdentIntegrationEnabled
+                                        and (not empty scheduleBean.event.patient.jdentPatientId)}">
                         <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
                                        itemLabel="#{msgs[g.value]}" />
                     </p:selectOneRadio>
