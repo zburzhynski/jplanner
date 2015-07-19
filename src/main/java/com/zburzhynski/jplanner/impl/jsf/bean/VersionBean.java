@@ -17,7 +17,7 @@ public class VersionBean implements Serializable {
 
     private String version = "1.0.0";
 
-    private String versionDate = "21.04.2015";
+    private String versionDate = "20.07.2015";
 
     /**
      * Gets program version.
