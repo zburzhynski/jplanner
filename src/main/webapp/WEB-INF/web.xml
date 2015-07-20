@@ -14,6 +14,11 @@
         <param-value>Production</param-value>
     </context-param>
 
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>jplanner.root</param-value>
+    </context-param>
+
     <!-- Welcome page -->
     <welcome-file-list>
         <welcome-file>pages/event/schedule-events.xhtml</welcome-file>
