@@ -543,8 +543,15 @@ public class ScheduleBean implements Serializable {
     private ScheduleSearchCriteria buildScheduleSearchCriteria(Date start, Date end) {
         ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
         searchCriteria.setWorkplace(workplace);
-        Date startDate = DateUtils.setInitialTime(DateUtils.addDayToDate(start, 1));
-        Date endDate = DateUtils.setFinalTime(end);
+        Date startDate;
+        Date endDate;
+        if (TimeZone.getDefault().getRawOffset() >= 0) {
+            startDate = DateUtils.setInitialTime(start);
+            endDate = DateUtils.setFinalTime(DateUtils.addDayToDate(end, -1));
+        } else {
+            startDate = DateUtils.setInitialTime(DateUtils.addDayToDate(start, 1));
+            endDate = DateUtils.setFinalTime(end);
+        }
         searchCriteria.setStartDate(startDate);
         searchCriteria.setEndDate(endDate);
         return searchCriteria;
