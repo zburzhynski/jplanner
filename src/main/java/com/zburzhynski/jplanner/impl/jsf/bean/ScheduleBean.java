@@ -98,7 +98,7 @@ public class ScheduleBean implements Serializable {
 
     private Schedule event;
 
-    private String scheduleView = "agendaWeek";
+    private String view = "agendaWeek";
 
     private Date initialDate = new Date();
 
@@ -399,7 +399,7 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent {@link SelectEvent}
      */
     public void selectViewListener(SelectEvent selectEvent) {
-        scheduleView = (String) selectEvent.getObject();
+        view = (String) selectEvent.getObject();
     }
 
     /**
@@ -453,12 +453,12 @@ public class ScheduleBean implements Serializable {
         this.event = event;
     }
 
-    public String getScheduleView() {
-        return scheduleView;
+    public String getView() {
+        return view;
     }
 
-    public void setScheduleView(String scheduleView) {
-        this.scheduleView = scheduleView;
+    public void setView(String view) {
+        this.view = view;
     }
 
     public Date getInitialDate() {

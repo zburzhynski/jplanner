@@ -50,7 +50,7 @@
                             firstHour="#{scheduleBean.firstHour}"
                             allDaySlot="false"
                             timeZone="#{scheduleBean.timeZone}"
-                            view="#{scheduleBean.scheduleView}"
+                            view="#{scheduleBean.view}"
                             initialDate="#{scheduleBean.initialDate}"
                             tooltip="true">
                     <p:ajax event="dateSelect" listener="#{scheduleBean.createEvent}" update="messages" />
