@@ -28,21 +28,21 @@ import javax.faces.bean.ManagedProperty;
 @ApplicationScoped
 public class ConfigBean implements Serializable {
 
-    private static final String P_SCHEDULER_PRECISION = "scheduler_precision";
+    private static final String SCHEDULER_PRECISION = "scheduler_precision";
 
-    private static final String P_EVENT_DURATION = "event_duration";
+    private static final String EVENT_DURATION = "event_duration";
 
-    private static final String P_PATIENTS_PER_PAGE = "patients_per_page";
+    private static final String PATIENTS_PER_PAGE = "patients_per_page";
 
-    private static final String P_EMPLOYEES_PER_PAGE = "employees_per_page";
+    private static final String EMPLOYEES_PER_PAGE = "employees_per_page";
 
-    private static final String P_CABINETS_PER_PAGE = "cabinets_per_page";
+    private static final String CABINETS_PER_PAGE = "cabinets_per_page";
 
-    private static final String P_POSITIONS_PER_PAGE = "job_positions_per_page";
+    private static final String POSITIONS_PER_PAGE = "job_positions_per_page";
 
-    private static final String P_JDENT_INTEGRATION_ENABLED = "jdent_integration_enabled";
+    private static final String JDENT_INTEGRATION_ENABLED = "jdent_integration_enabled";
 
-    private static final String P_JDENT_URL = "jdent_url";
+    private static final String JDENT_URL = "jdent_url";
 
     private Setting setting;
 
@@ -117,7 +117,7 @@ public class ConfigBean implements Serializable {
      * @return scheduler precision
      */
     public int getSchedulerPrecision() {
-        return Integer.parseInt(settings.get(P_SCHEDULER_PRECISION).getValue());
+        return Integer.parseInt(settings.get(SCHEDULER_PRECISION).getValue());
     }
 
     /**
@@ -126,7 +126,7 @@ public class ConfigBean implements Serializable {
      * @return schedule event duration
      */
     public int getEventDuration() {
-        return Integer.parseInt(settings.get(P_EVENT_DURATION).getValue());
+        return Integer.parseInt(settings.get(EVENT_DURATION).getValue());
     }
 
     /**
@@ -135,7 +135,7 @@ public class ConfigBean implements Serializable {
      * @return patients per page count
      */
     public int getPatientsPerPageCount() {
-        return Integer.parseInt(settings.get(P_PATIENTS_PER_PAGE).getValue());
+        return Integer.parseInt(settings.get(PATIENTS_PER_PAGE).getValue());
     }
 
     /**
@@ -144,7 +144,7 @@ public class ConfigBean implements Serializable {
      * @return employees per page count
      */
     public int getEmployeesPerPageCount() {
-        return Integer.parseInt(settings.get(P_EMPLOYEES_PER_PAGE).getValue());
+        return Integer.parseInt(settings.get(EMPLOYEES_PER_PAGE).getValue());
     }
 
     /**
@@ -153,7 +153,7 @@ public class ConfigBean implements Serializable {
      * @return cabinets per page count
      */
     public int getCabinetsPerPageCount() {
-        return Integer.parseInt(settings.get(P_CABINETS_PER_PAGE).getValue());
+        return Integer.parseInt(settings.get(CABINETS_PER_PAGE).getValue());
     }
 
     /**
@@ -162,7 +162,7 @@ public class ConfigBean implements Serializable {
      * @return positions per page count
      */
     public int getPositionsPerPageCount() {
-        return Integer.parseInt(settings.get(P_POSITIONS_PER_PAGE).getValue());
+        return Integer.parseInt(settings.get(POSITIONS_PER_PAGE).getValue());
     }
 
     /**
@@ -171,7 +171,7 @@ public class ConfigBean implements Serializable {
      * @return true if jdent integration enabled, else false
      */
     public boolean isJdentIntegrationEnabled() {
-        return BooleanUtils.toBoolean(settings.get(P_JDENT_INTEGRATION_ENABLED).getValue());
+        return BooleanUtils.toBoolean(settings.get(JDENT_INTEGRATION_ENABLED).getValue());
     }
 
     /**
@@ -180,7 +180,7 @@ public class ConfigBean implements Serializable {
      * @return jdent integration url
      */
     public String getJdentUrl() {
-        return settings.get(P_JDENT_URL).getValue();
+        return settings.get(JDENT_URL).getValue();
     }
 
     public Setting getSetting() {
