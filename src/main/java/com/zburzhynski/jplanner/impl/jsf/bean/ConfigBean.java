@@ -1,8 +1,8 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import static com.zburzhynski.jplanner.impl.domain.SettingCategory.COMMON;
-import static com.zburzhynski.jplanner.impl.domain.SettingCategory.JDENT;
-import static com.zburzhynski.jplanner.impl.domain.SettingCategory.VIEW;
+import static com.zburzhynski.jplanner.api.domain.SettingCategory.COMMON;
+import static com.zburzhynski.jplanner.api.domain.SettingCategory.JDENT;
+import static com.zburzhynski.jplanner.api.domain.SettingCategory.VIEW;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.ISettingService;
 import com.zburzhynski.jplanner.impl.domain.Setting;

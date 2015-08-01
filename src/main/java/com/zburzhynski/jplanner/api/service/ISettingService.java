@@ -1,7 +1,7 @@
 package com.zburzhynski.jplanner.api.service;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
-import com.zburzhynski.jplanner.impl.domain.SettingCategory;
+import com.zburzhynski.jplanner.api.domain.SettingCategory;
 
 import java.util.List;
 
@@ -19,7 +19,7 @@ public interface ISettingService<ID, T extends IDomain> extends IBaseService<ID,
     /**
      * Gets settings by category.
      *
-     * @param category {@link com.zburzhynski.jplanner.impl.domain.SettingCategory} setting category
+     * @param category {@link com.zburzhynski.jplanner.api.domain.SettingCategory} setting category
      * @return settings
      */
     List<T> getByCategory(SettingCategory category);

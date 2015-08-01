@@ -1,9 +1,9 @@
 package com.zburzhynski.jplanner.impl.repository;
 
 import static com.zburzhynski.jplanner.impl.domain.Setting.P_SORT_ORDER;
+import com.zburzhynski.jplanner.api.domain.SettingCategory;
 import com.zburzhynski.jplanner.api.repository.ISettingRepository;
 import com.zburzhynski.jplanner.impl.domain.Setting;
-import com.zburzhynski.jplanner.impl.domain.SettingCategory;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;

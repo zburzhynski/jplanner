@@ -1,9 +1,9 @@
 package com.zburzhynski.jplanner.impl.service;
 
+import com.zburzhynski.jplanner.api.domain.SettingCategory;
 import com.zburzhynski.jplanner.api.repository.ISettingRepository;
 import com.zburzhynski.jplanner.api.service.ISettingService;
 import com.zburzhynski.jplanner.impl.domain.Setting;
-import com.zburzhynski.jplanner.impl.domain.SettingCategory;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

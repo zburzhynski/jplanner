@@ -1,7 +1,7 @@
 package com.zburzhynski.jplanner.api.repository;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
-import com.zburzhynski.jplanner.impl.domain.SettingCategory;
+import com.zburzhynski.jplanner.api.domain.SettingCategory;
 
 import java.util.List;
 

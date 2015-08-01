@@ -1,4 +1,4 @@
-package com.zburzhynski.jplanner.impl.domain;
+package com.zburzhynski.jplanner.api.domain;
 
 /**
  * Setting value type.

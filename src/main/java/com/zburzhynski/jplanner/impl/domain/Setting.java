@@ -1,5 +1,7 @@
 package com.zburzhynski.jplanner.impl.domain;
 
+import com.zburzhynski.jplanner.api.domain.SettingCategory;
+import com.zburzhynski.jplanner.api.domain.SettingValueType;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
