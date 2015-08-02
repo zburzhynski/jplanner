@@ -22,10 +22,22 @@
 .workplaceValue {
     width: 33%;
 }
+.doctorLabel {
+    width: 10%;
+}
+.doctorValue {
+    width: 90%;
+}
 
 .eventMenu {
     width: 18%;
 }
 .eventMenuButton {
     width: 100%;
+}
+.workplaceViewType {
+    width: 30%;
+}
+.workplaceViewValue {
+    width: 70%;
 }

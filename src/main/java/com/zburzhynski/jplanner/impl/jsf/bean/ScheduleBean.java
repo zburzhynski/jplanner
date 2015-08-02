@@ -16,11 +16,15 @@ import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.Gender;
+import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.domain.ScheduleStatus;
+import com.zburzhynski.jplanner.api.domain.ScheduleViewType;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
+import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
+import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
@@ -96,6 +100,8 @@ public class ScheduleBean implements Serializable {
 
     private Workplace workplace;
 
+    private Employee doctor;
+
     private Schedule event;
 
     private String view = "agendaWeek";
@@ -104,11 +110,16 @@ public class ScheduleBean implements Serializable {
 
     private int firstHour = FIRTH_HOUR;
 
+    private ScheduleViewType viewType = ScheduleViewType.EMPLOYEE;
+
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
 
     @ManagedProperty(value = "#{cabinetService}")
     private ICabinetService cabinetService;
+
+    @ManagedProperty(value = "#{employeeService}")
+    private IEmployeeService employeeService;
 
     @ManagedProperty(value = "#{scheduleValidator}")
     private ScheduleValidator scheduleValidator;
@@ -130,12 +141,21 @@ public class ScheduleBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        List<Cabinet> cabinets = cabinetService.getAll();
-        if (isNotEmpty(cabinets)) {
-            cabinet = cabinets.get(0);
-            if (isNotEmpty(cabinet.getWorkplaces())) {
-                workplace = cabinet.getWorkplaces().get(0);
+        if (ScheduleViewType.WORKPLACE.equals(viewType)) {
+            List<Cabinet> cabinets = cabinetService.getAll();
+            if (isNotEmpty(cabinets)) {
+                cabinet = cabinets.get(0);
+                if (isNotEmpty(cabinet.getWorkplaces())) {
+                    workplace = cabinet.getWorkplaces().get(0);
+                }
             }
+            doctor = null;
+        } else if (ScheduleViewType.EMPLOYEE.equals(viewType)) {
+            List<Employee> doctors = employeeService.getByPosition(PositionType.DOCTOR);
+            if (isNotEmpty(doctors)) {
+                doctor = doctors.get(0);
+            }
+            workplace = null;
         }
         eventModel = new LazyScheduleModel() {
             @Override
@@ -403,6 +423,14 @@ public class ScheduleBean implements Serializable {
     }
 
     /**
+     * Selects view type listener.
+     */
+    public void selectViewTypeListener() {
+        init();
+        JsfUtils.update(SCHEDULER_COMPONENT);
+    }
+
+    /**
      * Select cabinet listener.
      */
     public void selectCabinetListener() {
@@ -414,6 +442,13 @@ public class ScheduleBean implements Serializable {
      * Select workplace listener.
      */
     public void selectWorkplaceListener() {
+        JsfUtils.update(SCHEDULER_COMPONENT);
+    }
+
+    /**
+     * Select doctor listener.
+     */
+    public void selectDoctorListener() {
         JsfUtils.update(SCHEDULER_COMPONENT);
     }
 
@@ -443,6 +478,14 @@ public class ScheduleBean implements Serializable {
 
     public void setWorkplace(Workplace workplace) {
         this.workplace = workplace;
+    }
+
+    public Employee getDoctor() {
+        return doctor;
+    }
+
+    public void setDoctor(Employee doctor) {
+        this.doctor = doctor;
     }
 
     public Schedule getEvent() {
@@ -477,12 +520,24 @@ public class ScheduleBean implements Serializable {
         this.firstHour = firstHour;
     }
 
+    public ScheduleViewType getViewType() {
+        return viewType;
+    }
+
+    public void setViewType(ScheduleViewType viewType) {
+        this.viewType = viewType;
+    }
+
     public void setScheduleService(IScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
 
     public void setCabinetService(ICabinetService cabinetService) {
         this.cabinetService = cabinetService;
+    }
+
+    public void setEmployeeService(IEmployeeService employeeService) {
+        this.employeeService = employeeService;
     }
 
     public void setScheduleValidator(ScheduleValidator scheduleValidator) {
@@ -542,7 +597,12 @@ public class ScheduleBean implements Serializable {
 
     private ScheduleSearchCriteria buildScheduleSearchCriteria(Date start, Date end) {
         ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
-        searchCriteria.setWorkplace(workplace);
+        if (workplace != null) {
+            searchCriteria.setWorkplace(workplace);
+        }
+        if (doctor != null) {
+            searchCriteria.setDoctor(doctor);
+        }
         Date startDate;
         Date endDate;
         if (TimeZone.getDefault().getRawOffset() >= 0) {
