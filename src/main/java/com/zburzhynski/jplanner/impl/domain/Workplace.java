@@ -74,7 +74,6 @@ public class Workplace extends Domain {
         Workplace that = (Workplace) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
-            .append(cabinet, that.cabinet)
             .append(name, that.name)
             .append(description, that.description)
             .isEquals();
@@ -84,7 +83,6 @@ public class Workplace extends Domain {
     public int hashCode() {
         return new HashCodeBuilder()
             .appendSuper(super.hashCode())
-            .append(cabinet)
             .append(name)
             .append(description)
             .toHashCode();
@@ -94,7 +92,6 @@ public class Workplace extends Domain {
     public String toString() {
         return new ToStringBuilder(this)
             .appendSuper(super.toString())
-            .append("cabinet", cabinet)
             .append("name", name)
             .append("description", description)
             .toString();

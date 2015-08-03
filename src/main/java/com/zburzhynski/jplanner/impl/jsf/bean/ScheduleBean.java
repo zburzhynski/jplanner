@@ -74,8 +74,6 @@ public class ScheduleBean implements Serializable {
 
     private static final String SCHEDULER_COMPONENT = "eventsForm:scheduler";
 
-    private static final String WORKPLACE_NOT_SELECTED = "schedule.workplaceNotSelected";
-
     private static final String EVENT_MOVED = "schedule.eventMoved";
 
     private static final String EVENT_RESIZED = "schedule.eventResized";
@@ -149,13 +147,11 @@ public class ScheduleBean implements Serializable {
                     workplace = cabinet.getWorkplaces().get(0);
                 }
             }
-            doctor = null;
         } else if (ScheduleViewType.EMPLOYEE.equals(viewType)) {
             List<Employee> doctors = employeeService.getByPosition(PositionType.DOCTOR);
             if (isNotEmpty(doctors)) {
                 doctor = doctors.get(0);
             }
-            workplace = null;
         }
         eventModel = new LazyScheduleModel() {
             @Override
@@ -173,14 +169,10 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent {@link SelectEvent}
      */
     public void createEvent(SelectEvent selectEvent) {
-        if (cabinet != null && CollectionUtils.isNotEmpty(cabinet.getWorkplaces())) {
-            initialDate = (Date) selectEvent.getObject();
-            firstHour = DateUtils.extractHour(initialDate);
-            event = buildScheduleEvent(selectEvent);
-            JsfUtils.redirect(SCHEDULE_EVENT.getPath());
-        } else {
-            messageHelper.addMessage(WORKPLACE_NOT_SELECTED);
-        }
+        initialDate = (Date) selectEvent.getObject();
+        firstHour = DateUtils.extractHour(initialDate);
+        event = buildScheduleEvent(selectEvent);
+        JsfUtils.redirect(SCHEDULE_EVENT.getPath());
     }
 
     /**
@@ -426,6 +418,11 @@ public class ScheduleBean implements Serializable {
      * Selects view type listener.
      */
     public void selectViewTypeListener() {
+        if (ScheduleViewType.WORKPLACE.equals(viewType)) {
+            doctor = null;
+        } else if (ScheduleViewType.EMPLOYEE.equals(viewType)) {
+            workplace = null;
+        }
         init();
         JsfUtils.update(SCHEDULER_COMPONENT);
     }
@@ -592,6 +589,7 @@ public class ScheduleBean implements Serializable {
         Date endDate = DateUtils.addMinuteToDate(startDate, configBean.getEventDuration());
         Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
         scheduleEvent.setWorkplace(workplace);
+        scheduleEvent.setDoctor(doctor);
         return scheduleEvent;
     }
 

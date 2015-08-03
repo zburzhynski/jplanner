@@ -106,6 +106,19 @@
                                        itemLabel="#{msgs[status.value]}" />
                     </p:selectOneMenu>
                     <p:spacer />
+                    <h:outputLabel for="workplace" value="#{msgs['schedule.workplace']}:" />
+                    <p:selectOneMenu id="workplace"
+                                     value="#{scheduleBean.event.workplace}"
+                                     label="#{msgs['schedule.workplace']}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     style="width: 100%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{workplaceListBean.workplaces}" var="workplace"
+                                       itemValue="#{workplace}"
+                                       itemLabel="#{workplace.cabinet.number} - #{workplace.name}" />
+                    </p:selectOneMenu>
+                    <p:spacer />
                     <h:outputLabel for="doctor" value="#{msgs['schedule.doctor']}:" />
                     <p:selectOneMenu id="doctor"
                                      value="#{scheduleBean.event.doctor}"
