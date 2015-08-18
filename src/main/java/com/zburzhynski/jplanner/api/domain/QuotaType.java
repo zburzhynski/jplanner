@@ -13,6 +13,8 @@ public enum QuotaType {
 
     OFF_TIME("quotaType.offTime"),
 
+    LUNCH("quotaType.lunch"),
+
     WEEKEND("quotaType.weekend"),
 
     HOLIDAY("quotaType.holiday"),
