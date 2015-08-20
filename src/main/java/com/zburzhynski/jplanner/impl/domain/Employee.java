@@ -4,11 +4,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -39,6 +43,12 @@ public class Employee extends Domain {
 
     @Column(name = "additional_info")
     private String additionalInfo;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(name = "employee_timetable",
+        joinColumns = {@JoinColumn(name = "employee_id")},
+        inverseJoinColumns = {@JoinColumn(name = "timetable_id")})
+    private List<Timetable> timetables;
 
 //    @OneToOne(fetch = FetchType.EAGER, targetEntity = User.class, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "application_user_id")
@@ -74,6 +84,27 @@ public class Employee extends Domain {
 
     public void setAdditionalInfo(String additionalInfo) {
         this.additionalInfo = additionalInfo;
+    }
+
+    /**
+     * Gets employee timetables.
+     *
+     * @return employee timetables
+     */
+    public List<Timetable> getTimetables() {
+        if (timetables == null) {
+            timetables = new ArrayList<>();
+        }
+        return timetables;
+    }
+
+    /**
+     * Sets employee timetables.
+     *
+     * @param timetables employee timetables to set
+     */
+    public void setTimetables(List<Timetable> timetables) {
+        this.timetables = timetables;
     }
 
     //    public IUser getUser() {

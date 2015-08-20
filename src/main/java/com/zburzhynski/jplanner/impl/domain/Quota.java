@@ -6,7 +6,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.Table;
 
 /**
@@ -20,12 +23,17 @@ import javax.persistence.Table;
 @Table(name = "quota")
 public class Quota extends Domain {
 
+    @Column(name = "start_date")
     private Date startDate;
 
+    @Column(name = "end_date")
     private Date endDate;
 
+    @Column(name = "quota_type")
+    @Enumerated(value = EnumType.STRING)
     private QuotaType quotaType;
 
+    @Column(name = "description")
     private String description;
 
     public Date getStartDate() {
