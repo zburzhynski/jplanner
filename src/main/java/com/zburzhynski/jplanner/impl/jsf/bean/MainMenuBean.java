@@ -6,6 +6,7 @@ import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
 import static com.zburzhynski.jplanner.api.domain.View.POSITIONS;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static com.zburzhynski.jplanner.api.domain.View.SETTINGS;
+import static com.zburzhynski.jplanner.api.domain.View.TIMETABLES;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
@@ -73,6 +74,15 @@ public class MainMenuBean implements Serializable {
      */
     public String positions() {
         return POSITIONS.getPath();
+    }
+
+    /**
+     * Redirects to timetables.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String timetables() {
+        return TIMETABLES.getPath();
     }
 
     /**
