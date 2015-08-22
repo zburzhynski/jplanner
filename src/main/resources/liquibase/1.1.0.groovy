@@ -51,6 +51,18 @@ databaseChangeLog {
     }
 
     changeSet(id: '2015-08-20-4', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        addForeignKeyConstraint(constraintName: 'FK_timetable_quota_2_timetable',
+                baseTableName: 'timetable_quota', baseTableSchemaName: 'jplanner', baseColumnNames: 'timetable_id',
+                referencedTableName: 'timetable', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2015-08-20-5', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        addForeignKeyConstraint(constraintName: 'FK_timetable_quota_2_quota',
+                baseTableName: 'timetable_quota', baseTableSchemaName: 'jplanner', baseColumnNames: 'quota_id',
+                referencedTableName: 'quota', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2015-08-20-6', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
         createTable(schemaName: 'jplanner', tableName: 'employee_timetable', tablespace: 'jplanner_data', remarks: 'Employee timetable mapping') {
             column(name: 'employee_id', type: 'VARCHAR(128)', remarks: 'The reference to the employee table') {
                 constraints(nullable: false)
@@ -61,6 +73,18 @@ databaseChangeLog {
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'employee_timetable', tablespace: 'jplanner_index',
                 columnNames: 'employee_id, timetable_id', constraintName: 'PK_employee_timetable')
+    }
+
+    changeSet(id: '2015-08-20-7', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        addForeignKeyConstraint(constraintName: 'FK_employee_timetable_2_employee',
+                baseTableName: 'employee_timetable', baseTableSchemaName: 'jplanner', baseColumnNames: 'employee_id',
+                referencedTableName: 'employee', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
+    }
+
+    changeSet(id: '2015-08-20-8', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        addForeignKeyConstraint(constraintName: 'FK_employee_timetable_2_timetable',
+                baseTableName: 'employee_timetable', baseTableSchemaName: 'jplanner', baseColumnNames: 'timetable_id',
+                referencedTableName: 'timetable', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
 }
