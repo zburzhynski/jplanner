@@ -48,6 +48,13 @@
                                 styleClass="cal">
                     </p:calendar>
                     <p:message for="birthday" />
+                    <h:outputLabel for="gender" value="#{msgs['person.gender']}:" />
+                    <p:selectOneRadio id="gender"
+                                      value="#{employeeBean.employee.person.gender}">
+                        <f:selectItems value="#{genderBean.genders}" var="g" itemValue="#{g}"
+                                       itemLabel="#{msgs[g.value]}" />
+                    </p:selectOneRadio>
+                    <p:message for="gender" />
                     <h:outputLabel for="position" value="#{msgs['position.name']}:" />
                     <p:selectOneMenu id="position"
                                      value="#{employeeBean.employee.position}"
