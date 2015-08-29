@@ -1,0 +1,161 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .cal .ui-inputfield {
+                width: 95%;
+            }
+            .period {
+                width: 38%;
+            }
+            .from {
+                width: 6%;
+                text-align: right;
+            }
+            .start {
+                width: 25%;
+            }
+            .to {
+                width: 6%;
+                text-align: right;
+            }
+            .end {
+                width: 25%;
+            }
+        </style>
+        <p:panel>
+            <h:form id="templateForm">
+                <h4>#{msgs['template.header']}</h4>
+                <h:panelGrid columns="5" columnClasses="period,from,start,to,end" width="40%">
+                    <h:outputText value="#{msgs['template.period']}" />
+                    <h:outputText value="#{msgs['template.from']}" />
+                    <p:calendar id="startDate"
+                                value="#{templateBean.startDate}"
+                                label="#{msgs['template.from']}"
+                                pattern="dd/MM/yyyy"
+                                yearRange="1900:c"
+                                navigator="true"
+                                locale="ru"
+                                required="true"
+                                styleClass="cal">
+                    </p:calendar>
+                    <h:outputText value="#{msgs['template.to']}" />
+                    <p:calendar id="endDate"
+                                value="#{templateBean.endDate}"
+                                label="#{msgs['template.to']}"
+                                pattern="dd/MM/yyyy"
+                                yearRange="1900:c"
+                                navigator="true"
+                                locale="ru"
+                                required="true"
+                                styleClass="cal">
+                    </p:calendar>
+                </h:panelGrid>
+                <h4>#{msgs['template.dayTemplate']}</h4>
+                <h:panelGrid id="dayTemplate">
+                    <p:selectOneRadio id="template" value="#{templateBean.template}" layout="custom">
+                        <f:selectItems value="#{timetableTemplateBean.templates}"
+                                       var="template"
+                                       itemValue="#{template}"
+                                       itemLabel="#{msgs[template.value]}" />
+                        <p:ajax process="@this" update="dayTemplate" />
+                    </p:selectOneRadio>
+                    <h:panelGrid columns="3">
+                        <p:radioButton id="opt1" for="template" itemIndex="0" />
+                        <h:outputLabel for="opt1" value="#{msgs[timetableTemplateBean.templates[0].value]}" />
+                        <h:panelGrid>
+                            <p:selectManyCheckbox id="selectedDayOfWeek" value="#{templateBean.selectedDayOfWeek}"
+                                                  disabled="#{templateBean.template != 'DAY_OF_WEEK'}">
+                                <f:selectItems value="#{dayOfWeekBean.days}" var="day"
+                                               itemValue="#{day}" itemLabel="#{msgs[day.name]}" />
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                        <p:radioButton id="opt2" for="template" itemIndex="1" />
+                        <h:outputLabel for="opt2" value="#{msgs[timetableTemplateBean.templates[1].value]}" />
+                        <p:spacer />
+                        <p:radioButton id="opt3" for="template" itemIndex="2" />
+                        <h:outputLabel for="opt3" value="#{msgs[timetableTemplateBean.templates[2].value]}" />
+                        <p:spacer />
+                        <p:radioButton id="opt4" for="template" itemIndex="3" />
+                        <h:outputLabel for="opt4" value="#{msgs[timetableTemplateBean.templates[3].value]}" />
+                        <h:panelGrid>
+                            <p:selectManyCheckbox value="#{templateBean.selectedDayOfMonth}" layout="grid" columns="16"
+                                                  disabled="#{templateBean.template != 'DAY_OF_MONTH'}">
+                                <f:selectItems value="#{dayOfMonthBean.days}" var="day" itemValue="#{day}" itemLabel="#{day.number}" />
+                            </p:selectManyCheckbox>
+                        </h:panelGrid>
+                        <p:radioButton id="opt5" for="template" itemIndex="4" />
+                        <h:outputLabel for="opt4" value="#{msgs[timetableTemplateBean.templates[4].value]}" />
+                        <p:spacer />
+                    </h:panelGrid>
+                </h:panelGrid>
+                <h4>#{msgs['template.timeInterval']}</h4>
+                <h:panelGrid width="75%">
+                    <p:dataTable value="#{templateBean.quotas}"
+                                 var="quota"
+                                 emptyMessage="#{msgs['quota.empty']}" style="width: 100%">
+                        <p:column headerText="#{msgs['quota.from']}" width="20%">
+                            <h:outputText value="#{quota.from}" />
+                        </p:column>
+                        <p:column headerText="#{msgs['quota.to']}" width="20%">
+                            <h:outputText value="#{quota.to}" />
+                        </p:column>
+                        <p:column headerText="#{msgs['quota.type']}" width="15%">
+                            <h:outputText value="#{quota.type}" />
+                        </p:column>
+                        <p:column headerText="#{msgs['quota.description']}" width="40%">
+                            <h:outputText value="#{quota.description}" />
+                        </p:column>
+                        <p:column width="5%">
+                            <h:panelGroup>
+                                <p:commandLink action="#{templateBean.editWorkplace}"
+                                               style="padding-right: 5px">
+                                    <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
+                                    <f:setPropertyActionListener
+                                            target="#{cabinetBean.workplace}" value="#{workplace}" />
+                                </p:commandLink>
+                                <p:commandLink action="#{cabinetBean.removeWorkplace}">
+                                    <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
+                                    <p:confirm header="#{msgs['removeWorkplaceConfirm.header']}"
+                                               message="#{msgs['removeWorkplaceConfirm.message']}?"
+                                               icon="ui-icon-alert" />
+                                    <f:setPropertyActionListener
+                                            target="#{cabinetBean.workplace}" value="#{workplace}" />
+                                </p:commandLink>
+                            </h:panelGroup>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:commandButton image="/resources/css/css-images/add.gif"
+                                     title="#{msgs['button.add']}" />
+                </h:panelGrid>
+                <h4>#{msgs['template.dayExclusion']}</h4>
+                <h:panelGrid columns="2">
+                    <h:outputLabel for="excludedDayOfWeek" value="#{msgs['template.excludedDays']}" />
+                    <p:selectManyCheckbox id="excludedDayOfWeek" value="#{templateBean.excludedDayOfWeek}">
+                        <f:selectItems value="#{dayOfWeekBean.days}" var="day" itemValue="#{day}" itemLabel="#{msgs[day.name]}" />
+                    </p:selectManyCheckbox>
+                    <h:outputLabel for="excludedDates" value="#{msgs['template.excludedDates']}" />
+                    <p:spacer id="excludedDates" />
+                </h:panelGrid>
+                <h:panelGrid columns="2" style="padding-top: 5px">
+                    <h:commandButton id="generate" value="#{msgs['timetable.button.generate']}"
+                                     action="#{templateBean.generate}" />
+                    <h:commandButton id="cancel" value="#{msgs['button.cancel']}"
+                                     action="/pages/timetable/timetables?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+                <ui:include src="/pages/localization/scheduler_localization.xhtml" />
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>
