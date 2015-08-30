@@ -15,6 +15,7 @@ public class QuotaValidator extends BaseValidator {
 
     private static final String START_DATE_NOT_SELECTED = "quotaValidator.startDateNotSelected";
     private static final String END_DATE_NOT_SELECTED = "quotaValidator.endDateNotSelected";
+    private static final String START_TIME_GREATER_THEN_END_TIME = "quotaValidator.startTimeGreaterThenEndTime";
 
     /**
      * Validates schedule event.
@@ -29,6 +30,10 @@ public class QuotaValidator extends BaseValidator {
         }
         if (quota.getEndDate() == null) {
             addMessage(END_DATE_NOT_SELECTED);
+            return false;
+        }
+        if (quota.getStartDate().after(quota.getEndDate()) || quota.getStartDate().equals(quota.getEndDate())) {
+            addMessage(START_TIME_GREATER_THEN_END_TIME);
             return false;
         }
         return true;
