@@ -9,10 +9,10 @@
     <p:dialog id="quota" widgetVar="quota" header="#{msgs['template.timeInterval']}" modal="true" closeOnEscape="true">
        <h:panelGrid columns="3">
            <p:outputLabel for="from" value="#{msgs['quota.from']}" />
-           <p:calendar id="from" value="#{templateBean.quota.startDate}" pattern="HH:mm" timeOnly="true" required="true" />
+           <p:calendar id="from" value="#{templateBean.quota.startDate}" locale="ru" pattern="HH:mm" timeOnly="true" required="true" />
            <p:message for="from" />
            <p:outputLabel for="from" value="#{msgs['quota.to']}" />
-           <p:calendar id="to" value="#{templateBean.quota.endDate}" pattern="HH:mm" timeOnly="true" required="true" />
+           <p:calendar id="to" value="#{templateBean.quota.endDate}" locale="ru" pattern="HH:mm" timeOnly="true" required="true" />
            <p:message for="to" />
            <p:outputLabel for="decription" value="#{msgs['quota.description']}" />
            <p:inputTextarea id="decription" value="#{templateBean.quota.description}" />
