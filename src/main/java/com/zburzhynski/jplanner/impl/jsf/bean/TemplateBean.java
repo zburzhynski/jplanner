@@ -91,9 +91,11 @@ public class TemplateBean implements Serializable {
 
     /**
      * Removes quota.
+     *
+     * @param removedQuota removed quota
      */
-    public void removeQuota() {
-        quotas.remove(quota);
+    public void removeQuota(Quota removedQuota) {
+        quotas.remove(removedQuota);
     }
 
     public Date getStartDate() {

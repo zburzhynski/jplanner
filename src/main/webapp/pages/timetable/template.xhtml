@@ -113,25 +113,22 @@
                         <p:column headerText="#{msgs['quota.type']}" width="20%">
                             <h:outputText value="#{quota.quotaType}" />
                         </p:column>
-                        <p:column headerText="#{msgs['quota.description']}" width="43%">
+                        <p:column headerText="#{msgs['quota.description']}" width="37%">
                             <h:outputText value="#{quota.description}" />
                         </p:column>
-                        <p:column width="7%">
+                        <p:column width="13%">
                             <h:panelGroup>
-                                <p:commandLink actionListener="#{templateBean.editQuota}"
-                                               style="padding-right: 5px">
-                                    <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
-                                    <f:setPropertyActionListener
-                                            target="#{templateBean.quota}" value="#{quota}" />
-                                </p:commandLink>
-                                <p:commandLink action="#{cabinetBean.removeWorkplace}">
-                                    <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
-                                    <p:confirm header="#{msgs['removeWorkplaceConfirm.header']}"
-                                               message="#{msgs['removeWorkplaceConfirm.message']}?"
+                                <p:commandButton actionListener="#{templateBean.editQuota(quota)}"
+                                                 icon="ui-icon-pencil"
+                                                 style="padding-right: 5px">
+                                </p:commandButton>
+                                <p:commandButton actionListener="#{templateBean.removeQuota(quota)}"
+                                                 icon="ui-icon-trash"
+                                                 update="quotas">
+                                    <p:confirm header="#{msgs['removeQuotaConfirm.header']}"
+                                               message="#{msgs['removeQuotaConfirm.message']}?"
                                                icon="ui-icon-alert" />
-                                    <f:setPropertyActionListener
-                                            target="#{cabinetBean.workplace}" value="#{workplace}" />
-                                </p:commandLink>
+                                </p:commandButton>
                             </h:panelGroup>
                         </p:column>
                     </p:dataTable>
@@ -160,6 +157,16 @@
                                      action="/pages/timetable/timetables?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
                 <ui:include src="/pages/timetable/quota.xhtml" />
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
             </h:form>
