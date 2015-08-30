@@ -98,17 +98,21 @@
                 </h:panelGrid>
                 <h4>#{msgs['template.timeInterval']}</h4>
                 <h:panelGrid width="75%">
-                    <p:dataTable value="#{templateBean.quotas}"
+                    <p:dataTable widgetVar="quotas" value="#{templateBean.quotas}"
                                  var="quota"
                                  emptyMessage="#{msgs['quota.empty']}" style="width: 100%">
                         <p:column headerText="#{msgs['quota.from']}" width="20%">
-                            <h:outputText value="#{quota.from}" />
+                            <h:outputText value="#{quota.startDate}">
+                                <f:convertDateTime pattern="HH:mm" />
+                            </h:outputText>
                         </p:column>
                         <p:column headerText="#{msgs['quota.to']}" width="20%">
-                            <h:outputText value="#{quota.to}" />
+                            <h:outputText value="#{quota.endDate}">
+                                <f:convertDateTime pattern="HH:mm" />
+                            </h:outputText>
                         </p:column>
                         <p:column headerText="#{msgs['quota.type']}" width="15%">
-                            <h:outputText value="#{quota.type}" />
+                            <h:outputText value="#{quota.quotaType}" />
                         </p:column>
                         <p:column headerText="#{msgs['quota.description']}" width="40%">
                             <h:outputText value="#{quota.description}" />
@@ -134,7 +138,11 @@
                     </p:dataTable>
                 </h:panelGrid>
                 <h:panelGrid>
-                    <h:commandButton image="/resources/css/css-images/add.gif"
+                    <p:commandButton actionListener="#{templateBean.addQuota}"
+                                     process="@this"
+                                     update="quota"
+                                     oncomplete="PF('quota').show();"
+                                     icon="ui-icon-plusthick"
                                      title="#{msgs['button.add']}" />
                 </h:panelGrid>
                 <h4>#{msgs['template.dayExclusion']}</h4>
@@ -147,12 +155,13 @@
                     <p:spacer id="excludedDates" />
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px">
-                    <h:commandButton id="generate" value="#{msgs['timetable.button.generate']}"
+                    <p:commandButton id="generate" value="#{msgs['timetable.button.generate']}"
                                      action="#{templateBean.generate}" />
-                    <h:commandButton id="cancel" value="#{msgs['button.cancel']}"
+                    <p:commandButton id="cancel" value="#{msgs['button.cancel']}"
                                      action="/pages/timetable/timetables?faces-redirect=true"
                                      immediate="true" />
                 </h:panelGrid>
+                <ui:include src="/pages/timetable/quota.xhtml" />
                 <ui:include src="/pages/localization/scheduler_localization.xhtml" />
             </h:form>
         </p:panel>

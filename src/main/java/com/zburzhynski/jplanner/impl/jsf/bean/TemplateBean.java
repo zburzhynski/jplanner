@@ -4,6 +4,7 @@ import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
@@ -26,7 +27,9 @@ public class TemplateBean implements Serializable {
 
     private TimetableTemplate template = TimetableTemplate.DAY_OF_WEEK;
 
-    private List<Quota> quotas;
+    private Quota quota;
+
+    private List<Quota> quotas = new ArrayList<>();
 
     private String[] selectedDayOfWeek;
 
@@ -42,7 +45,27 @@ public class TemplateBean implements Serializable {
      * Generates time quotes.
      */
     public void generate() {
+    }
 
+    /**
+     * Adds quota.
+     */
+    public void addQuota() {
+        quota = new Quota();
+    }
+
+    /**
+     * Saves quota.
+     */
+    public void saveQuota() {
+        quotas.add(quota);
+    }
+
+    /**
+     * Removes quota.
+     */
+    public void removeQuota() {
+        quotas.remove(quota);
     }
 
     public Date getStartDate() {
@@ -67,6 +90,14 @@ public class TemplateBean implements Serializable {
 
     public void setTemplate(TimetableTemplate template) {
         this.template = template;
+    }
+
+    public Quota getQuota() {
+        return quota;
+    }
+
+    public void setQuota(Quota quota) {
+        this.quota = quota;
     }
 
     public List<Quota> getQuotas() {

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="quota" widgetVar="quota" header="#{msgs['template.timeInterval']}" modal="true" closeOnEscape="true">
+       <h:panelGrid columns="3">
+           <p:outputLabel for="from" value="#{msgs['quota.from']}" />
+           <p:calendar id="from" value="#{templateBean.quota.startDate}" pattern="HH:mm" timeOnly="true" required="true" />
+           <p:message for="from" />
+           <p:outputLabel for="from" value="#{msgs['quota.to']}" />
+           <p:calendar id="to" value="#{templateBean.quota.endDate}" pattern="HH:mm" timeOnly="true" required="true" />
+           <p:message for="to" />
+           <p:outputLabel for="decription" value="#{msgs['quota.description']}" />
+           <p:inputTextarea id="decription" value="#{templateBean.quota.description}" />
+           <p:message for="decription" />
+       </h:panelGrid>
+       <h:panelGrid columns="2">
+           <p:commandButton id="save"
+                            value="#{msgs['button.save']}"
+                            actionListener="#{templateBean.saveQuota}"
+                            process="@this"
+                            onclick="PF('quotas').update();PF('quota').hide();"
+                            icon="ui-icon-disk" />
+           <p:commandButton type="cancel"
+                            value="#{msgs['button.cancel']}"
+                            onclick="PF('quota').hide();"
+                            immediate="true"
+                            icon="ui-icon-cancel" />
+       </h:panelGrid>
+    </p:dialog>
+
+</ui:composition>
