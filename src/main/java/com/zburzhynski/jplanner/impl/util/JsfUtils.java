@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.util;
 
+import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -77,10 +78,19 @@ public final class JsfUtils {
     /**
      * Updates element state.
      *
-     * @param name name of element tot update
+     * @param name name of element to update
      */
     public static void update(String name) {
         FacesContext.getCurrentInstance().getPartialViewContext().getRenderIds().add(name);
+    }
+
+    /**
+     * Executes java script.
+     *
+     * @param script java script to execute
+     */
+    public static void execute(String script) {
+        RequestContext.getCurrentInstance().execute(script);
     }
 
 }

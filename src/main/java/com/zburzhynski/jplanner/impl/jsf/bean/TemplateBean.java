@@ -1,13 +1,19 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.ModificationMode.CREATE;
+import static com.zburzhynski.jplanner.api.domain.ModificationMode.EDIT;
+import com.zburzhynski.jplanner.api.domain.ModificationMode;
 import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
 import com.zburzhynski.jplanner.impl.domain.Quota;
+import com.zburzhynski.jplanner.impl.jsf.validator.QuotaValidator;
+import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 /**
@@ -20,6 +26,8 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean
 @ViewScoped
 public class TemplateBean implements Serializable {
+
+    private static final String HIDE_QUOTA_DIALOG = "PF('quota').hide();";
 
     private Date startDate;
 
@@ -41,6 +49,11 @@ public class TemplateBean implements Serializable {
 
     private List<Date> excludedArbitraryDays;
 
+    private ModificationMode quotaModificationMode;
+
+    @ManagedProperty(value = "#{quotaValidator}")
+    private QuotaValidator quotaValidator;
+
     /**
      * Generates time quotes.
      */
@@ -51,14 +64,29 @@ public class TemplateBean implements Serializable {
      * Adds quota.
      */
     public void addQuota() {
+        quotaModificationMode = CREATE;
         quota = new Quota();
+    }
+
+    /**
+     * Edits quota.
+     */
+    public void editQuota() {
+        quotaModificationMode = EDIT;
     }
 
     /**
      * Saves quota.
      */
     public void saveQuota() {
-        quotas.add(quota);
+        boolean valid = quotaValidator.validate(quota);
+        if (!valid) {
+            return;
+        }
+        if (CREATE.equals(quotaModificationMode)) {
+            quotas.add(quota);
+        }
+        JsfUtils.execute(HIDE_QUOTA_DIALOG);
     }
 
     /**
@@ -146,6 +174,10 @@ public class TemplateBean implements Serializable {
 
     public void setExcludedArbitraryDays(List<Date> excludedArbitraryDays) {
         this.excludedArbitraryDays = excludedArbitraryDays;
+    }
+
+    public void setQuotaValidator(QuotaValidator quotaValidator) {
+        this.quotaValidator = quotaValidator;
     }
 
 }

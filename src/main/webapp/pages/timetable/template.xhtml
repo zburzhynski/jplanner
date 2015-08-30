@@ -32,6 +32,7 @@
         </style>
         <p:panel>
             <h:form id="templateForm">
+                <p:growl id="messages" showDetail="true" />
                 <h4>#{msgs['template.header']}</h4>
                 <h:panelGrid columns="5" columnClasses="period,from,start,to,end" width="40%">
                     <h:outputText value="#{msgs['template.period']}" />
@@ -43,7 +44,6 @@
                                 yearRange="1900:c"
                                 navigator="true"
                                 locale="ru"
-                                required="true"
                                 styleClass="cal">
                     </p:calendar>
                     <h:outputText value="#{msgs['template.to']}" />
@@ -54,7 +54,6 @@
                                 yearRange="1900:c"
                                 navigator="true"
                                 locale="ru"
-                                required="true"
                                 styleClass="cal">
                     </p:calendar>
                 </h:panelGrid>
@@ -97,33 +96,33 @@
                     </h:panelGrid>
                 </h:panelGrid>
                 <h4>#{msgs['template.timeInterval']}</h4>
-                <h:panelGrid width="75%">
-                    <p:dataTable widgetVar="quotas" value="#{templateBean.quotas}"
+                <h:panelGrid width="80%">
+                    <p:dataTable id="quotas" value="#{templateBean.quotas}"
                                  var="quota"
                                  emptyMessage="#{msgs['quota.empty']}" style="width: 100%">
-                        <p:column headerText="#{msgs['quota.from']}" width="20%">
+                        <p:column headerText="#{msgs['quota.from']}" width="15%">
                             <h:outputText value="#{quota.startDate}">
                                 <f:convertDateTime pattern="HH:mm" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="#{msgs['quota.to']}" width="20%">
+                        <p:column headerText="#{msgs['quota.to']}" width="15%">
                             <h:outputText value="#{quota.endDate}">
                                 <f:convertDateTime pattern="HH:mm" />
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="#{msgs['quota.type']}" width="15%">
+                        <p:column headerText="#{msgs['quota.type']}" width="20%">
                             <h:outputText value="#{quota.quotaType}" />
                         </p:column>
-                        <p:column headerText="#{msgs['quota.description']}" width="40%">
+                        <p:column headerText="#{msgs['quota.description']}" width="43%">
                             <h:outputText value="#{quota.description}" />
                         </p:column>
-                        <p:column width="5%">
+                        <p:column width="7%">
                             <h:panelGroup>
-                                <p:commandLink action="#{templateBean.editWorkplace}"
+                                <p:commandLink actionListener="#{templateBean.editQuota}"
                                                style="padding-right: 5px">
                                     <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
                                     <f:setPropertyActionListener
-                                            target="#{cabinetBean.workplace}" value="#{workplace}" />
+                                            target="#{templateBean.quota}" value="#{quota}" />
                                 </p:commandLink>
                                 <p:commandLink action="#{cabinetBean.removeWorkplace}">
                                     <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
