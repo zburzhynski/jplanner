@@ -155,4 +155,52 @@ public final class DateUtils {
         return Integer.parseInt(dateFormat.format(date));
     }
 
+    /**
+     * Checks is one date before or equals other date.
+     *
+     * @param checkDate check date
+     * @param endDate   end date
+     * @return true if one date before other, else false
+     */
+    public static boolean beforeOrEquals(Date checkDate, Date endDate) {
+        return checkDate.equals(endDate) || checkDate.before(endDate);
+    }
+
+    /**
+     * Checks is one date after or equals other date .
+     *
+     * @param checkDate check date
+     * @param startDate start date
+     * @return true if one date after other, else false
+     */
+    public static boolean afterOrEquals(Date checkDate, Date startDate) {
+        return checkDate.equals(startDate) || checkDate.after(startDate);
+    }
+
+    /**
+     * Checks is two dates overlapped including.
+     *
+     * @param start1 start date of first range
+     * @param end1 end date of first range
+     * @param start2 start date of second range
+     * @param end2 end date of second range
+     * @return true if dates overlapped, else false
+     */
+    public static boolean isOverlapIncluding(Date start1, Date end1, Date start2, Date end2) {
+        return beforeOrEquals(start1, end2) && afterOrEquals(end1, start2);
+    }
+
+    /**
+     * Checks is two dates overlapped excluding.
+     *
+     * @param start1 start date of first range
+     * @param end1 end date of first range
+     * @param start2 start date of second range
+     * @param end2 end date of second range
+     * @return true if dates overlapped, else false
+     */
+    public static boolean isOverlapExcluding(Date start1, Date end1, Date start2, Date end2) {
+        return start1.before(end2) && end1.after(start2);
+    }
+
 }

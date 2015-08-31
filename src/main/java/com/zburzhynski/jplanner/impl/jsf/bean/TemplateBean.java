@@ -79,7 +79,7 @@ public class TemplateBean implements Serializable {
      * Saves quota.
      */
     public void saveQuota() {
-        boolean valid = quotaValidator.validate(quota);
+        boolean valid = quotaValidator.validate(quota, quotas);
         if (!valid) {
             return;
         }
