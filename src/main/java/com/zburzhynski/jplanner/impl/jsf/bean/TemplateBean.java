@@ -12,6 +12,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
@@ -37,7 +39,7 @@ public class TemplateBean implements Serializable {
 
     private Quota quota;
 
-    private List<Quota> quotas = new ArrayList<>();
+    private Set<Quota> quotas = new TreeSet<>();
 
     private String[] selectedDayOfWeek;
 
@@ -79,7 +81,7 @@ public class TemplateBean implements Serializable {
      * Saves quota.
      */
     public void saveQuota() {
-        boolean valid = quotaValidator.validate(quota, quotas);
+        boolean valid = quotaValidator.validate(quota, new ArrayList<>(quotas));
         if (!valid) {
             return;
         }
@@ -130,11 +132,11 @@ public class TemplateBean implements Serializable {
         this.quota = quota;
     }
 
-    public List<Quota> getQuotas() {
+    public Set<Quota> getQuotas() {
         return quotas;
     }
 
-    public void setQuotas(List<Quota> quotas) {
+    public void setQuotas(Set<Quota> quotas) {
         this.quotas = quotas;
     }
 

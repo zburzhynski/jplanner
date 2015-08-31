@@ -21,7 +21,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "quota")
-public class Quota extends Domain {
+public class Quota extends Domain implements Comparable<Quota> {
 
     @Column(name = "start_date")
     private Date startDate;
@@ -66,6 +66,11 @@ public class Quota extends Domain {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public int compareTo(Quota o) {
+        return this.getStartDate().compareTo(o.startDate);
     }
 
     @Override
