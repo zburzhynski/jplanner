@@ -24,6 +24,15 @@
                        showButtonPanel="true"
                        locale="ru" />
            <p:message for="to" />
+           <h:outputLabel for="quotaType" value="#{msgs['quota.type']}:" />
+           <p:selectOneMenu id="quotaType"
+                            value="#{templateBean.quota.quotaType}"
+                            required="true"
+                            style="width: 80%">
+               <f:selectItems value="#{quotaTypeBean.quotaTypes}" var="type" itemValue="#{type}"
+                              itemLabel="#{msgs[type.value]}" />
+           </p:selectOneMenu>
+           <p:message for="quotaType" />
            <p:outputLabel for="decription" value="#{msgs['quota.description']}" />
            <p:inputTextarea id="decription" value="#{templateBean.quota.description}" />
            <p:message for="decription" />

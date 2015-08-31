@@ -37,7 +37,7 @@ public class TemplateBean implements Serializable {
 
     private TimetableTemplate template = TimetableTemplate.DAY_OF_WEEK;
 
-    private Quota quota;
+    private Quota quota = new Quota();
 
     private Set<Quota> quotas = new TreeSet<>();
 
