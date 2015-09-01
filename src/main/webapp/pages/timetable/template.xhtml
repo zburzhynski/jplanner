@@ -92,7 +92,12 @@
                         </h:panelGrid>
                         <p:radioButton id="opt5" for="template" itemIndex="4" />
                         <h:outputLabel for="opt4" value="#{msgs[timetableTemplateBean.templates[4].value]}" />
-                        <p:spacer />
+                        <h:panelGrid>
+                            <p:calendar mode="inline" selection="multiple" pages="2" locale="ru" disabled="#{templateBean.template != 'ARBITRARY_DATE'}">
+                                <p:ajax event="dateSelect" listener="#{templateBean.arbitraryDateSelectListener}" update="selectedArbitraryDates" />
+                            </p:calendar>
+                            <h:outputLabel id="selectedArbitraryDates" value="#{templateBean.selectedArbitraryDates}" />
+                        </h:panelGrid>
                     </h:panelGrid>
                 </h:panelGrid>
                 <h4>#{msgs['template.timeInterval']}</h4>

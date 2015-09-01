@@ -2,11 +2,15 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.CREATE;
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.EDIT;
+import com.zburzhynski.jplanner.api.domain.CommonConstant;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
 import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.jsf.validator.QuotaValidator;
+import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.primefaces.event.SelectEvent;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -45,11 +49,11 @@ public class TemplateBean implements Serializable {
 
     private String[] selectedDayOfMonth;
 
-    private List<Date> selectedArbitraryDays;
+    private Set<Date> selectedArbitraryDates = new TreeSet<>();
 
     private String[] excludedDayOfWeek;
 
-    private List<Date> excludedArbitraryDays;
+    private Set<Date> excludedArbitraryDates = new TreeSet<>();
 
     private ModificationMode quotaModificationMode;
 
@@ -98,6 +102,20 @@ public class TemplateBean implements Serializable {
      */
     public void removeQuota(Quota removedQuota) {
         quotas.remove(removedQuota);
+    }
+
+    /**
+     * Arbitrary date select listener.
+     *
+     * @param event {SelectEvent} select event
+     */
+    public void arbitraryDateSelectListener(SelectEvent event) {
+        Date selected = (Date) event.getObject();
+        if (selectedArbitraryDates.contains(selected)) {
+            selectedArbitraryDates.remove(selected);
+        } else {
+            selectedArbitraryDates.add(selected);
+        }
     }
 
     public Date getStartDate() {
@@ -156,12 +174,17 @@ public class TemplateBean implements Serializable {
         this.selectedDayOfMonth = selectedDayOfMonth;
     }
 
-    public List<Date> getSelectedArbitraryDays() {
-        return selectedArbitraryDays;
-    }
-
-    public void setSelectedArbitraryDays(List<Date> selectedArbitraryDays) {
-        this.selectedArbitraryDays = selectedArbitraryDays;
+    /**
+     * Gets selected arbitrary dates.
+     *
+     * @return selected arbitrary dates
+     */
+    public String getSelectedArbitraryDates() {
+        List<String> selectedDates = new ArrayList<>();
+        for (Date date : selectedArbitraryDates) {
+            selectedDates.add(DateUtils.formatDate(date, CommonConstant.RUSSIAN_DATE_FORMAT));
+        }
+        return StringUtils.join(selectedDates, CommonConstant.COMMA + CommonConstant.SPACE);
     }
 
     public String[] getExcludedDayOfWeek() {
@@ -172,12 +195,8 @@ public class TemplateBean implements Serializable {
         this.excludedDayOfWeek = excludedDayOfWeek;
     }
 
-    public List<Date> getExcludedArbitraryDays() {
-        return excludedArbitraryDays;
-    }
-
-    public void setExcludedArbitraryDays(List<Date> excludedArbitraryDays) {
-        this.excludedArbitraryDays = excludedArbitraryDays;
+    public String getExcludedArbitraryDates() {
+        return null;
     }
 
     public void setQuotaValidator(QuotaValidator quotaValidator) {

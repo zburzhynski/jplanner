@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 /**
  * Contains common methods for working with dates.
@@ -21,6 +22,8 @@ public final class DateUtils {
     private static final String DAY_TEMPLATE = "dd";
     private static final String MONTH_TEMPLATE = "MM";
     private static final String YEAR_TEMPLATE = "yyyy";
+    private static final String RUSSIAN_LANGUAGE = "ru";
+    private static final String RUSSIAN_REGION = "RU";
 
     /**
      * Sets initial time 00:00:00 to date.
@@ -201,6 +204,20 @@ public final class DateUtils {
      */
     public static boolean isOverlapExcluding(Date start1, Date end1, Date start2, Date end2) {
         return start1.before(end2) && end1.after(start2);
+    }
+
+    /**
+     * Formats date by template.
+     *
+     * @param date     date
+     * @param template template
+     * @return formatted date
+     */
+    public static String formatDate(Date date, String template) {
+        Locale locale = new Locale.Builder().setLanguage(RUSSIAN_LANGUAGE)
+            .setRegion(RUSSIAN_REGION).build();
+        DateFormat dateFormat = new SimpleDateFormat(template, locale);
+        return dateFormat.format(date);
     }
 
 }
