@@ -93,10 +93,19 @@
                         <p:radioButton id="opt5" for="template" itemIndex="4" />
                         <h:outputLabel for="opt4" value="#{msgs[timetableTemplateBean.templates[4].value]}" />
                         <h:panelGrid>
-                            <p:calendar mode="inline" selection="multiple" pages="2" locale="ru" disabled="#{templateBean.template != 'ARBITRARY_DATE'}">
-                                <p:ajax event="dateSelect" listener="#{templateBean.arbitraryDateSelectListener}" update="selectedArbitraryDates" />
-                            </p:calendar>
-                            <h:outputLabel id="selectedArbitraryDates" value="#{templateBean.selectedArbitraryDates}" />
+                            <h:outputLabel id="templateArbitraryDates" value="#{templateBean.selectedArbitraryDates}" />
+                            <h:panelGroup>
+                                <p:commandButton icon="ui-icon-calendar"
+                                                 title="#{msgs['button.select']}"
+                                                 onclick="PF('arbitraryDate').show();"
+                                                 update="selectedArbitraryDates"
+                                                 disabled="#{templateBean.template != 'ARBITRARY_DATE'}" />
+                                <p:commandButton icon="ui-icon-close"
+                                                 title="#{msgs['button.clear']}"
+                                                 actionListener="#{templateBean.clearSelectedArbitraryDates}"
+                                                 update="templateArbitraryDates"
+                                                 disabled="#{templateBean.template != 'ARBITRARY_DATE'}" />
+                            </h:panelGroup>
                         </h:panelGrid>
                     </h:panelGrid>
                 </h:panelGrid>
@@ -124,10 +133,12 @@
                         <p:column width="13%">
                             <h:panelGroup>
                                 <p:commandButton actionListener="#{templateBean.editQuota}"
+                                                 title="#{msgs['button.edit']}"
                                                  icon="ui-icon-pencil"
                                                  style="padding-right: 5px">
                                 </p:commandButton>
                                 <p:commandButton actionListener="#{templateBean.removeQuota(quota)}"
+                                                 title="#{msgs['button.remove']}"
                                                  icon="ui-icon-trash"
                                                  update="quotas">
                                     <p:confirm header="#{msgs['removeQuotaConfirm.header']}"
@@ -152,14 +163,32 @@
                     <p:selectManyCheckbox id="excludedDayOfWeek" value="#{templateBean.excludedDayOfWeek}">
                         <f:selectItems value="#{dayOfWeekBean.days}" var="day" itemValue="#{day}" itemLabel="#{msgs[day.name]}" />
                     </p:selectManyCheckbox>
-                    <h:outputLabel for="excludedDates" value="#{msgs['template.excludedDates']}" />
-                    <p:spacer id="excludedDates" />
+                    <h:outputLabel for="templateExcludedDates" value="#{msgs['template.excludedDates']}" />
+                    <h:panelGrid>
+                        <h:outputLabel id="templateExcludedDates" value="#{templateBean.excludedArbitraryDates}" />
+                        <h:panelGroup>
+                            <p:commandButton id="selectExclusion" icon="ui-icon-calendar"
+                                             title="#{msgs['button.select']}"
+                                             onclick="PF('exclusionDate').show();"
+                                             update="excludedArbitraryDates" />
+                            <p:commandButton id="clearExclusion"
+                                             icon="ui-icon-close"
+                                             title="#{msgs['button.clear']}"
+                                             actionListener="#{templateBean.clearExcludedArbitraryDates}"
+                                             update="@this,templateExcludedDates"
+                                             disabled="#{empty templateBean.excludedArbitraryDates}" />
+                        </h:panelGroup>
+                    </h:panelGrid>
                 </h:panelGrid>
                 <h:panelGrid columns="2" style="padding-top: 5px">
-                    <p:commandButton id="generate" value="#{msgs['timetable.button.generate']}"
-                                     action="#{templateBean.generate}" />
-                    <p:commandButton id="cancel" value="#{msgs['button.cancel']}"
+                    <p:commandButton id="generate"
+                                     value="#{msgs['timetable.button.generate']}"
+                                     action="#{templateBean.generate}"
+                                     icon="ui-icon-clipboard" />
+                    <p:commandButton id="cancel"
+                                     value="#{msgs['button.cancel']}"
                                      action="/pages/timetable/timetables?faces-redirect=true"
+                                     icon="ui-icon-cancel"
                                      immediate="true" />
                 </h:panelGrid>
                 <p:confirmDialog global="true" closeOnEscape="true">
@@ -172,6 +201,8 @@
                                      styleClass="ui-confirmdialog-no"
                                      icon="ui-icon-close" />
                 </p:confirmDialog>
+                <ui:include src="/pages/timetable/arbitrary-date.xhtml" />
+                <ui:include src="/pages/timetable/exclusion-date.xhtml" />
                 <ui:include src="/pages/timetable/quota.xhtml" />
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
             </h:form>

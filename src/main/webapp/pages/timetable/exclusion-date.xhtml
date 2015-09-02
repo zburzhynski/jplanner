@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="exclusionDate"
+              widgetVar="exclusionDate"
+              header="#{msgs['template.excludedDates']}"
+              modal="true"
+              width="645px"
+              closeOnEscape="true">
+        <h:panelGrid>
+            <p:calendar mode="inline" selection="multiple" pages="2" locale="ru">
+                <p:ajax event="dateSelect" listener="#{templateBean.excludedDateSelectListener}" update="excludedArbitraryDates" />
+            </p:calendar>
+            <h:outputLabel id="excludedArbitraryDates" value="#{templateBean.excludedArbitraryDates}" />
+        </h:panelGrid>
+        <h:panelGrid columns="2">
+            <p:commandButton id="okExclusionDate"
+                             value="#{msgs['button.ok']}"
+                             onclick="PF('exclusionDate').hide();"
+                             update="templateExcludedDates,clearExclusion" />
+            <p:commandButton id="clearExclusionDate"
+                             value="#{msgs['button.clear']}"
+                             actionListener="#{templateBean.clearExcludedArbitraryDates}"
+                             update="excludedArbitraryDates" />
+        </h:panelGrid>
+    </p:dialog>
+
+</ui:composition>

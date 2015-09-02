@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:dialog id="arbitraryDate"
+              widgetVar="arbitraryDate"
+              header="#{msgs['template.selectedDates']}"
+              modal="true"
+              width="645px"
+              closeOnEscape="true">
+        <h:panelGrid>
+            <p:calendar mode="inline" selection="multiple" pages="2" locale="ru">
+                <p:ajax event="dateSelect" listener="#{templateBean.arbitraryDateSelectListener}" update="selectedArbitraryDates" />
+            </p:calendar>
+            <h:outputLabel id="selectedArbitraryDates" value="#{templateBean.selectedArbitraryDates}" />
+        </h:panelGrid>
+        <h:panelGrid columns="2">
+            <p:commandButton id="okArbitraryDate"
+                             value="#{msgs['button.ok']}"
+                             onclick="PF('arbitraryDate').hide();"
+                             update="templateArbitraryDates" />
+            <p:commandButton id="clearArbitraryDate"
+                             value="#{msgs['button.clear']}"
+                             actionListener="#{templateBean.clearSelectedArbitraryDates}"
+                             update="selectedArbitraryDates" />
+        </h:panelGrid>
+    </p:dialog>
+
+</ui:composition>

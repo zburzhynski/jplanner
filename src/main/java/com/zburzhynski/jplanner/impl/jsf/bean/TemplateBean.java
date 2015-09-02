@@ -118,6 +118,34 @@ public class TemplateBean implements Serializable {
         }
     }
 
+    /**
+     * Excluded date select listener.
+     *
+     * @param event {SelectEvent} select event
+     */
+    public void excludedDateSelectListener(SelectEvent event) {
+        Date selected = (Date) event.getObject();
+        if (excludedArbitraryDates.contains(selected)) {
+            excludedArbitraryDates.remove(selected);
+        } else {
+            excludedArbitraryDates.add(selected);
+        }
+    }
+
+    /**
+     * Clear selected arbitrary dates.
+     */
+    public void clearSelectedArbitraryDates() {
+        selectedArbitraryDates = new TreeSet<>();
+    }
+
+    /**
+     * Clear excluded arbitrary dates.
+     */
+    public void clearExcludedArbitraryDates() {
+        excludedArbitraryDates = new TreeSet<>();
+    }
+
     public Date getStartDate() {
         return startDate;
     }
@@ -195,8 +223,17 @@ public class TemplateBean implements Serializable {
         this.excludedDayOfWeek = excludedDayOfWeek;
     }
 
+    /**
+     * Gets excluded arbitrary dates.
+     *
+     * @return excluded arbitrary dates
+     */
     public String getExcludedArbitraryDates() {
-        return null;
+        List<String> excludedDates = new ArrayList<>();
+        for (Date date : excludedArbitraryDates) {
+            excludedDates.add(DateUtils.formatDate(date, CommonConstant.RUSSIAN_DATE_FORMAT));
+        }
+        return StringUtils.join(excludedDates, CommonConstant.COMMA + CommonConstant.SPACE);
     }
 
     public void setQuotaValidator(QuotaValidator quotaValidator) {
