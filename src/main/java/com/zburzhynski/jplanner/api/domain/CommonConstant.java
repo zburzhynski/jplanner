@@ -9,6 +9,7 @@ package com.zburzhynski.jplanner.api.domain;
  */
 public abstract class CommonConstant {
 
+    public static final String TIME_FORMAT = "HH:mm:ss";
     public static final String RUSSIAN_DATE_FORMAT = "dd.MM.yyyy";
     public static final String DOT = ".";
     public static final String COMMA = ",";

@@ -1,5 +1,7 @@
 package com.zburzhynski.jplanner.api.domain;
 
+import java.util.EnumSet;
+
 /**
  * Day of week.
  * <p/>
@@ -9,25 +11,48 @@ package com.zburzhynski.jplanner.api.domain;
  */
 public enum DayOfWeek {
 
-    MONDAY(1, "dayOfWeek.monday"),
-    TUESDAY(2, "dayOfWeek.tuesday"),
-    WEDNESDAY(3, "dayOfWeek.wednesday"),
-    THURSDAY(4, "dayOfWeek.thursday"),
-    FRIDAY(5, "dayOfWeek.friday"),
-    SATURDAY(6, "dayOfWeek.saturday"),
-    SUNDAY(7, "dayOfWeek.sunday");
+    MONDAY(1, 2, "dayOfWeek.monday"),
+    TUESDAY(2, 3, "dayOfWeek.tuesday"),
+    WEDNESDAY(3, 4, "dayOfWeek.wednesday"),
+    THURSDAY(4, 5, "dayOfWeek.thursday"),
+    FRIDAY(5, 6, "dayOfWeek.friday"),
+    SATURDAY(6, 7, "dayOfWeek.saturday"),
+    SUNDAY(7, 1, "dayOfWeek.sunday");
 
-    private Integer number;
+    private Integer russianNumber;
+
+    private Integer englishNumber;
 
     private String name;
 
-    private DayOfWeek(int number, String name) {
-        this.number = number;
+    private DayOfWeek(int russianNumber, int englishNumber, String name) {
+        this.russianNumber = russianNumber;
+        this.englishNumber = englishNumber;
         this.name = name;
     }
 
-    public Integer getNumber() {
-        return number;
+    /**
+     * Gets day by number.
+     *
+     * @param dayNumber day number
+     * @return day
+     */
+    public static DayOfWeek getByNumber(int dayNumber) {
+        EnumSet<DayOfWeek> days = EnumSet.allOf(DayOfWeek.class);
+        for (DayOfWeek day : days) {
+            if (day.getEnglishNumber() == dayNumber) {
+                return day;
+            }
+        }
+        return null;
+    }
+
+    public Integer getRussianNumber() {
+        return russianNumber;
+    }
+
+    public Integer getEnglishNumber() {
+        return englishNumber;
     }
 
     public String getName() {

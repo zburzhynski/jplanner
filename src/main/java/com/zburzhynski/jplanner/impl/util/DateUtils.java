@@ -1,6 +1,9 @@
 package com.zburzhynski.jplanner.impl.util;
 
+import com.zburzhynski.jplanner.api.domain.DayOfWeek;
+
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -159,6 +162,18 @@ public final class DateUtils {
     }
 
     /**
+     * Gets day name from date.
+     *
+     * @param date date
+     * @return day name
+     */
+    public static DayOfWeek getDayName(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return DayOfWeek.getByNumber(calendar.get(Calendar.DAY_OF_WEEK));
+    }
+
+    /**
      * Checks is one date before or equals other date.
      *
      * @param checkDate check date
@@ -181,12 +196,23 @@ public final class DateUtils {
     }
 
     /**
+     * Checks if two date objects are on the same day ignoring time.
+     *
+     * @param date1 first date
+     * @param date2 second date
+     * @return true if two dates represent the same day
+     */
+    public static boolean isSameDay(Date date1, Date date2) {
+        return org.apache.commons.lang3.time.DateUtils.isSameDay(date1, date2);
+    }
+
+    /**
      * Checks is two dates overlapped including.
      *
      * @param start1 start date of first range
-     * @param end1 end date of first range
+     * @param end1   end date of first range
      * @param start2 start date of second range
-     * @param end2 end date of second range
+     * @param end2   end date of second range
      * @return true if dates overlapped, else false
      */
     public static boolean isOverlapIncluding(Date start1, Date end1, Date start2, Date end2) {
@@ -197,9 +223,9 @@ public final class DateUtils {
      * Checks is two dates overlapped excluding.
      *
      * @param start1 start date of first range
-     * @param end1 end date of first range
+     * @param end1   end date of first range
      * @param start2 start date of second range
-     * @param end2 end date of second range
+     * @param end2   end date of second range
      * @return true if dates overlapped, else false
      */
     public static boolean isOverlapExcluding(Date start1, Date end1, Date start2, Date end2) {
@@ -218,6 +244,24 @@ public final class DateUtils {
             .setRegion(RUSSIAN_REGION).build();
         DateFormat dateFormat = new SimpleDateFormat(template, locale);
         return dateFormat.format(date);
+    }
+
+    /**
+     * Parse date by template.
+     *
+     * @param date     date
+     * @param template template
+     * @return date
+     */
+    public static Date parseDate(String date, String template) {
+        try {
+            Locale locale = new Locale.Builder().setLanguage(RUSSIAN_LANGUAGE)
+                .setRegion(RUSSIAN_REGION).build();
+            DateFormat dateFormat = new SimpleDateFormat(template, locale);
+            return dateFormat.parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
     }
 
 }

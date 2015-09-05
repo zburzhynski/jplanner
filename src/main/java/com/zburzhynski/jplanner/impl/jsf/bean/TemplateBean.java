@@ -2,9 +2,11 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.CREATE;
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.EDIT;
+import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.CommonConstant;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
 import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
+import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.jsf.validator.QuotaValidator;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
@@ -55,7 +57,12 @@ public class TemplateBean implements Serializable {
 
     private Set<Date> excludedArbitraryDates = new TreeSet<>();
 
+    private String description;
+
     private ModificationMode quotaModificationMode;
+
+    @ManagedProperty(value = "#{timetableService}")
+    private ITimetableService timetableService;
 
     @ManagedProperty(value = "#{quotaValidator}")
     private QuotaValidator quotaValidator;
@@ -64,6 +71,8 @@ public class TemplateBean implements Serializable {
      * Generates time quotes.
      */
     public void generate() {
+        TimetableCreateCriteria createCriteria = buildTimetableCreateCriteria();
+        timetableService.createTimetable(createCriteria);
     }
 
     /**
@@ -236,8 +245,37 @@ public class TemplateBean implements Serializable {
         return StringUtils.join(excludedDates, CommonConstant.COMMA + CommonConstant.SPACE);
     }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setTimetableService(ITimetableService timetableService) {
+        this.timetableService = timetableService;
+    }
+
     public void setQuotaValidator(QuotaValidator quotaValidator) {
         this.quotaValidator = quotaValidator;
+    }
+
+    private TimetableCreateCriteria buildTimetableCreateCriteria() {
+        TimetableCreateCriteria criteria = new TimetableCreateCriteria();
+       //TODO: set real id
+        criteria.setEmployeeId("402881824a8b344a014a8b4a4b48000e");
+        criteria.setStartDate(startDate);
+        criteria.setEndDate(endDate);
+        criteria.setTemplate(template);
+        criteria.setSelectedDayOfWeek(selectedDayOfWeek);
+        criteria.setSelectedDayOfMonth(selectedDayOfMonth);
+        criteria.setSelectedArbitraryDates(selectedArbitraryDates);
+        criteria.setExcludedDayOfWeek(excludedDayOfWeek);
+        criteria.setExcludedArbitraryDates(excludedArbitraryDates);
+        criteria.setQuotas(quotas);
+        criteria.setDescription(description);
+        return criteria;
     }
 
 }
