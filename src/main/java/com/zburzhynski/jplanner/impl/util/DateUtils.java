@@ -27,6 +27,7 @@ public final class DateUtils {
     private static final String YEAR_TEMPLATE = "yyyy";
     private static final String RUSSIAN_LANGUAGE = "ru";
     private static final String RUSSIAN_REGION = "RU";
+    private static final int EVEN_DIVIDER = 2;
 
     /**
      * Sets initial time 00:00:00 to date.
@@ -262,6 +263,26 @@ public final class DateUtils {
         } catch (ParseException e) {
             return null;
         }
+    }
+
+    /**
+     * Checks if day even.
+     *
+     * @param date date to check
+     * @return true if day even
+     */
+    public static boolean isEvenDay(Date date) {
+        return extractDay(date) % EVEN_DIVIDER == 0;
+    }
+
+    /**
+     * Checks if day odd.
+     *
+     * @param date date to check
+     * @return true if day odd
+     */
+    public static boolean isOddDay(Date date) {
+        return !isEvenDay(date);
     }
 
 }

@@ -3,8 +3,13 @@ package com.zburzhynski.jplanner.impl.service;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.RUSSIAN_DATE_FORMAT;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.TIME_FORMAT;
+import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ARBITRARY_DATE;
+import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.DAY_OF_MONTH;
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.DAY_OF_WEEK;
+import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.EVEN_DAY;
+import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
 import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
+import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
@@ -20,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Implementation of {@link ITimetableService} interface.
@@ -36,31 +42,67 @@ public class TimetableService implements ITimetableService {
 
     @Override
     @Transactional(readOnly = false)
-    public void createTimetable(TimetableCreateCriteria createCriteria) {
-        Date startDate = createCriteria.getStartDate();
-        Date endDate = createCriteria.getEndDate();
+    public void createTimetable(TimetableCreateCriteria criteria) {
+        Date startDate = criteria.getStartDate();
+        Date endDate = criteria.getEndDate();
         List<Quota> quotas = new ArrayList<>();
         while (startDate.before(endDate)) {
-            createDayOfWeekQuotas(startDate, createCriteria, quotas);
+            createDayOfWeekQuotas(startDate, criteria, quotas);
+            createEvenDayQuotas(startDate, criteria, quotas);
+            createOddDayQuotas(startDate, criteria, quotas);
+            createDayOfMonthQuotas(startDate, criteria, quotas);
+            createArbitraryDateQuotas(startDate, criteria, quotas);
             startDate = DateUtils.addDayToDate(startDate, 1);
         }
         if (CollectionUtils.isEmpty(quotas)) {
             return;
         }
-        Employee employee = (Employee) employeeRepository.findById(createCriteria.getEmployeeId());
+        Employee employee = (Employee) employeeRepository.findById(criteria.getEmployeeId());
         Timetable timetable = new Timetable();
-        timetable.setStartDate(createCriteria.getStartDate());
-        timetable.setEndDate(createCriteria.getEndDate());
-        timetable.setDescription(createCriteria.getDescription());
+        timetable.setStartDate(criteria.getStartDate());
+        timetable.setEndDate(criteria.getEndDate());
+        timetable.setDescription(criteria.getDescription());
         timetable.setQuotas(quotas);
         employee.getTimetables().add(timetable);
         employeeRepository.saveOrUpdate(employee);
     }
 
-    private void createDayOfWeekQuotas(Date date, TimetableCreateCriteria createCriteria, List<Quota> quotas) {
-        if (DAY_OF_WEEK.equals(createCriteria.getTemplate())) {
-            if (!isDateExcluded(date, createCriteria) && isDateInList(date, createCriteria.getSelectedDayOfWeek())) {
-                quotas.addAll(createQuotas(date, createCriteria));
+    private void createDayOfWeekQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+        if (DAY_OF_WEEK.equals(criteria.getTemplate())) {
+            if (!isDateExcluded(date, criteria) && isDayInWeek(date, criteria.getSelectedDayOfWeek())) {
+                quotas.addAll(createQuotas(date, criteria));
+            }
+        }
+    }
+
+    private void createEvenDayQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+        if (EVEN_DAY.equals(criteria.getTemplate())) {
+            if (!isDateExcluded(date, criteria) && DateUtils.isEvenDay(date)) {
+                quotas.addAll(createQuotas(date, criteria));
+            }
+        }
+    }
+
+    private void createOddDayQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+        if (ODD_DAY.equals(criteria.getTemplate())) {
+            if (!isDateExcluded(date, criteria) && DateUtils.isOddDay(date)) {
+                quotas.addAll(createQuotas(date, criteria));
+            }
+        }
+    }
+
+    private void createDayOfMonthQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+        if (DAY_OF_MONTH.equals(criteria.getTemplate())) {
+            if (!isDateExcluded(date, criteria) && isDayInMonth(date, criteria.getSelectedDayOfMonth())) {
+                quotas.addAll(createQuotas(date, criteria));
+            }
+        }
+    }
+
+    private void createArbitraryDateQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+        if (ARBITRARY_DATE.equals(criteria.getTemplate())) {
+            if (!isDateExcluded(date, criteria) && isDateInList(date, criteria.getSelectedArbitraryDates())) {
+                quotas.addAll(createQuotas(date, criteria));
             }
         }
     }
@@ -84,7 +126,7 @@ public class TimetableService implements ITimetableService {
         return quotas;
     }
 
-    private boolean isDateInList(Date date, String[] selectedDayOfWeek) {
+    private boolean isDayInWeek(Date date, String[] selectedDayOfWeek) {
         for (String selectedDay : selectedDayOfWeek) {
             if (DateUtils.getDayName(date).equals(DayOfWeek.valueOf(selectedDay))) {
                 return true;
@@ -93,12 +135,23 @@ public class TimetableService implements ITimetableService {
         return false;
     }
 
-    private boolean isDateExcluded(Date date, TimetableCreateCriteria createCriteria) {
-        if (isDateInList(date, createCriteria.getExcludedDayOfWeek())) {
-            return true;
+    private boolean isDayInMonth(Date date, String[] selectedDayOfMonth) {
+        for (String selectedDay : selectedDayOfMonth) {
+            if (DateUtils.extractDay(date) == DayOfMonth.valueOf(selectedDay).getNumber()) {
+                return true;
+            }
         }
-        for (Date excludedDate : createCriteria.getExcludedArbitraryDates()) {
-            if (DateUtils.isSameDay(date, excludedDate)) {
+        return false;
+    }
+
+    private boolean isDateExcluded(Date date, TimetableCreateCriteria createCriteria) {
+        return isDayInWeek(date, createCriteria.getExcludedDayOfWeek())
+            || isDateInList(date, createCriteria.getExcludedArbitraryDates());
+    }
+
+    private boolean isDateInList(Date date, Set<Date> selectedDates) {
+        for (Date selectedDate : selectedDates) {
+            if (DateUtils.isSameDay(date, selectedDate)) {
                 return true;
             }
         }
