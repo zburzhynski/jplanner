@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
@@ -50,7 +51,7 @@ public class TimetableService implements ITimetableService<Timetable> {
     public void createTimetable(TimetableCreateCriteria criteria) {
         Date startDate = criteria.getStartDate();
         Date endDate = criteria.getEndDate();
-        Set<Quota> quotas = new TreeSet<>();
+        SortedSet<Quota> quotas = new TreeSet<>();
         while (startDate.before(endDate)) {
             createDayOfWeekQuotas(startDate, criteria, quotas);
             createEvenDayQuotas(startDate, criteria, quotas);
@@ -64,8 +65,8 @@ public class TimetableService implements ITimetableService<Timetable> {
         }
         Employee employee = (Employee) employeeRepository.findById(criteria.getEmployeeId());
         Timetable timetable = new Timetable();
-        timetable.setStartDate(criteria.getStartDate());
-        timetable.setEndDate(criteria.getEndDate());
+        timetable.setStartDate(quotas.first().getStartDate());
+        timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
         timetable.setQuotas(quotas);
         employee.getTimetables().add(timetable);

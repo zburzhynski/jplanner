@@ -36,17 +36,17 @@
                 <p:dataTable id="timetables" value="#{timetableBean.employee.timetables}"
                              var="timetable"
                              emptyMessage="#{msgs['timetables.empty']}" style="width: 100%">
-                    <p:column headerText="#{msgs['timetable.startDate']}" width="15%">
+                    <p:column headerText="#{msgs['timetable.startDate']}" width="16%">
                         <h:outputText value="#{timetable.startDate}">
-                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msgs['timetable.endDate']}" width="15%">
+                    <p:column headerText="#{msgs['timetable.endDate']}" width="16%">
                         <h:outputText value="#{timetable.endDate}">
-                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msgs['quota.description']}" width="59%">
+                    <p:column headerText="#{msgs['quota.description']}" width="57%">
                         <h:outputText value="#{quota.description}" />
                     </p:column>
                     <p:column width="11%">
