@@ -25,6 +25,7 @@ public class EmployeeListBean implements Serializable {
 
     private List<Employee> doctors;
     private List<Employee> assistants;
+    private List<Employee> employees;
 
     @ManagedProperty(value = "#{employeeService}")
     private IEmployeeService employeeService;
@@ -36,6 +37,7 @@ public class EmployeeListBean implements Serializable {
     public void init() {
         doctors = employeeService.getByPosition(DOCTOR);
         assistants = employeeService.getByPosition(ASSISTANT);
+        employees = employeeService.getAll();
     }
 
     /**
@@ -54,6 +56,15 @@ public class EmployeeListBean implements Serializable {
      */
     public List<Employee> getAssistants() {
         return assistants;
+    }
+
+    /**
+     * Gets employees of dental clinic.
+     *
+     * @return employees of dental clinic
+     */
+    public List<Employee> getEmployees() {
+        return employees;
     }
 
     /**

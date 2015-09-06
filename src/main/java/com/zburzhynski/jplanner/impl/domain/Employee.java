@@ -4,8 +4,8 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -29,6 +29,8 @@ public class Employee extends Domain {
 
     public static final String P_PERSON = "person";
     public static final String P_POSITION = "position";
+    public static final String P_TIMETABLES = "timetables";
+    public static final String P_TIMETABLE = "timetable";
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")
@@ -48,7 +50,7 @@ public class Employee extends Domain {
     @JoinTable(name = "employee_timetable",
         joinColumns = {@JoinColumn(name = "employee_id")},
         inverseJoinColumns = {@JoinColumn(name = "timetable_id")})
-    private List<Timetable> timetables;
+    private Set<Timetable> timetables;
 
 //    @OneToOne(fetch = FetchType.EAGER, targetEntity = User.class, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "application_user_id")
@@ -91,9 +93,9 @@ public class Employee extends Domain {
      *
      * @return employee timetables
      */
-    public List<Timetable> getTimetables() {
+    public Set<Timetable> getTimetables() {
         if (timetables == null) {
-            timetables = new ArrayList<>();
+            timetables = new TreeSet<>();
         }
         return timetables;
     }
@@ -103,7 +105,7 @@ public class Employee extends Domain {
      *
      * @param timetables employee timetables to set
      */
-    public void setTimetables(List<Timetable> timetables) {
+    public void setTimetables(Set<Timetable> timetables) {
         this.timetables = timetables;
     }
 

@@ -4,9 +4,9 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,7 +25,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "timetable")
-public class Timetable extends Domain {
+public class Timetable extends Domain implements Comparable<Timetable> {
+
+    public static final String P_QUOTAS = "quotas";
+    public static final String P_QUOTA = "quota";
 
     @Column(name = "start_date")
     private Date startDate;
@@ -40,7 +43,7 @@ public class Timetable extends Domain {
     @JoinTable(name = "timetable_quota",
         joinColumns = {@JoinColumn(name = "timetable_id")},
         inverseJoinColumns = {@JoinColumn(name = "quota_id")})
-    private List<Quota> quotas;
+    private Set<Quota> quotas;
 
     public Date getStartDate() {
         return startDate;
@@ -71,9 +74,9 @@ public class Timetable extends Domain {
      *
      * @return timetable quotas
      */
-    public List<Quota> getQuotas() {
+    public Set<Quota> getQuotas() {
         if (quotas == null) {
-            quotas = new ArrayList<>();
+            quotas = new TreeSet<>();
         }
         return quotas;
     }
@@ -83,8 +86,13 @@ public class Timetable extends Domain {
      *
      * @param quotas timetable quotas to set
      */
-    public void setQuotas(List<Quota> quotas) {
+    public void setQuotas(Set<Quota> quotas) {
         this.quotas = quotas;
+    }
+
+    @Override
+    public int compareTo(Timetable o) {
+        return this.getStartDate().compareTo(o.startDate);
     }
 
     @Override

@@ -18,6 +18,8 @@ public enum View {
     POSITIONS("/pages/position/positions?faces-redirect=true"),
     POSITION("/pages/position/position?faces-redirect=true"),
     TIMETABLES("/pages/timetable/timetables?faces-redirect=true"),
+    TIMETABLE("/pages/timetable/timetable?faces-redirect=true"),
+    TIMETABLE_TEMPLATE("/pages/timetable/template?faces-redirect=true"),
     EMPLOYEES("/pages/employee/employees?faces-redirect=true"),
     EMPLOYEE("/pages/employee/employee?faces-redirect=true"),
     PATIENTS("/pages/patient/patients?faces-redirect=true"),

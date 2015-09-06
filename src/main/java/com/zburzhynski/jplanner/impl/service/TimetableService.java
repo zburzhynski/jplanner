@@ -12,6 +12,7 @@ import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
+import com.zburzhynski.jplanner.api.repository.ITimetableRepository;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Quota;
@@ -26,6 +27,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Implementation of {@link ITimetableService} interface.
@@ -35,17 +37,20 @@ import java.util.Set;
  * @author Vladimir Zburzhynski
  */
 @Service("timetableService")
-public class TimetableService implements ITimetableService {
+public class TimetableService implements ITimetableService<Timetable> {
 
     @Autowired
     private IEmployeeRepository employeeRepository;
+
+    @Autowired
+    private ITimetableRepository timetableRepository;
 
     @Override
     @Transactional(readOnly = false)
     public void createTimetable(TimetableCreateCriteria criteria) {
         Date startDate = criteria.getStartDate();
         Date endDate = criteria.getEndDate();
-        List<Quota> quotas = new ArrayList<>();
+        Set<Quota> quotas = new TreeSet<>();
         while (startDate.before(endDate)) {
             createDayOfWeekQuotas(startDate, criteria, quotas);
             createEvenDayQuotas(startDate, criteria, quotas);
@@ -67,7 +72,13 @@ public class TimetableService implements ITimetableService {
         employeeRepository.saveOrUpdate(employee);
     }
 
-    private void createDayOfWeekQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+    @Override
+    @Transactional(readOnly = false)
+    public void delete(Timetable timetable) {
+        timetableRepository.delete(timetable);
+    }
+
+    private void createDayOfWeekQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
         if (DAY_OF_WEEK.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && isDayInWeek(date, criteria.getSelectedDayOfWeek())) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -75,7 +86,7 @@ public class TimetableService implements ITimetableService {
         }
     }
 
-    private void createEvenDayQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+    private void createEvenDayQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
         if (EVEN_DAY.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && DateUtils.isEvenDay(date)) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -83,7 +94,7 @@ public class TimetableService implements ITimetableService {
         }
     }
 
-    private void createOddDayQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+    private void createOddDayQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
         if (ODD_DAY.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && DateUtils.isOddDay(date)) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -91,7 +102,7 @@ public class TimetableService implements ITimetableService {
         }
     }
 
-    private void createDayOfMonthQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+    private void createDayOfMonthQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
         if (DAY_OF_MONTH.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && isDayInMonth(date, criteria.getSelectedDayOfMonth())) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -99,7 +110,7 @@ public class TimetableService implements ITimetableService {
         }
     }
 
-    private void createArbitraryDateQuotas(Date date, TimetableCreateCriteria criteria, List<Quota> quotas) {
+    private void createArbitraryDateQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
         if (ARBITRARY_DATE.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && isDateInList(date, criteria.getSelectedArbitraryDates())) {
                 quotas.addAll(createQuotas(date, criteria));

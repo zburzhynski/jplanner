@@ -1,11 +1,14 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.EQUAL;
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.CREATE;
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.EDIT;
 import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.CommonConstant;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
 import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
+import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.jsf.validator.QuotaValidator;
@@ -20,9 +23,11 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  * Timetable template bean.
@@ -36,6 +41,8 @@ import javax.faces.bean.ViewScoped;
 public class TemplateBean implements Serializable {
 
     private static final String HIDE_QUOTA_DIALOG = "PF('quota').hide();";
+
+    private static final String EMPLOYEE_ID_PARAM = "employeeId";
 
     private Date startDate;
 
@@ -61,6 +68,8 @@ public class TemplateBean implements Serializable {
 
     private ModificationMode quotaModificationMode;
 
+    private String employeeId;
+
     @ManagedProperty(value = "#{timetableService}")
     private ITimetableService timetableService;
 
@@ -68,11 +77,32 @@ public class TemplateBean implements Serializable {
     private QuotaValidator quotaValidator;
 
     /**
-     * Generates time quotes.
+     * Inits bean state.
      */
-    public void generate() {
+    @PostConstruct
+    public void init() {
+        employeeId = FacesContext.getCurrentInstance().getExternalContext()
+            .getRequestParameterMap().get(EMPLOYEE_ID_PARAM);
+    }
+
+    /**
+     * Generates time quotes.
+     *
+     * @return path for navigating
+     */
+    public String generate() {
         TimetableCreateCriteria createCriteria = buildTimetableCreateCriteria();
         timetableService.createTimetable(createCriteria);
+        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + employeeId;
+    }
+
+    /**
+     * Cancel generating.
+     *
+     * @return path for navigating
+     */
+    public String cancel() {
+        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + employeeId;
     }
 
     /**
@@ -253,6 +283,10 @@ public class TemplateBean implements Serializable {
         this.description = description;
     }
 
+    public String getEmployeeId() {
+        return employeeId;
+    }
+
     public void setTimetableService(ITimetableService timetableService) {
         this.timetableService = timetableService;
     }
@@ -263,8 +297,7 @@ public class TemplateBean implements Serializable {
 
     private TimetableCreateCriteria buildTimetableCreateCriteria() {
         TimetableCreateCriteria criteria = new TimetableCreateCriteria();
-       //TODO: set real id
-        criteria.setEmployeeId("402881824a8b344a014a8b4a4b48000e");
+        criteria.setEmployeeId(employeeId);
         criteria.setStartDate(startDate);
         criteria.setEndDate(endDate);
         criteria.setTemplate(template);

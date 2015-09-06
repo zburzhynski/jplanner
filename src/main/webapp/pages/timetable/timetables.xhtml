@@ -9,13 +9,79 @@
 
     <ui:define name="content">
         <p:panel>
+            <style type="text/css">
+                .emp-label {
+                    font-weight: bold;
+                    width: 25%;
+                }
+                .emp-value {
+                    width: 75%;
+                }
+            </style>
             <h:form id="timetablesForm">
                 <h4>#{msgs['timetables.header']}</h4>
-                <h:panelGrid columns="1" style="padding-top: 5px">
-                    <h:commandButton action="/pages/timetable/template?faces-redirect=true"
+                <h:panelGrid columns="2" columnClasses="emp-label,emp-value" width="44%">
+                    <h:outputLabel for="employee" value="#{msgs['timetables.employee']}:" />
+                    <p:selectOneMenu id="employee"
+                                     value="#{timetableBean.employeeId}"
+                                     label="#{msgs['timetables.employee']}"
+                                     required="true"
+                                     style="width: 100%">
+                        <f:selectItems value="#{employeeListBean.employees}" var="employee"
+                                       itemValue="#{employee.id}"
+                                       itemLabel="#{employee.person.fullName}" />
+                        <p:ajax event="change" listener="#{timetableBean.employeeSelectListener}" />
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:dataTable id="timetables" value="#{timetableBean.employee.timetables}"
+                             var="timetable"
+                             emptyMessage="#{msgs['timetables.empty']}" style="width: 100%">
+                    <p:column headerText="#{msgs['timetable.startDate']}" width="15%">
+                        <h:outputText value="#{timetable.startDate}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{msgs['timetable.endDate']}" width="15%">
+                        <h:outputText value="#{timetable.endDate}">
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="#{msgs['quota.description']}" width="59%">
+                        <h:outputText value="#{quota.description}" />
+                    </p:column>
+                    <p:column width="11%">
+                        <h:panelGroup>
+                            <p:commandButton actionListener="#{timetableBean.editTimetable}"
+                                             title="#{msgs['button.edit']}"
+                                             icon="ui-icon-pencil"
+                                             style="padding-right: 5px">
+                            </p:commandButton>
+                            <p:commandButton actionListener="#{timetableBean.removeTimetable(timetable)}"
+                                             title="#{msgs['button.remove']}"
+                                             icon="ui-icon-trash"
+                                             update="timetables">
+                                <p:confirm header="#{msgs['removeTimetableConfirm.header']}"
+                                           message="#{msgs['removeTimetableConfirm.message']}?"
+                                           icon="ui-icon-alert" />
+                            </p:commandButton>
+                        </h:panelGroup>
+                    </p:column>
+                </p:dataTable>
+                <h:panelGrid style="padding-top: 5px">
+                    <h:commandButton action="#{timetableBean.addTimetable}"
                                      image="/resources/css/css-images/add.gif"
                                      title="#{msgs['button.add']}" />
                 </h:panelGrid>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
             </h:form>
         </p:panel>
     </ui:define>
