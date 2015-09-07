@@ -8,10 +8,11 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
  * <p/>
  * Date: 04.09.2015
  *
+ * @param <ID> The type of unique identifier.
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
  */
-public interface ITimetableService<T extends IDomain> {
+public interface ITimetableService<ID, T extends IDomain> {
 
     /**
      * Creates timetable.
@@ -19,6 +20,14 @@ public interface ITimetableService<T extends IDomain> {
      * @param createCriteria {@link TimetableCreateCriteria} timetable create criteria
      */
     void createTimetable(TimetableCreateCriteria createCriteria);
+
+    /**
+     * Gets timetable by id.
+     *
+     * @param id id
+     * @return timetable
+     */
+    T getById(ID id);
 
     /**
      * Deletes timetable.

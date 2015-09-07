@@ -9,6 +9,8 @@ import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.primefaces.model.DefaultScheduleModel;
+import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -31,10 +33,13 @@ public class TimetableBean implements Serializable {
 
     private static final String TIMETABLES_COMPONENT = "timetablesForm:timetables";
     private static final String EMPLOYEE_ID_PARAM = "employeeId";
+    private static final String TIMETABLE_ID_PARAM = "timetableId";
 
     private String employeeId;
 
     private Employee employee;
+
+    private ScheduleModel eventModel = new DefaultScheduleModel();
 
     @ManagedProperty(value = "#{employeeService}")
     private IEmployeeService employeeService;
@@ -70,10 +75,11 @@ public class TimetableBean implements Serializable {
     /**
      * Edits timetable.
      *
+     * @param editedTimetable edited timetable
      * @return path for navigating
      */
-    public String editTimetable() {
-        return null;
+    public String editTimetable(Timetable editedTimetable) {
+        return View.TIMETABLE.getPath() + AMPERSAND + TIMETABLE_ID_PARAM + EQUAL + editedTimetable.getId();
     }
 
     /**
@@ -109,6 +115,14 @@ public class TimetableBean implements Serializable {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
+    }
+
+    public ScheduleModel getEventModel() {
+        return eventModel;
+    }
+
+    public void setEventModel(ScheduleModel eventModel) {
+        this.eventModel = eventModel;
     }
 
     public void setEmployeeService(IEmployeeService employeeService) {

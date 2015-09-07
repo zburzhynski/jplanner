@@ -7,16 +7,10 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
  * <p/>
  * Date: 06.09.2015
  *
+ * @param <ID> The type of unique identifier.
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
  */
-public interface ITimetableRepository<T extends IDomain> {
-
-    /**
-     * Deletes timetable.
-     *
-     * @param timetable timetable to delete
-     */
-    void delete(T timetable);
+public interface ITimetableRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
 
 }

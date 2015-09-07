@@ -51,12 +51,12 @@
                     </p:column>
                     <p:column width="11%">
                         <h:panelGroup>
-                            <p:commandButton actionListener="#{timetableBean.editTimetable}"
+                            <p:commandButton action="#{timetableBean.editTimetable(timetable)}"
                                              title="#{msgs['button.edit']}"
                                              icon="ui-icon-pencil"
                                              style="padding-right: 5px">
                             </p:commandButton>
-                            <p:commandButton actionListener="#{timetableBean.removeTimetable(timetable)}"
+                            <p:commandButton action="#{timetableBean.removeTimetable(timetable)}"
                                              title="#{msgs['button.remove']}"
                                              icon="ui-icon-trash"
                                              update="timetables">

@@ -38,7 +38,7 @@ import java.util.TreeSet;
  * @author Vladimir Zburzhynski
  */
 @Service("timetableService")
-public class TimetableService implements ITimetableService<Timetable> {
+public class TimetableService implements ITimetableService<String, Timetable> {
 
     @Autowired
     private IEmployeeRepository employeeRepository;
@@ -71,6 +71,12 @@ public class TimetableService implements ITimetableService<Timetable> {
         timetable.setQuotas(quotas);
         employee.getTimetables().add(timetable);
         employeeRepository.saveOrUpdate(employee);
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public Timetable getById(String id) {
+        return (Timetable) timetableRepository.findById(id);
     }
 
     @Override

@@ -11,6 +11,21 @@
         <p:panel>
             <h:form id="timetableForm">
                 <h4>#{msgs['timetable.header']}</h4>
+                <p:schedule id="scheduler"
+                            value="#{employeeTimetableBean.eventModel}"
+                            slotMinutes="#{configBean.schedulerPrecision}"
+                            locale="ru"
+                            axisFormat="H:mm"
+                            timeFormat="H:mm"
+                            showWeekends="true"
+                            firstHour="#{scheduleBean.firstHour}"
+                            allDaySlot="false"
+                            timeZone="#{scheduleBean.timeZone}"
+                            view="#{scheduleBean.view}"
+                            initialDate="#{scheduleBean.initialDate}"
+                            tooltip="true">
+                </p:schedule>
+                <ui:include src="/pages/localization/calendar-localization.xhtml" />
             </h:form>
         </p:panel>
     </ui:define>
