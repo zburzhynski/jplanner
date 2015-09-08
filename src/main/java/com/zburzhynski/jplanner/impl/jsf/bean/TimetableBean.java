@@ -8,9 +8,8 @@ import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.primefaces.model.DefaultScheduleModel;
-import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
 import java.util.List;
@@ -39,8 +38,6 @@ public class TimetableBean implements Serializable {
 
     private Employee employee;
 
-    private ScheduleModel eventModel = new DefaultScheduleModel();
-
     @ManagedProperty(value = "#{employeeService}")
     private IEmployeeService employeeService;
 
@@ -56,7 +53,9 @@ public class TimetableBean implements Serializable {
             .getRequestParameterMap().get(EMPLOYEE_ID_PARAM);
         if (StringUtils.isBlank(employeeIdParam)) {
             List<Employee> employees = employeeService.getAll();
-            employee = (Employee) employeeService.getById(employees.get(0).getId());
+            if (CollectionUtils.isNotEmpty(employees)) {
+                employee = (Employee) employeeService.getById(employees.get(0).getId());
+            }
         } else {
             employee = (Employee) employeeService.getById(employeeIdParam);
             employeeId = employeeIdParam;
@@ -115,14 +114,6 @@ public class TimetableBean implements Serializable {
 
     public void setEmployee(Employee employee) {
         this.employee = employee;
-    }
-
-    public ScheduleModel getEventModel() {
-        return eventModel;
-    }
-
-    public void setEventModel(ScheduleModel eventModel) {
-        this.eventModel = eventModel;
     }
 
     public void setEmployeeService(IEmployeeService employeeService) {
