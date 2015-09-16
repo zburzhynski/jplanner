@@ -53,6 +53,66 @@ public final class JsfUtils {
     }
 
     /**
+     * Setts attribute in request scope.
+     *
+     * @param name  attribute name
+     * @param value attribute value
+     */
+    public static void setRequestAttribute(String name, Object value) {
+        FacesContext.getCurrentInstance().getExternalContext().getRequestMap().put(name, value);
+    }
+
+    /**
+     * Gets attribute from request scope.
+     *
+     * @param name attribute name
+     * @return attribute
+     */
+    public static Object getRequestAttribute(String name) {
+        return FacesContext.getCurrentInstance().getExternalContext().getRequestMap().get(name);
+    }
+
+    /**
+     * Setts attribute in flash scope.
+     *
+     * @param name  attribute name
+     * @param value attribute value
+     */
+    public static void setFlashAttribute(String name, Object value) {
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().put(name, value);
+    }
+
+    /**
+     * Gets attribute from flash scope.
+     *
+     * @param name attribute name
+     * @return attribute
+     */
+    public static Object getFlashAttribute(String name) {
+        return FacesContext.getCurrentInstance().getExternalContext().getFlash().get(name);
+    }
+
+    /**
+     * Setts attribute in session scope.
+     *
+     * @param name  attribute name
+     * @param value attribute value
+     */
+    public static void setSessionAttribute(String name, Object value) {
+        FacesContext.getCurrentInstance().getExternalContext().getSessionMap().put(name, value);
+    }
+
+    /**
+     * Gets attribute from session scope.
+     *
+     * @param name attribute name
+     * @return attribute
+     */
+    public static Object getSessionAttribute(String name) {
+        return FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(name);
+    }
+
+    /**
      * Gets bean from jsf session context by name.
      *
      * @param name bean name
