@@ -4,11 +4,15 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
+import java.util.Set;
+import java.util.TreeSet;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -39,6 +43,9 @@ public class AvailableResource extends Domain {
 
     @Column(name = "description")
     private String description;
+
+    @OneToMany(mappedBy = "availableResource", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Timetable> timetables;
 
     public String getName() {
         return name;
@@ -78,6 +85,27 @@ public class AvailableResource extends Domain {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    /**
+     * Gets timetables.
+     *
+     * @return timetables
+     */
+    public Set<Timetable> getTimetables() {
+        if (timetables == null) {
+            timetables = new TreeSet<>();
+        }
+        return timetables;
+    }
+
+    /**
+     * Sets timetables.
+     *
+     * @param timetables timetables to set
+     */
+    public void setTimetables(Set<Timetable> timetables) {
+        this.timetables = timetables;
     }
 
     @Override

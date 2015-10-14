@@ -87,7 +87,7 @@ public class TimetableBean implements Serializable {
      * @param removedTimetable timetable to remove
      */
     public void removeTimetable(Timetable removedTimetable) {
-        employee.getTimetables().remove(removedTimetable);
+        //employee.getTimetables().remove(removedTimetable);
         employeeService.saveOrUpdate(employee);
         timetableService.delete(removedTimetable);
     }
@@ -96,7 +96,7 @@ public class TimetableBean implements Serializable {
      * Employee select listener.
      */
     public void employeeSelectListener() {
-        employee = (Employee) employeeService.getById(employeeId);
+        //employee = (Employee) employeeService.getById(employeeId);
         JsfUtils.update(TIMETABLES_COMPONENT);
     }
 

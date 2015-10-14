@@ -10,6 +10,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -23,6 +26,10 @@ import javax.persistence.Table;
 @Table(name = "quota")
 public class Quota extends Domain implements Comparable<Quota> {
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "timetable_id")
+    private Timetable timetable;
+
     @Column(name = "start_date")
     private Date startDate;
 
@@ -35,6 +42,14 @@ public class Quota extends Domain implements Comparable<Quota> {
 
     @Column(name = "description")
     private String description;
+
+    public Timetable getTimetable() {
+        return timetable;
+    }
+
+    public void setTimetable(Timetable timetable) {
+        this.timetable = timetable;
+    }
 
     public Date getStartDate() {
         return startDate;

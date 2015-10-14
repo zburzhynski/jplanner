@@ -68,7 +68,7 @@ public class TemplateBean implements Serializable {
 
     private ModificationMode quotaModificationMode;
 
-    private String employeeId;
+    private String availableResourceId;
 
     @ManagedProperty(value = "#{timetableService}")
     private ITimetableService timetableService;
@@ -81,7 +81,7 @@ public class TemplateBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        employeeId = FacesContext.getCurrentInstance().getExternalContext()
+        availableResourceId = FacesContext.getCurrentInstance().getExternalContext()
             .getRequestParameterMap().get(EMPLOYEE_ID_PARAM);
     }
 
@@ -93,7 +93,7 @@ public class TemplateBean implements Serializable {
     public String generate() {
         TimetableCreateCriteria createCriteria = buildTimetableCreateCriteria();
         timetableService.createTimetable(createCriteria);
-        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + employeeId;
+        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + availableResourceId;
     }
 
     /**
@@ -102,7 +102,7 @@ public class TemplateBean implements Serializable {
      * @return path for navigating
      */
     public String cancel() {
-        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + employeeId;
+        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + availableResourceId;
     }
 
     /**
@@ -283,8 +283,8 @@ public class TemplateBean implements Serializable {
         this.description = description;
     }
 
-    public String getEmployeeId() {
-        return employeeId;
+    public String getAvailableResourceId() {
+        return availableResourceId;
     }
 
     public void setTimetableService(ITimetableService timetableService) {
@@ -297,7 +297,7 @@ public class TemplateBean implements Serializable {
 
     private TimetableCreateCriteria buildTimetableCreateCriteria() {
         TimetableCreateCriteria criteria = new TimetableCreateCriteria();
-        criteria.setEmployeeId(employeeId);
+        criteria.setAvailableResourceId(availableResourceId);
         criteria.setStartDate(startDate);
         criteria.setEndDate(endDate);
         criteria.setTemplate(template);

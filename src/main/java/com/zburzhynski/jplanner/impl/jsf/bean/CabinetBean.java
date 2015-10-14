@@ -144,7 +144,7 @@ public class CabinetBean implements Serializable {
      */
     public String saveWorkplace() {
         if (CREATE.equals(workplaceModificationMode)) {
-            cabinet.getWorkplaces().add(workplace);
+            cabinet.addWorkplace(workplace);
         }
         return CABINET.getPath();
     }
@@ -155,7 +155,7 @@ public class CabinetBean implements Serializable {
      * @return path for navigating
      */
     public String removeWorkplace() {
-        cabinet.getWorkplaces().remove(workplace);
+        cabinet.removeWorkplace(workplace);
         return CABINET.getPath();
     }
 

@@ -63,13 +63,13 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         if (CollectionUtils.isEmpty(quotas)) {
             return;
         }
-        Employee employee = (Employee) employeeRepository.findById(criteria.getEmployeeId());
+        Employee employee = (Employee) employeeRepository.findById(criteria.getAvailableResourceId());
         Timetable timetable = new Timetable();
         timetable.setStartDate(quotas.first().getStartDate());
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
         timetable.setQuotas(quotas);
-        employee.getTimetables().add(timetable);
+        //employee.getTimetables().add(timetable);
         employeeRepository.saveOrUpdate(employee);
     }
 

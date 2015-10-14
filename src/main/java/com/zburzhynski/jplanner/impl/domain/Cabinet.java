@@ -9,7 +9,6 @@ import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -39,8 +38,7 @@ public class Cabinet extends Domain {
     @Column(name = "description")
     private String description;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "cabinet_id", nullable = false)
+    @OneToMany(mappedBy = "cabinet", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Workplace> workplaces;
 
     public String getNumber() {
@@ -86,6 +84,25 @@ public class Cabinet extends Domain {
      */
     public void setWorkplaces(List<Workplace> workplaces) {
         this.workplaces = workplaces;
+    }
+
+    /**
+     * Adds workplace to cabinet.
+     *
+     * @param workplace workplace to add
+     */
+    public void addWorkplace(Workplace workplace) {
+        workplace.setCabinet(this);
+        getWorkplaces().add(workplace);
+    }
+
+    /**
+     * Removes workplace from cabinet.
+     *
+     * @param workplace workplace to remove
+     */
+    public void removeWorkplace(Workplace workplace) {
+        getWorkplaces().remove(workplace);
     }
 
     @Override

@@ -12,8 +12,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -30,6 +30,10 @@ public class Timetable extends Domain implements Comparable<Timetable> {
     public static final String P_QUOTAS = "quotas";
     public static final String P_QUOTA = "quota";
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "available_resource_id")
+    private AvailableResource availableResource;
+
     @Column(name = "start_date")
     private Date startDate;
 
@@ -39,11 +43,16 @@ public class Timetable extends Domain implements Comparable<Timetable> {
     @Column(name = "description")
     private String description;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinTable(name = "timetable_quota",
-        joinColumns = {@JoinColumn(name = "timetable_id")},
-        inverseJoinColumns = {@JoinColumn(name = "quota_id")})
+    @OneToMany(mappedBy = "timetable", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Quota> quotas;
+
+    public AvailableResource getAvailableResource() {
+        return availableResource;
+    }
+
+    public void setAvailableResource(AvailableResource availableResource) {
+        this.availableResource = availableResource;
+    }
 
     public Date getStartDate() {
         return startDate;

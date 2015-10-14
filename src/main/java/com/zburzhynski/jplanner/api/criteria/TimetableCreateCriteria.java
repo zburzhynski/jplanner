@@ -16,7 +16,7 @@ import java.util.TreeSet;
  */
 public class TimetableCreateCriteria {
 
-    private String employeeId;
+    private String availableResourceId;
 
     private Date startDate;
 
@@ -38,12 +38,12 @@ public class TimetableCreateCriteria {
 
     private String description;
 
-    public String getEmployeeId() {
-        return employeeId;
+    public String getAvailableResourceId() {
+        return availableResourceId;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setAvailableResourceId(String availableResourceId) {
+        this.availableResourceId = availableResourceId;
     }
 
     public Date getStartDate() {
