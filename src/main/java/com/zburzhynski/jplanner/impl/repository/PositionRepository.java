@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Implementation of {@link PositionRepository} interface.
+ * Implementation of {@link IPositionRepository} interface.
  * <p/>
  * Date: 04.05.15
  *
