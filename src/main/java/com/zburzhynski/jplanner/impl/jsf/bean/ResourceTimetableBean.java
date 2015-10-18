@@ -19,7 +19,7 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 
 /**
- * Employee timetable bean.
+ * Resource timetable bean.
  * <p/>
  * Date: 07.09.2015
  *
@@ -27,7 +27,7 @@ import javax.faces.context.FacesContext;
  */
 @ManagedBean
 @ViewScoped
-public class EmployeeTimetableBean implements Serializable {
+public class ResourceTimetableBean implements Serializable {
 
     private static final String TIMETABLE_ID_PARAM = "timetableId";
 
