@@ -1,10 +1,7 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
-import static com.zburzhynski.jplanner.api.domain.CommonConstant.EQUAL;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
-import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
@@ -12,12 +9,13 @@ import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 /**
  * Timetable bean.
@@ -30,9 +28,9 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class TimetableBean implements Serializable {
 
+    public static final String RESOURCE_ID_PARAM = "resourceId";
+    public static final String TIMETABLE_ID_PARAM = "timetableId";
     private static final String TIMETABLES_COMPONENT = "timetablesForm:timetables";
-    private static final String RESOURCE_ID_PARAM = "resourceId";
-    private static final String TIMETABLE_ID_PARAM = "timetableId";
 
     private String resourceId;
 
@@ -41,16 +39,12 @@ public class TimetableBean implements Serializable {
     @ManagedProperty(value = "#{availableResourceService}")
     private IAvailableResourceService resourceService;
 
-    @ManagedProperty(value = "#{timetableService}")
-    private ITimetableService timetableService;
-
     /**
      * Inits bean state.
      */
     @PostConstruct
     public void init() {
-        String resourceIdParam = FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get(RESOURCE_ID_PARAM);
+        String resourceIdParam = JsfUtils.getRequestParam(RESOURCE_ID_PARAM);
         if (StringUtils.isBlank(resourceIdParam)) {
             List<AvailableResource> resources = resourceService.getAll();
             if (CollectionUtils.isNotEmpty(resources)) {
@@ -70,7 +64,9 @@ public class TimetableBean implements Serializable {
      * @return path for navigating
      */
     public String addTimetable() {
-        return View.TIMETABLE_TEMPLATE.getPath() + AMPERSAND + RESOURCE_ID_PARAM + EQUAL + resourceId;
+        Map<String, Object> params = new HashMap<>();
+        params.put(RESOURCE_ID_PARAM, resourceId);
+        return JsfUtils.buildUrl(View.TIMETABLE_TEMPLATE.getPath(), params);
     }
 
     /**
@@ -80,7 +76,9 @@ public class TimetableBean implements Serializable {
      * @return path for navigating
      */
     public String editTimetable(Timetable editedTimetable) {
-        return View.TIMETABLE.getPath() + AMPERSAND + TIMETABLE_ID_PARAM + EQUAL + editedTimetable.getId();
+        Map<String, Object> params = new HashMap<>();
+        params.put(TIMETABLE_ID_PARAM, editedTimetable.getId());
+        return JsfUtils.buildUrl(View.TIMETABLE.getPath(), params);
     }
 
     /**
@@ -119,10 +117,6 @@ public class TimetableBean implements Serializable {
 
     public void setResourceService(IAvailableResourceService resourceService) {
         this.resourceService = resourceService;
-    }
-
-    public void setTimetableService(ITimetableService timetableService) {
-        this.timetableService = timetableService;
     }
 
 }

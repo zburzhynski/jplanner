@@ -1,8 +1,10 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.impl.jsf.bean.TimetableBean.TIMETABLE_ID_PARAM;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
+import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -16,7 +18,6 @@ import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 /**
  * Resource timetable bean.
@@ -29,8 +30,6 @@ import javax.faces.context.FacesContext;
 @ViewScoped
 public class ResourceTimetableBean implements Serializable {
 
-    private static final String TIMETABLE_ID_PARAM = "timetableId";
-
     private ScheduleModel eventModel;
 
     @ManagedProperty(value = "#{timetableService}")
@@ -41,8 +40,7 @@ public class ResourceTimetableBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        String timetableId = FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get(TIMETABLE_ID_PARAM);
+        String timetableId = JsfUtils.getRequestParam(TIMETABLE_ID_PARAM);
         Timetable timetable = (Timetable) timetableService.getById(timetableId);
         if (CollectionUtils.isNotEmpty(timetable.getQuotas())) {
             List<ScheduleEvent> events = new ArrayList<>();

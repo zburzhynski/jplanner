@@ -1,9 +1,8 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
-import static com.zburzhynski.jplanner.api.domain.CommonConstant.EQUAL;
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.CREATE;
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.EDIT;
+import static com.zburzhynski.jplanner.impl.jsf.bean.TimetableBean.RESOURCE_ID_PARAM;
 import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.CommonConstant;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
@@ -20,14 +19,15 @@ import org.primefaces.event.SelectEvent;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
-import javax.faces.context.FacesContext;
 
 /**
  * Timetable template bean.
@@ -41,8 +41,6 @@ import javax.faces.context.FacesContext;
 public class TemplateBean implements Serializable {
 
     private static final String HIDE_QUOTA_DIALOG = "PF('quota').hide();";
-
-    private static final String RESOURCE_ID_PARAM = "resourceId";
 
     private Date startDate;
 
@@ -68,7 +66,7 @@ public class TemplateBean implements Serializable {
 
     private ModificationMode quotaModificationMode;
 
-    private String availableResourceId;
+    private String resourceId;
 
     @ManagedProperty(value = "#{timetableService}")
     private ITimetableService timetableService;
@@ -81,8 +79,7 @@ public class TemplateBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        availableResourceId = FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get(RESOURCE_ID_PARAM);
+        resourceId = JsfUtils.getRequestParam(RESOURCE_ID_PARAM);
     }
 
     /**
@@ -93,7 +90,9 @@ public class TemplateBean implements Serializable {
     public String generate() {
         TimetableCreateCriteria createCriteria = buildTimetableCreateCriteria();
         timetableService.createTimetable(createCriteria);
-        return View.TIMETABLES.getPath() + AMPERSAND + RESOURCE_ID_PARAM + EQUAL + availableResourceId;
+        Map<String, Object> params = new HashMap<>();
+        params.put(RESOURCE_ID_PARAM, resourceId);
+        return JsfUtils.buildUrl(View.TIMETABLES.getPath(), params);
     }
 
     /**
@@ -102,7 +101,9 @@ public class TemplateBean implements Serializable {
      * @return path for navigating
      */
     public String cancel() {
-        return View.TIMETABLES.getPath() + AMPERSAND + RESOURCE_ID_PARAM + EQUAL + availableResourceId;
+        Map<String, Object> params = new HashMap<>();
+        params.put(RESOURCE_ID_PARAM, resourceId);
+        return JsfUtils.buildUrl(View.TIMETABLES.getPath(), params);
     }
 
     /**
@@ -283,10 +284,6 @@ public class TemplateBean implements Serializable {
         this.description = description;
     }
 
-    public String getAvailableResourceId() {
-        return availableResourceId;
-    }
-
     public void setTimetableService(ITimetableService timetableService) {
         this.timetableService = timetableService;
     }
@@ -297,7 +294,7 @@ public class TemplateBean implements Serializable {
 
     private TimetableCreateCriteria buildTimetableCreateCriteria() {
         TimetableCreateCriteria criteria = new TimetableCreateCriteria();
-        criteria.setAvailableResourceId(availableResourceId);
+        criteria.setAvailableResourceId(resourceId);
         criteria.setStartDate(startDate);
         criteria.setEndDate(endDate);
         criteria.setTemplate(template);

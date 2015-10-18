@@ -1,10 +1,17 @@
 package com.zburzhynski.jplanner.impl.util;
 
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.EQUAL;
+import org.apache.commons.collections.MapUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import javax.faces.application.NavigationHandler;
 import javax.faces.application.ViewHandler;
 import javax.faces.component.UIViewRoot;
@@ -24,6 +31,29 @@ public final class JsfUtils {
 
     private JsfUtils() {
         throw new AssertionError();
+    }
+
+    /**
+     * Build url with parameters.
+     *
+     * @param url    source url
+     * @param params parameters
+     * @return url with parameters
+     */
+    public static String buildUrl(String url, Map<String, Object> params) {
+        StringBuilder builder = new StringBuilder();
+        if (StringUtils.isNotBlank(url)) {
+            builder.append(url);
+        }
+        if (MapUtils.isNotEmpty(params)) {
+            builder.append(AMPERSAND);
+            Set<String> parameters = new LinkedHashSet<>();
+            for (Map.Entry<String, Object> entry : params.entrySet()) {
+                parameters.add(entry.getKey() + EQUAL + entry.getValue());
+            }
+            builder.append(StringUtils.join(parameters, AMPERSAND));
+        }
+        return builder.toString();
     }
 
     /**
@@ -50,6 +80,16 @@ public final class JsfUtils {
         } catch (IOException e) {
             LOGGER.error("Can not redirect to url", url);
         }
+    }
+
+    /**
+     * Gets request parameter.
+     *
+     * @param name parameter name
+     * @return request parameter value
+     */
+    public static String getRequestParam(String name) {
+        return FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap().get(name);
     }
 
     /**
