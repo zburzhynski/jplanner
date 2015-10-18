@@ -25,8 +25,6 @@ public class Employee extends Domain {
 
     public static final String P_PERSON = "person";
     public static final String P_POSITION = "position";
-    public static final String P_TIMETABLES = "timetables";
-    public static final String P_TIMETABLE = "timetable";
 
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "person_id")

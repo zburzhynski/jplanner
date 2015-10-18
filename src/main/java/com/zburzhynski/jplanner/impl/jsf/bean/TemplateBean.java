@@ -42,7 +42,7 @@ public class TemplateBean implements Serializable {
 
     private static final String HIDE_QUOTA_DIALOG = "PF('quota').hide();";
 
-    private static final String EMPLOYEE_ID_PARAM = "employeeId";
+    private static final String RESOURCE_ID_PARAM = "resourceId";
 
     private Date startDate;
 
@@ -82,7 +82,7 @@ public class TemplateBean implements Serializable {
     @PostConstruct
     public void init() {
         availableResourceId = FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get(EMPLOYEE_ID_PARAM);
+            .getRequestParameterMap().get(RESOURCE_ID_PARAM);
     }
 
     /**
@@ -93,7 +93,7 @@ public class TemplateBean implements Serializable {
     public String generate() {
         TimetableCreateCriteria createCriteria = buildTimetableCreateCriteria();
         timetableService.createTimetable(createCriteria);
-        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + availableResourceId;
+        return View.TIMETABLES.getPath() + AMPERSAND + RESOURCE_ID_PARAM + EQUAL + availableResourceId;
     }
 
     /**
@@ -102,7 +102,7 @@ public class TemplateBean implements Serializable {
      * @return path for navigating
      */
     public String cancel() {
-        return View.TIMETABLES.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + availableResourceId;
+        return View.TIMETABLES.getPath() + AMPERSAND + RESOURCE_ID_PARAM + EQUAL + availableResourceId;
     }
 
     /**

@@ -99,6 +99,25 @@ public class Timetable extends Domain implements Comparable<Timetable> {
         this.quotas = quotas;
     }
 
+    /**
+     * Adds quota to timetable.
+     *
+     * @param quota quota to add
+     */
+    public void addQuota(Quota quota) {
+        quota.setTimetable(this);
+        getQuotas().add(quota);
+    }
+
+    /**
+     * Removes quota from timetable.
+     *
+     * @param quota quota to remove
+     */
+    public void removeQuota(Quota quota) {
+        getQuotas().remove(quota);
+    }
+
     @Override
     public int compareTo(Timetable o) {
         return this.getStartDate().compareTo(o.startDate);

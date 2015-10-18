@@ -4,15 +4,10 @@ import static com.zburzhynski.jplanner.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jplanner.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.Employee.P_PERSON;
 import static com.zburzhynski.jplanner.impl.domain.Employee.P_POSITION;
-import static com.zburzhynski.jplanner.impl.domain.Employee.P_TIMETABLE;
-import static com.zburzhynski.jplanner.impl.domain.Employee.P_TIMETABLES;
 import static com.zburzhynski.jplanner.impl.domain.Person.P_NAME;
 import static com.zburzhynski.jplanner.impl.domain.Person.P_PATRONYMIC;
 import static com.zburzhynski.jplanner.impl.domain.Person.P_SURNAME;
 import static com.zburzhynski.jplanner.impl.domain.Position.P_POSITION_TYPE;
-import static com.zburzhynski.jplanner.impl.domain.Timetable.P_QUOTA;
-import static com.zburzhynski.jplanner.impl.domain.Timetable.P_QUOTAS;
-import static org.hibernate.sql.JoinType.LEFT_OUTER_JOIN;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
@@ -53,8 +48,6 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_PERSON, P_PERSON);
         criteria.createAlias(P_POSITION, P_POSITION);
-        criteria.createAlias(P_TIMETABLES, P_TIMETABLE, LEFT_OUTER_JOIN);
-        criteria.createAlias(P_TIMETABLE + DOT + P_QUOTAS, P_QUOTA, LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq(P_ID, id));
         return (Employee) criteria.uniqueResult();
     }

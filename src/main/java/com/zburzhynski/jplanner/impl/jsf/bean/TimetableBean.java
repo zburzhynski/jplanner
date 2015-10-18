@@ -3,9 +3,9 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.EQUAL;
 import com.zburzhynski.jplanner.api.domain.View;
-import com.zburzhynski.jplanner.api.service.IEmployeeService;
+import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
-import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.collections.CollectionUtils;
@@ -31,15 +31,15 @@ import javax.faces.context.FacesContext;
 public class TimetableBean implements Serializable {
 
     private static final String TIMETABLES_COMPONENT = "timetablesForm:timetables";
-    private static final String EMPLOYEE_ID_PARAM = "employeeId";
+    private static final String RESOURCE_ID_PARAM = "resourceId";
     private static final String TIMETABLE_ID_PARAM = "timetableId";
 
-    private String employeeId;
+    private String resourceId;
 
-    private Employee employee;
+    private AvailableResource resource;
 
-    @ManagedProperty(value = "#{employeeService}")
-    private IEmployeeService employeeService;
+    @ManagedProperty(value = "#{availableResourceService}")
+    private IAvailableResourceService resourceService;
 
     @ManagedProperty(value = "#{timetableService}")
     private ITimetableService timetableService;
@@ -49,16 +49,18 @@ public class TimetableBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        String employeeIdParam = FacesContext.getCurrentInstance().getExternalContext()
-            .getRequestParameterMap().get(EMPLOYEE_ID_PARAM);
-        if (StringUtils.isBlank(employeeIdParam)) {
-            List<Employee> employees = employeeService.getAll();
-            if (CollectionUtils.isNotEmpty(employees)) {
-                employee = (Employee) employeeService.getById(employees.get(0).getId());
+        String resourceIdParam = FacesContext.getCurrentInstance().getExternalContext()
+            .getRequestParameterMap().get(RESOURCE_ID_PARAM);
+        if (StringUtils.isBlank(resourceIdParam)) {
+            List<AvailableResource> resources = resourceService.getAll();
+            if (CollectionUtils.isNotEmpty(resources)) {
+                resource = (AvailableResource) resourceService.getById(resources.get(0).getId());
             }
         } else {
-            employee = (Employee) employeeService.getById(employeeIdParam);
-            employeeId = employeeIdParam;
+            resource = (AvailableResource) resourceService.getById(resourceIdParam);
+        }
+        if (resource != null) {
+            resourceId = resource.getId();
         }
     }
 
@@ -68,7 +70,7 @@ public class TimetableBean implements Serializable {
      * @return path for navigating
      */
     public String addTimetable() {
-        return View.TIMETABLE_TEMPLATE.getPath() + AMPERSAND + EMPLOYEE_ID_PARAM + EQUAL + employeeId;
+        return View.TIMETABLE_TEMPLATE.getPath() + AMPERSAND + RESOURCE_ID_PARAM + EQUAL + resourceId;
     }
 
     /**
@@ -87,37 +89,36 @@ public class TimetableBean implements Serializable {
      * @param removedTimetable timetable to remove
      */
     public void removeTimetable(Timetable removedTimetable) {
-        //employee.getTimetables().remove(removedTimetable);
-        employeeService.saveOrUpdate(employee);
-        timetableService.delete(removedTimetable);
+        resource.removeTimetable(removedTimetable);
+        resourceService.saveOrUpdate(resource);
     }
 
     /**
      * Employee select listener.
      */
-    public void employeeSelectListener() {
-        //employee = (Employee) employeeService.getById(employeeId);
+    public void resourceSelectListener() {
+        resource = (AvailableResource) resourceService.getById(resourceId);
         JsfUtils.update(TIMETABLES_COMPONENT);
     }
 
-    public String getEmployeeId() {
-        return employeeId;
+    public String getResourceId() {
+        return resourceId;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setResourceId(String resourceId) {
+        this.resourceId = resourceId;
     }
 
-    public Employee getEmployee() {
-        return employee;
+    public AvailableResource getResource() {
+        return resource;
     }
 
-    public void setEmployee(Employee employee) {
-        this.employee = employee;
+    public void setResource(AvailableResource resource) {
+        this.resource = resource;
     }
 
-    public void setEmployeeService(IEmployeeService employeeService) {
-        this.employeeService = employeeService;
+    public void setResourceService(IAvailableResourceService resourceService) {
+        this.resourceService = resourceService;
     }
 
     public void setTimetableService(ITimetableService timetableService) {

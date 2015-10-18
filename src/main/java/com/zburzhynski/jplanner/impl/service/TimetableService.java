@@ -11,10 +11,10 @@ import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
 import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
-import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
+import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
 import com.zburzhynski.jplanner.api.repository.ITimetableRepository;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
-import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
@@ -41,7 +41,7 @@ import java.util.TreeSet;
 public class TimetableService implements ITimetableService<String, Timetable> {
 
     @Autowired
-    private IEmployeeRepository employeeRepository;
+    private IAvailableResourceRepository resourceRepository;
 
     @Autowired
     private ITimetableRepository timetableRepository;
@@ -63,14 +63,19 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         if (CollectionUtils.isEmpty(quotas)) {
             return;
         }
-        Employee employee = (Employee) employeeRepository.findById(criteria.getAvailableResourceId());
+        AvailableResource resource = (AvailableResource) resourceRepository.findById(criteria.getAvailableResourceId());
+        if (resource == null) {
+            return;
+        }
         Timetable timetable = new Timetable();
         timetable.setStartDate(quotas.first().getStartDate());
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
-        timetable.setQuotas(quotas);
-        //employee.getTimetables().add(timetable);
-        employeeRepository.saveOrUpdate(employee);
+        for (Quota quota : quotas) {
+            timetable.addQuota(quota);
+        }
+        resource.addTimetable(timetable);
+        resourceRepository.saveOrUpdate(resource);
     }
 
     @Override

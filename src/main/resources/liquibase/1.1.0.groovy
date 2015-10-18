@@ -11,9 +11,7 @@ databaseChangeLog {
             column(name: 'doctor_id', type: 'VARCHAR(128)', remarks: 'The reference to the employee table') {
                 constraints(nullable: false)
             }
-            column(name: 'assistant_id', type: 'VARCHAR(128)', remarks: 'The reference to the employee table') {
-                constraints(nullable: false)
-            }
+            column(name: 'assistant_id', type: 'VARCHAR(128)', remarks: 'The reference to the employee table')
             column(name: 'workplace_id', type: 'VARCHAR(128)', remarks: 'The reference to the workplace table') {
                 constraints(nullable: false)
             }

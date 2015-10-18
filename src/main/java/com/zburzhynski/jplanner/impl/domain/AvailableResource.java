@@ -26,6 +26,12 @@ import javax.persistence.Table;
 @Table(schema = "jplanner", name = "available_resource")
 public class AvailableResource extends Domain {
 
+    public static final String P_TIMETABLES = "timetables";
+    public static final String P_TIMETABLE = "timetable";
+    public static final String P_DOCTOR = "doctor";
+    public static final String P_ASSISTANT = "assistant";
+    public static final String P_WORKPLACE = "workplace";
+
     @Column(name = "name")
     private String name;
 
@@ -106,6 +112,25 @@ public class AvailableResource extends Domain {
      */
     public void setTimetables(Set<Timetable> timetables) {
         this.timetables = timetables;
+    }
+
+    /**
+     * Adds timetable to available resource.
+     *
+     * @param timetable timetable for add
+     */
+    public void addTimetable(Timetable timetable) {
+        timetable.setAvailableResource(this);
+        getTimetables().add(timetable);
+    }
+
+    /**
+     * Remove timetable from available resource.
+     *
+     * @param timetable timetable for remove
+     */
+    public void removeTimetable(Timetable timetable) {
+        getTimetables().remove(timetable);
     }
 
     @Override

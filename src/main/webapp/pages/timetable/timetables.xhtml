@@ -10,30 +10,30 @@
     <ui:define name="content">
         <p:panel>
             <style type="text/css">
-                .emp-label {
+                .res-label {
                     font-weight: bold;
-                    width: 25%;
+                    width: 35%;
                 }
-                .emp-value {
-                    width: 75%;
+                .res-value {
+                    width: 65%;
                 }
             </style>
             <h:form id="timetablesForm">
                 <h4>#{msgs['timetables.header']}</h4>
-                <h:panelGrid columns="2" columnClasses="emp-label,emp-value" width="44%">
-                    <h:outputLabel for="employee" value="#{msgs['timetables.employee']}:" />
-                    <p:selectOneMenu id="employee"
-                                     value="#{timetableBean.employeeId}"
-                                     label="#{msgs['timetables.employee']}"
+                <h:panelGrid columns="2" columnClasses="res-label,res-value" width="50%">
+                    <h:outputLabel for="resource" value="#{msgs['timetables.resource']}:" />
+                    <p:selectOneMenu id="resource"
+                                     value="#{timetableBean.resourceId}"
+                                     label="#{msgs['timetables.resource']}"
                                      required="true"
                                      style="width: 100%">
-                        <f:selectItems value="#{employeeListBean.employees}" var="employee"
-                                       itemValue="#{employee.id}"
-                                       itemLabel="#{employee.person.fullName}" />
-                        <p:ajax event="change" listener="#{timetableBean.employeeSelectListener}" />
+                        <f:selectItems value="#{resourceListBean.resources}" var="res"
+                                       itemValue="#{res.id}"
+                                       itemLabel="#{res.name}" />
+                        <p:ajax event="change" listener="#{timetableBean.resourceSelectListener}" />
                     </p:selectOneMenu>
                 </h:panelGrid>
-                <p:dataTable id="timetables" value="#{timetableBean.employee.timetables}"
+                <p:dataTable id="timetables" value="#{timetableBean.resource.timetables}"
                              var="timetable"
                              emptyMessage="#{msgs['timetables.empty']}" style="width: 100%">
                     <p:column headerText="#{msgs['timetable.startDate']}" width="16%">
