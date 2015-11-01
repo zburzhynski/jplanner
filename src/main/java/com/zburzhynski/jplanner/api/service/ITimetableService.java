@@ -1,6 +1,6 @@
 package com.zburzhynski.jplanner.api.service;
 
-import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
+import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 
 /**
@@ -12,28 +12,13 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
  */
-public interface ITimetableService<ID, T extends IDomain> {
+public interface ITimetableService<ID, T extends IDomain> extends IBaseService<ID, T> {
 
     /**
-     * Creates timetable.
+     * Creates timetable quotas.
      *
-     * @param createCriteria {@link TimetableCreateCriteria} timetable create criteria
+     * @param createCriteria {@link QuotaCreateCriteria} quota create criteria
      */
-    void createTimetable(TimetableCreateCriteria createCriteria);
-
-    /**
-     * Gets timetable by id.
-     *
-     * @param id id
-     * @return timetable
-     */
-    T getById(ID id);
-
-    /**
-     * Deletes timetable.
-     *
-     * @param timetable timetable to delete
-     */
-    void delete(T timetable);
+    void createQuota(QuotaCreateCriteria createCriteria);
 
 }

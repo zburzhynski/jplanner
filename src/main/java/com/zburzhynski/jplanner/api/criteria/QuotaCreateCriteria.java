@@ -8,15 +8,15 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * Timetable create criteria.
+ * Quota create criteria.
  * <p/>
  * Date: 04.09.2015
  *
  * @author Vladimir Zburzhynski
  */
-public class TimetableCreateCriteria {
+public class QuotaCreateCriteria {
 
-    private String availableResourceId;
+    private String timetableId;
 
     private Date startDate;
 
@@ -38,12 +38,12 @@ public class TimetableCreateCriteria {
 
     private String description;
 
-    public String getAvailableResourceId() {
-        return availableResourceId;
+    public String getTimetableId() {
+        return timetableId;
     }
 
-    public void setAvailableResourceId(String availableResourceId) {
-        this.availableResourceId = availableResourceId;
+    public void setTimetableId(String timetableId) {
+        this.timetableId = timetableId;
     }
 
     public Date getStartDate() {

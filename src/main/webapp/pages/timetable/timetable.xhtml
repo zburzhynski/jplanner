@@ -9,24 +9,57 @@
 
     <ui:define name="content">
         <p:panel>
+            <style type="text/css">
+                .name {
+                    font-weight: bold;
+                    width: 10%;
+                }
+                .val {
+                    width: 50%;
+                }
+                .msg {
+                    width: 40%;
+                }
+            </style>
             <h:form id="timetableForm">
-                <h4>#{msgs['timetable.header']}</h4>
-                <p:schedule id="scheduler"
-                            value="#{resourceTimetableBean.eventModel}"
-                            slotMinutes="#{configBean.schedulerPrecision}"
-                            locale="ru"
-                            axisFormat="H:mm"
-                            timeFormat="H:mm"
-                            showWeekends="true"
-                            firstHour="#{scheduleBean.firstHour}"
-                            allDaySlot="false"
-                            timeZone="#{scheduleBean.timeZone}"
-                            view="#{scheduleBean.view}"
-                            initialDate="#{scheduleBean.initialDate}"
-                            tooltip="true">
-                </p:schedule>
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="60%">
+                    <h:outputLabel for="startDate" value="#{msgs['timetable.startDate']}:" />
+                    <p:calendar id="startDate"
+                                value="#{timetableBean.timetable.startDate}"
+                                label="#{msgs['timetable.startDate']}"
+                                pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
+                                locale="ru"
+                                required="true" />
+                    <p:message for="startDate" />
+                    <h:outputLabel for="endDate" value="#{msgs['timetable.endDate']}:" />
+                    <p:calendar id="endDate"
+                                value="#{timetableBean.timetable.endDate}"
+                                label="#{msgs['timetable.endDate']}"
+                                pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
+                                locale="ru"
+                                required="true" />
+                    <p:message for="endDate" />
+                    <h:outputLabel for="description" value="#{msgs['timetable.description']}:" />
+                    <p:inputTextarea id="description"
+                                     value="#{timetableBean.timetable.description}"
+                                     label="#{msgs['timetable.description']}"
+                                     maxlength="500"
+                                     style="width: 97%" />
+                    <p:message for="description" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="saveTimetable"
+                                     value="#{msgs['button.save']}"
+                                     action="#{timetableBean.saveTimetable}" />
+                    <h:commandButton id="cancelUpdateTimetable"
+                                     value="#{msgs['button.cancel']}"
+                                     action="#{timetableBean.cancelUpdateTimetable}"
+                                     immediate="true" />
+                </h:panelGrid>
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
-            </h:form>
+             </h:form>
         </p:panel>
     </ui:define>
 

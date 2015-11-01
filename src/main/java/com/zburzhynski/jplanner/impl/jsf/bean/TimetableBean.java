@@ -1,17 +1,14 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.RESOURCE_ID_PARAM;
+import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_PARAM;
 import com.zburzhynski.jplanner.api.domain.View;
-import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
+import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
-import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -20,7 +17,7 @@ import javax.faces.bean.ViewScoped;
 /**
  * Timetable bean.
  * <p/>
- * Date: 29.08.2015
+ * Date: 31.10.2015
  *
  * @author Vladimir Zburzhynski
  */
@@ -28,95 +25,60 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class TimetableBean implements Serializable {
 
-    public static final String RESOURCE_ID_PARAM = "resourceId";
-    public static final String TIMETABLE_ID_PARAM = "timetableId";
-    private static final String TIMETABLES_COMPONENT = "timetablesForm:timetables";
-
     private String resourceId;
 
-    private AvailableResource resource;
+    private Timetable timetable;
 
-    @ManagedProperty(value = "#{availableResourceService}")
-    private IAvailableResourceService resourceService;
+    @ManagedProperty(value = "#{timetableService}")
+    private ITimetableService timetableService;
 
     /**
      * Inits bean state.
      */
     @PostConstruct
     public void init() {
-        String resourceIdParam = JsfUtils.getRequestParam(RESOURCE_ID_PARAM);
-        if (StringUtils.isBlank(resourceIdParam)) {
-            List<AvailableResource> resources = resourceService.getAll();
-            if (CollectionUtils.isNotEmpty(resources)) {
-                resource = (AvailableResource) resourceService.getById(resources.get(0).getId());
-            }
+        resourceId = (String) JsfUtils.getFlashAttribute(RESOURCE_ID_PARAM);
+        Timetable editedTimetable = (Timetable) JsfUtils.getFlashAttribute(TIMETABLE_PARAM);
+        if (editedTimetable == null) {
+            AvailableResource resource = (AvailableResource) JsfUtils.getFlashAttribute(TimetablesBean.RESOURCE_PARAM);
+            timetable = new Timetable();
+            timetable.setAvailableResource(resource);
         } else {
-            resource = (AvailableResource) resourceService.getById(resourceIdParam);
-        }
-        if (resource != null) {
-            resourceId = resource.getId();
+            timetable = editedTimetable;
         }
     }
 
     /**
-     * Adds timetable.
+     * Saves timetable.
      *
      * @return path for navigating
      */
-    public String addTimetable() {
-        Map<String, Object> params = new HashMap<>();
-        params.put(RESOURCE_ID_PARAM, resourceId);
-        return JsfUtils.buildUrl(View.TIMETABLE_TEMPLATE.getPath(), params);
+    public String saveTimetable() {
+        JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
+        timetableService.saveOrUpdate(timetable);
+        return View.TIMETABLES.getPath();
     }
 
     /**
-     * Edits timetable.
+     * Cancel update template.
      *
-     * @param editedTimetable edited timetable
      * @return path for navigating
      */
-    public String editTimetable(Timetable editedTimetable) {
-        Map<String, Object> params = new HashMap<>();
-        params.put(TIMETABLE_ID_PARAM, editedTimetable.getId());
-        return JsfUtils.buildUrl(View.TIMETABLE.getPath(), params);
+    public String cancelUpdateTimetable() {
+        JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
+        return View.TIMETABLES.getPath();
     }
 
-    /**
-     * Removes timetable.
-     *
-     * @param removedTimetable timetable to remove
-     */
-    public void removeTimetable(Timetable removedTimetable) {
-        resource.removeTimetable(removedTimetable);
-        resourceService.saveOrUpdate(resource);
+    public Timetable getTimetable() {
+        return timetable;
     }
 
-    /**
-     * Employee select listener.
-     */
-    public void resourceSelectListener() {
-        resource = (AvailableResource) resourceService.getById(resourceId);
-        JsfUtils.update(TIMETABLES_COMPONENT);
+    public void setTimetable(Timetable timetable) {
+        this.timetable = timetable;
     }
 
-    public String getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(String resourceId) {
-        this.resourceId = resourceId;
-    }
-
-    public AvailableResource getResource() {
-        return resource;
-    }
-
-    public void setResource(AvailableResource resource) {
-        this.resource = resource;
-    }
-
-    public void setResourceService(IAvailableResourceService resourceService) {
-        this.resourceService = resourceService;
+    public void setTimetableService(ITimetableService timetableService) {
+        this.timetableService = timetableService;
     }
 
 }

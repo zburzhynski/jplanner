@@ -1,6 +1,6 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import static com.zburzhynski.jplanner.impl.jsf.bean.TimetableBean.TIMETABLE_ID_PARAM;
+import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_ID_PARAM;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
@@ -20,7 +20,7 @@ import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
 
 /**
- * Resource timetable bean.
+ * Timetable quota bean.
  * <p/>
  * Date: 07.09.2015
  *
@@ -28,7 +28,7 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class ResourceTimetableBean implements Serializable {
+public class TimetableQuotaBean implements Serializable {
 
     private ScheduleModel eventModel;
 
@@ -40,17 +40,17 @@ public class ResourceTimetableBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        String timetableId = JsfUtils.getRequestParam(TIMETABLE_ID_PARAM);
+        String timetableId = (String) JsfUtils.getFlashAttribute(TIMETABLE_ID_PARAM);
         Timetable timetable = (Timetable) timetableService.getById(timetableId);
+        eventModel = new DefaultScheduleModel();
         if (CollectionUtils.isNotEmpty(timetable.getQuotas())) {
             List<ScheduleEvent> events = new ArrayList<>();
             for (Quota quota : timetable.getQuotas()) {
                 ScheduleEvent event = new DefaultScheduleEvent(quota.getQuotaType().name(),
                     quota.getStartDate(), quota.getEndDate());
                 event.setId(quota.getId());
-                events.add(event);
+                eventModel.addEvent(event);
             }
-            eventModel = new DefaultScheduleModel(events);
         }
     }
 

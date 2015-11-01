@@ -23,17 +23,17 @@
                 <h:panelGrid columns="2" columnClasses="res-label,res-value" width="50%">
                     <h:outputLabel for="resource" value="#{msgs['timetables.resource']}:" />
                     <p:selectOneMenu id="resource"
-                                     value="#{timetableBean.resourceId}"
+                                     value="#{timetablesBean.resourceId}"
                                      label="#{msgs['timetables.resource']}"
                                      required="true"
                                      style="width: 100%">
                         <f:selectItems value="#{resourceListBean.resources}" var="res"
                                        itemValue="#{res.id}"
                                        itemLabel="#{res.name}" />
-                        <p:ajax event="change" listener="#{timetableBean.resourceSelectListener}" />
+                        <p:ajax event="change" listener="#{timetablesBean.resourceSelectListener}" />
                     </p:selectOneMenu>
                 </h:panelGrid>
-                <p:dataTable id="timetables" value="#{timetableBean.resource.timetables}"
+                <p:dataTable id="timetables" value="#{timetablesBean.resource.timetables}"
                              var="timetable"
                              emptyMessage="#{msgs['timetables.empty']}" style="width: 100%">
                     <p:column headerText="#{msgs['timetable.startDate']}" width="16%">
@@ -46,17 +46,21 @@
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msgs['quota.description']}" width="57%">
-                        <h:outputText value="#{quota.description}" />
+                    <p:column headerText="#{msgs['quota.description']}" width="49%">
+                        <h:outputText value="#{timetable.description}" />
                     </p:column>
-                    <p:column width="11%">
+                    <p:column width="19%">
                         <h:panelGroup>
-                            <p:commandButton action="#{timetableBean.editTimetable(timetable)}"
+                            <p:commandButton action="#{timetablesBean.editQuota(timetable)}"
+                                             icon="ui-icon-calculator" />
+                            <p:commandButton action="#{timetablesBean.addQuota(timetable)}"
                                              title="#{msgs['button.edit']}"
-                                             icon="ui-icon-pencil"
-                                             style="padding-right: 5px">
+                                             icon="ui-icon-plus" />
+                            <p:commandButton action="#{timetablesBean.editTimetable(timetable)}"
+                                             title="#{msgs['button.edit']}"
+                                             icon="ui-icon-pencil">
                             </p:commandButton>
-                            <p:commandButton action="#{timetableBean.removeTimetable(timetable)}"
+                            <p:commandButton action="#{timetablesBean.removeTimetable(timetable)}"
                                              title="#{msgs['button.remove']}"
                                              icon="ui-icon-trash"
                                              update="timetables">
@@ -68,7 +72,7 @@
                     </p:column>
                 </p:dataTable>
                 <h:panelGrid style="padding-top: 5px">
-                    <h:commandButton action="#{timetableBean.addTimetable}"
+                    <h:commandButton action="#{timetablesBean.addTimetable}"
                                      image="/resources/css/css-images/add.gif"
                                      title="#{msgs['button.add']}" />
                 </h:panelGrid>

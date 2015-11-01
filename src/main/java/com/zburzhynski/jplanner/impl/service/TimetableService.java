@@ -8,17 +8,17 @@ import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.DAY_OF_MONTH
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.DAY_OF_WEEK;
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.EVEN_DAY;
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
-import com.zburzhynski.jplanner.api.criteria.TimetableCreateCriteria;
+import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
 import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
 import com.zburzhynski.jplanner.api.repository.ITimetableRepository;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
-import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -38,6 +38,7 @@ import java.util.TreeSet;
  * @author Vladimir Zburzhynski
  */
 @Service("timetableService")
+@Transactional(readOnly = true)
 public class TimetableService implements ITimetableService<String, Timetable> {
 
     @Autowired
@@ -47,8 +48,45 @@ public class TimetableService implements ITimetableService<String, Timetable> {
     private ITimetableRepository timetableRepository;
 
     @Override
+    public Timetable getById(String id) {
+        return (Timetable) timetableRepository.findById(id);
+    }
+
+    @Override
     @Transactional(readOnly = false)
-    public void createTimetable(TimetableCreateCriteria criteria) {
+    public boolean saveOrUpdate(Timetable timetable) {
+        boolean result = false;
+        if (timetable != null) {
+            if (StringUtils.isBlank(timetable.getId())) {
+                timetableRepository.insert(timetable);
+                result = true;
+            } else {
+                timetableRepository.update(timetable);
+                result = true;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public boolean delete(Timetable timetable) {
+        boolean deleted = false;
+        if (timetable != null) {
+            timetableRepository.delete(timetable);
+            deleted = true;
+        }
+        return deleted;
+    }
+
+    @Override
+    public List<Timetable> getAll() {
+        return timetableRepository.findAll();
+    }
+
+    @Override
+    @Transactional(readOnly = false)
+    public void createQuota(QuotaCreateCriteria criteria) {
         Date startDate = criteria.getStartDate();
         Date endDate = criteria.getEndDate();
         SortedSet<Quota> quotas = new TreeSet<>();
@@ -63,34 +101,20 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         if (CollectionUtils.isEmpty(quotas)) {
             return;
         }
-        AvailableResource resource = (AvailableResource) resourceRepository.findById(criteria.getAvailableResourceId());
-        if (resource == null) {
+        Timetable timetable = (Timetable) timetableRepository.findById(criteria.getTimetableId());
+        if (timetable == null) {
             return;
         }
-        Timetable timetable = new Timetable();
         timetable.setStartDate(quotas.first().getStartDate());
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
         for (Quota quota : quotas) {
             timetable.addQuota(quota);
         }
-        resource.addTimetable(timetable);
-        resourceRepository.saveOrUpdate(resource);
+        timetableRepository.saveOrUpdate(timetable);
     }
 
-    @Override
-    @Transactional(readOnly = false)
-    public Timetable getById(String id) {
-        return (Timetable) timetableRepository.findById(id);
-    }
-
-    @Override
-    @Transactional(readOnly = false)
-    public void delete(Timetable timetable) {
-        timetableRepository.delete(timetable);
-    }
-
-    private void createDayOfWeekQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
+    private void createDayOfWeekQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
         if (DAY_OF_WEEK.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && isDayInWeek(date, criteria.getSelectedDayOfWeek())) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -98,7 +122,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         }
     }
 
-    private void createEvenDayQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
+    private void createEvenDayQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
         if (EVEN_DAY.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && DateUtils.isEvenDay(date)) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -106,7 +130,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         }
     }
 
-    private void createOddDayQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
+    private void createOddDayQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
         if (ODD_DAY.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && DateUtils.isOddDay(date)) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -114,7 +138,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         }
     }
 
-    private void createDayOfMonthQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
+    private void createDayOfMonthQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
         if (DAY_OF_MONTH.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && isDayInMonth(date, criteria.getSelectedDayOfMonth())) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -122,7 +146,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         }
     }
 
-    private void createArbitraryDateQuotas(Date date, TimetableCreateCriteria criteria, Set<Quota> quotas) {
+    private void createArbitraryDateQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
         if (ARBITRARY_DATE.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && isDateInList(date, criteria.getSelectedArbitraryDates())) {
                 quotas.addAll(createQuotas(date, criteria));
@@ -130,7 +154,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         }
     }
 
-    private List<Quota> createQuotas(Date currentDate, TimetableCreateCriteria createCriteria) {
+    private List<Quota> createQuotas(Date currentDate, QuotaCreateCriteria createCriteria) {
         List<Quota> quotas = new ArrayList<>();
         String date = DateUtils.formatDate(currentDate, RUSSIAN_DATE_FORMAT);
         for (Quota templateQuota : createCriteria.getQuotas()) {
@@ -167,7 +191,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         return false;
     }
 
-    private boolean isDateExcluded(Date date, TimetableCreateCriteria createCriteria) {
+    private boolean isDateExcluded(Date date, QuotaCreateCriteria createCriteria) {
         return isDayInWeek(date, createCriteria.getExcludedDayOfWeek())
             || isDateInList(date, createCriteria.getExcludedArbitraryDates());
     }
