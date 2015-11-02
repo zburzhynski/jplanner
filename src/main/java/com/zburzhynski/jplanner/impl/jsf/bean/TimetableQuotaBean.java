@@ -5,6 +5,7 @@ import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import com.zburzhynski.jplanner.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
@@ -12,8 +13,6 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,6 +34,9 @@ public class TimetableQuotaBean implements Serializable {
     @ManagedProperty(value = "#{timetableService}")
     private ITimetableService timetableService;
 
+    @ManagedProperty(value = "#{propertyReader}")
+    private PropertyReader propertyReader;
+
     /**
      * Inits bean state.
      */
@@ -44,9 +46,9 @@ public class TimetableQuotaBean implements Serializable {
         Timetable timetable = (Timetable) timetableService.getById(timetableId);
         eventModel = new DefaultScheduleModel();
         if (CollectionUtils.isNotEmpty(timetable.getQuotas())) {
-            List<ScheduleEvent> events = new ArrayList<>();
             for (Quota quota : timetable.getQuotas()) {
-                ScheduleEvent event = new DefaultScheduleEvent(quota.getQuotaType().name(),
+                String quotaType = propertyReader.readProperty(quota.getQuotaType().getValue());
+                ScheduleEvent event = new DefaultScheduleEvent(quotaType,
                     quota.getStartDate(), quota.getEndDate());
                 event.setId(quota.getId());
                 eventModel.addEvent(event);
@@ -64,6 +66,10 @@ public class TimetableQuotaBean implements Serializable {
 
     public void setTimetableService(ITimetableService timetableService) {
         this.timetableService = timetableService;
+    }
+
+    public void setPropertyReader(PropertyReader propertyReader) {
+        this.propertyReader = propertyReader;
     }
 
 }
