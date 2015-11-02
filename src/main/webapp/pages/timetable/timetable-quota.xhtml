@@ -24,6 +24,8 @@
                             view="#{scheduleBean.view}"
                             initialDate="#{scheduleBean.initialDate}"
                             tooltip="true">
+                    <p:ajax event="eventMove" listener="#{timetableQuotaBean.moveEvent}" update="scheduler" />
+                    <p:ajax event="eventResize" listener="#{timetableQuotaBean.resizeEvent}" update="scheduler" />
                 </p:schedule>
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
             </h:form>

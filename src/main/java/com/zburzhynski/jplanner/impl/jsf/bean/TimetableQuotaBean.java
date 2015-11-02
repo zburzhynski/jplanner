@@ -1,12 +1,15 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_ID_PARAM;
+import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.Timetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
+import org.primefaces.event.ScheduleEntryMoveEvent;
+import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.DefaultScheduleModel;
 import org.primefaces.model.ScheduleEvent;
@@ -34,6 +37,9 @@ public class TimetableQuotaBean implements Serializable {
     @ManagedProperty(value = "#{timetableService}")
     private ITimetableService timetableService;
 
+    @ManagedProperty(value = "#{quotaService}")
+    private IQuotaService quotaService;
+
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader propertyReader;
 
@@ -51,9 +57,34 @@ public class TimetableQuotaBean implements Serializable {
                 ScheduleEvent event = new DefaultScheduleEvent(quotaType,
                     quota.getStartDate(), quota.getEndDate());
                 event.setId(quota.getId());
-                eventModel.addEvent(event);
+                eventModel.getEvents().add(event);
             }
         }
+    }
+
+    /**
+     * Moves quota event.
+     *
+     * @param moveEvent {@link ScheduleEntryMoveEvent}
+     */
+    public void moveEvent(ScheduleEntryMoveEvent moveEvent) {
+        ScheduleEvent scheduleEvent = moveEvent.getScheduleEvent();
+        Quota quota = (Quota) quotaService.getById(scheduleEvent.getId());
+        quota.setStartDate(scheduleEvent.getStartDate());
+        quota.setEndDate(scheduleEvent.getEndDate());
+        quotaService.saveOrUpdate(quota);
+    }
+
+    /**
+     * Resize quota event.
+     *
+     * @param resizeEvent {@link ScheduleEntryResizeEvent}
+     */
+    public void resizeEvent(ScheduleEntryResizeEvent resizeEvent) {
+        ScheduleEvent scheduleEvent = resizeEvent.getScheduleEvent();
+        Quota quota = (Quota) quotaService.getById(scheduleEvent.getId());
+        quota.setEndDate(scheduleEvent.getEndDate());
+        quotaService.saveOrUpdate(quota);
     }
 
     public ScheduleModel getEventModel() {
@@ -66,6 +97,10 @@ public class TimetableQuotaBean implements Serializable {
 
     public void setTimetableService(ITimetableService timetableService) {
         this.timetableService = timetableService;
+    }
+
+    public void setQuotaService(IQuotaService quotaService) {
+        this.quotaService = quotaService;
     }
 
     public void setPropertyReader(PropertyReader propertyReader) {
