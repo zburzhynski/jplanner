@@ -37,8 +37,8 @@ public class AvailableResourceRepository extends AbstractBaseRepository<String, 
     public AvailableResource findById(String id) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_DOCTOR, P_DOCTOR);
-        criteria.createAlias(P_ASSISTANT, P_ASSISTANT);
         criteria.createAlias(P_WORKPLACE, P_WORKPLACE);
+        criteria.createAlias(P_ASSISTANT, P_ASSISTANT, LEFT_OUTER_JOIN);
         criteria.createAlias(P_TIMETABLES, P_TIMETABLE, LEFT_OUTER_JOIN);
         criteria.createAlias(P_TIMETABLE + DOT + P_QUOTAS, P_QUOTA, LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq(P_ID, id));
