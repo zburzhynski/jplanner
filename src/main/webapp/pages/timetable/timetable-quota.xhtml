@@ -28,6 +28,10 @@
                     <p:ajax event="eventResize" listener="#{timetableQuotaBean.resizeEvent}" update="scheduler" />
                 </p:schedule>
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
+                <br />
+                <p:commandButton id="back"
+                                 value="#{msgs['timetableQuota.button.back']}"
+                                 action="#{timetableQuotaBean.back}" />
             </h:form>
         </p:panel>
     </ui:define>

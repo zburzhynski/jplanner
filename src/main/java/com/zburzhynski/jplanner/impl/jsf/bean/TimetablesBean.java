@@ -98,6 +98,7 @@ public class TimetablesBean implements Serializable {
      * @return path for navigating
      */
     public String addQuota(Timetable timetable) {
+        JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
         JsfUtils.setFlashAttribute(TIMETABLE_ID_PARAM, timetable.getId());
         return View.TIMETABLE_TEMPLATE.getPath();
     }

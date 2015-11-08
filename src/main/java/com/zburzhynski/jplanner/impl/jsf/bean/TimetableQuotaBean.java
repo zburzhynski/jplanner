@@ -1,6 +1,8 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.RESOURCE_ID_PARAM;
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_ID_PARAM;
+import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.api.service.ITimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
@@ -32,6 +34,8 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class TimetableQuotaBean implements Serializable {
 
+    private String resourceId;
+
     private ScheduleModel eventModel;
 
     @ManagedProperty(value = "#{timetableService}")
@@ -48,6 +52,7 @@ public class TimetableQuotaBean implements Serializable {
      */
     @PostConstruct
     public void init() {
+        resourceId = (String) JsfUtils.getFlashAttribute(RESOURCE_ID_PARAM);
         String timetableId = (String) JsfUtils.getFlashAttribute(TIMETABLE_ID_PARAM);
         Timetable timetable = (Timetable) timetableService.getById(timetableId);
         eventModel = new DefaultScheduleModel();
@@ -85,6 +90,16 @@ public class TimetableQuotaBean implements Serializable {
         Quota quota = (Quota) quotaService.getById(scheduleEvent.getId());
         quota.setEndDate(scheduleEvent.getEndDate());
         quotaService.saveOrUpdate(quota);
+    }
+
+    /**
+     * Returns to timetables form.
+     *
+     * @return path for navigating
+     */
+    public String back() {
+        JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
+        return View.TIMETABLES.getPath();
     }
 
     public ScheduleModel getEventModel() {
