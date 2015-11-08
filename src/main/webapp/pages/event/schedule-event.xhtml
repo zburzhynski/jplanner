@@ -138,9 +138,12 @@
                                 label="#{msgs['schedule.from']}"
                                 pattern="dd/MM/yyyy HH:mm"
                                 navigator="true"
+                                showButtonPanel="true"
                                 locale="ru"
                                 required="true"
-                                styleClass="cal" />
+                                styleClass="cal">
+                        <p:ajax event="dateSelect" listener="#{scheduleBean.startDateSelectListener}" update="doctor" />
+                    </p:calendar>
                     <p:spacer />
                     <h:outputLabel for="to" value="#{msgs['schedule.to']}:" />
                     <p:calendar id="to"
@@ -148,9 +151,12 @@
                                 label="#{msgs['schedule.to']}"
                                 pattern="dd/MM/yyyy HH:mm"
                                 navigator="true"
+                                showButtonPanel="true"
                                 locale="ru"
                                 required="true"
-                                styleClass="cal" />
+                                styleClass="cal">
+                        <p:ajax event="dateSelect" listener="#{scheduleBean.endDateSelectListener}" update="doctor" />
+                    </p:calendar>
                     <p:spacer />
                     <h:outputLabel for="reason" value="#{msgs['schedule.reason']}:" />
                     <p:inputTextarea id="reason"

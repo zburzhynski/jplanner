@@ -1,8 +1,10 @@
 package com.zburzhynski.jplanner.api.service;
 
+import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.api.domain.PositionType;
+import com.zburzhynski.jplanner.impl.domain.Employee;
 
 import java.util.List;
 
@@ -39,6 +41,14 @@ public interface IEmployeeService<ID, T extends IDomain> extends IBaseService<ID
      * @return employees
      */
     List<T> getByPosition(PositionType positionType);
+
+    /**
+     * Gets available employees by criteria.
+     *
+     * @param searchCriteria {@link AvailableEmployeeSearchCriteria} available employee search criteria
+     * @return employees
+     */
+    List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria);
 
     /**
      * Gets employees by criteria.

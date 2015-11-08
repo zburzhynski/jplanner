@@ -159,8 +159,19 @@ public final class JsfUtils {
      * @param <T>  bean  type
      * @return bean from context
      */
-    public static <T> T getBean(String name) {
+    public static <T> T getSessionBean(String name) {
         return (T) FacesContext.getCurrentInstance().getExternalContext().getSessionMap().get(name);
+    }
+
+    /**
+     * Gets bean from jsf view context by name.
+     *
+     * @param name bean name
+     * @param <T>  bean  type
+     * @return bean from context
+     */
+    public static <T> T getViewBean(String name) {
+        return (T) FacesContext.getCurrentInstance().getViewRoot().getViewMap().get(name);
     }
 
     /**

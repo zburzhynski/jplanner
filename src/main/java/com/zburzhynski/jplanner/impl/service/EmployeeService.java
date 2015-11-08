@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.service;
 
+import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -72,6 +74,11 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
     @Override
     public List<Employee> getByPosition(PositionType positionType) {
         return employeeRepository.findByPosition(positionType);
+    }
+
+    @Override
+    public List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria) {
+        return new ArrayList<>();
     }
 
     @Override

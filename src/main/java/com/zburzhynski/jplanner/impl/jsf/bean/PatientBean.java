@@ -81,7 +81,7 @@ public class PatientBean implements Serializable {
      */
     public String selectPatient() {
         if (patient != null) {
-            ScheduleBean scheduleBean = JsfUtils.getBean("scheduleBean");
+            ScheduleBean scheduleBean = JsfUtils.getSessionBean("scheduleBean");
             if (scheduleBean != null) {
                 scheduleBean.getEvent().getClient().setJdentPatientId(patient.getId());
                 scheduleBean.getEvent().getClient().getPerson().setSurname(patient.getSurname());

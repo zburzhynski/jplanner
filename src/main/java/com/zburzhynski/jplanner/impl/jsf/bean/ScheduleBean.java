@@ -384,7 +384,7 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String choosePatient() {
-        PatientBean patientBean = JsfUtils.getBean("patientBean");
+        PatientBean patientBean = JsfUtils.getSessionBean("patientBean");
         if (patientBean != null) {
             patientBean.setSearchPatientRequest(new SearchPatientRequest());
             patientBean.setPatient(null);
@@ -447,6 +447,30 @@ public class ScheduleBean implements Serializable {
      */
     public void selectDoctorListener() {
         JsfUtils.update(SCHEDULER_COMPONENT);
+    }
+
+    /**
+     * Start date select listener.
+     *
+     * @param selectEvent date select event
+     */
+    public void startDateSelectListener(SelectEvent selectEvent) {
+        EmployeeListBean employeeBean = JsfUtils.getViewBean("employeeListBean");
+        if (employeeBean != null) {
+            employeeBean.setStartDate(event.getStartDate());
+            employeeBean.setEndDate(event.getEndDate());
+            employeeBean.setWorkplace(workplace);
+            employeeBean.init();
+        }
+    }
+
+    /**
+     * End date select listener.
+     *
+     * @param selectEvent date select event
+     */
+    public void endDateSelectListener(SelectEvent selectEvent) {
+
     }
 
     public String getTimeZone() {
