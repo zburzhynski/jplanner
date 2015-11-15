@@ -4,14 +4,15 @@ import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
+import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.domain.Quota;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -27,6 +28,9 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
 
     @Autowired
     private IEmployeeRepository employeeRepository;
+
+    @Autowired
+    private IQuotaRepository quotaRepository;
 
     @Override
     public Employee getById(String id) {
@@ -78,7 +82,11 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
 
     @Override
     public List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria) {
-        return new ArrayList<>();
+        List<Quota> intersectingQuotas = quotaRepository.findIntersecting(searchCriteria.getStartDate(),
+            searchCriteria.getEndDate());
+
+
+        return employeeRepository.findAvailable(searchCriteria);
     }
 
     @Override

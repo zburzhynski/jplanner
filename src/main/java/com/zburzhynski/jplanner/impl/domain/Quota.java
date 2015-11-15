@@ -26,6 +26,12 @@ import javax.persistence.Table;
 @Table(name = "quota")
 public class Quota extends Domain implements Comparable<Quota> {
 
+    public static final String P_TIMETABLE = "timetable";
+    public static final String P_START_DATE = "startDate";
+    public static final String P_END_DATE = "endDate";
+    public static final String P_QUOTA_TYPE = "quotaType";
+    public static final String P_DESCRIPTION = "description";
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timetable_id")
     private Timetable timetable;

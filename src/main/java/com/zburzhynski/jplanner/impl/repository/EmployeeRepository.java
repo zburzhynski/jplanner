@@ -1,6 +1,9 @@
 package com.zburzhynski.jplanner.impl.repository;
 
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.DOT;
+import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_TIMETABLE;
+import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_TIMETABLES;
+import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_WORKPLACE;
 import static com.zburzhynski.jplanner.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.Employee.P_PERSON;
 import static com.zburzhynski.jplanner.impl.domain.Employee.P_POSITION;
@@ -8,17 +11,25 @@ import static com.zburzhynski.jplanner.impl.domain.Person.P_NAME;
 import static com.zburzhynski.jplanner.impl.domain.Person.P_PATRONYMIC;
 import static com.zburzhynski.jplanner.impl.domain.Person.P_SURNAME;
 import static com.zburzhynski.jplanner.impl.domain.Position.P_POSITION_TYPE;
+import static com.zburzhynski.jplanner.impl.domain.Timetable.P_QUOTA;
+import static com.zburzhynski.jplanner.impl.domain.Timetable.P_QUOTAS;
+import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
+import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.CriteriaAlias;
 import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
+import org.hibernate.criterion.ProjectionList;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -72,6 +83,79 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
         criteria.addOrder(Order.asc(P_PERSON + DOT + P_SURNAME));
         criteria.addOrder(Order.asc(P_PERSON + DOT + P_NAME));
         criteria.addOrder(Order.asc(P_PERSON + DOT + P_PATRONYMIC));
+        return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
+    }
+
+    @Override
+    public List<Employee> findAvailable(AvailableEmployeeSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        DetachedCriteria resourceCriteria = DetachedCriteria.forClass(AvailableResource.class);
+        resourceCriteria.createAlias(P_TIMETABLES, P_TIMETABLE);
+        resourceCriteria.createAlias(P_TIMETABLE + DOT + P_QUOTAS, P_QUOTA);
+        resourceCriteria.createAlias(P_WORKPLACE, P_WORKPLACE);
+        //resourceCriteria.createAlias(P_DOCTOR, P_DOCTOR, JoinType.LEFT_OUTER_JOIN);
+//        resourceCriteria.add(Restrictions.eq(P_WORKPLACE + DOT + P_ID, searchCriteria.getWorkplaceId()));
+//        if (StringUtils.isNotBlank(searchCriteria.getDoctorId())) {
+//            resourceCriteria.add(Restrictions.eq(P_DOCTOR + DOT + P_ID, searchCriteria.getDoctorId()));
+//        }
+
+
+        DetachedCriteria minDate = DetachedCriteria.forClass(Quota.class, "quotaAlias");
+
+        ProjectionList projections = Projections.projectionList();
+        projections.add(Projections.max(Quota.P_START_DATE));
+
+        minDate.setProjection(projections);
+        minDate.add(Restrictions.gt(Quota.P_END_DATE, searchCriteria.getStartDate()));
+        minDate.add(Restrictions.lt(Quota.P_START_DATE, searchCriteria.getEndDate()));
+
+//        DetachedCriteria offTime = DetachedCriteria.forClass(Quota.class);
+//        offTime.add(Restrictions.ge(Quota.P_END_DATE, searchCriteria.getStartDate()));
+//        offTime.add(Restrictions.le(Quota.P_START_DATE, searchCriteria.getEndDate()));
+//        offTime.add(Restrictions.ne(Quota.P_QUOTA_TYPE, QuotaType.WORK_TIME));
+//
+//        minDate.add(Subqueries.notExists(offTime));
+
+
+        resourceCriteria.add(Subqueries.ge(searchCriteria.getStartDate(), minDate));
+
+
+//        DetachedCriteria maxDate = DetachedCriteria.forClass(Quota.class);
+//
+//        projections = Projections.projectionList();
+//        projections.add(Projections.max(Quota.P_START_DATE));
+//
+//        maxDate.setProjection(projections);
+//        maxDate.add(Restrictions.ge(Quota.P_END_DATE, searchCriteria.getStartDate()));
+//        maxDate.add(Restrictions.le(Quota.P_START_DATE, searchCriteria.getEndDate()));
+//
+//        offTime = DetachedCriteria.forClass(Quota.class);
+//        offTime.add(Restrictions.ge(Quota.P_END_DATE, searchCriteria.getStartDate()));
+//        offTime.add(Restrictions.le(Quota.P_START_DATE, searchCriteria.getEndDate()));
+//        offTime.add(Restrictions.ne(Quota.P_QUOTA_TYPE, QuotaType.WORK_TIME));
+//
+//        maxDate.add(Subqueries.notExists(offTime));
+//
+//
+//        resourceCriteria.add(Subqueries.le(Quota.P_END_DATE, maxDate));
+
+
+//        resourceCriteria.add(Restrictions.ge(P_QUOTA + DOT + Quota.P_START_DATE, searchCriteria.getStartDate()));
+//        resourceCriteria.add(Restrictions.ge(P_QUOTA + DOT + Quota.P_END_DATE, searchCriteria.getStartDate()));
+//
+//        resourceCriteria.add(Restrictions.ge(P_QUOTA + DOT + Quota.P_START_DATE, searchCriteria.getEndDate()));
+//        resourceCriteria.add(Restrictions.ge(P_QUOTA + DOT + Quota.P_END_DATE, searchCriteria.getEndDate()));
+//
+//
+//        resourceCriteria.add(Restrictions.eq(P_QUOTA + DOT + Quota.P_QUOTA_TYPE, QuotaType.WORK_TIME));
+
+//        Conjunction conjunction = Restrictions.conjunction();
+//        disjunction.add(Restrictions.ge(P_QUOTA + DOT + Quota.P_END_DATE, searchCriteria.getStartDate()));
+//        disjunction.add(Restrictions.le(P_QUOTA + DOT + Quota.P_START_DATE, searchCriteria.getEndDate()));
+//        resourceCriteria.add(disjunction);
+//        resourceCriteria.add(Restrictions.eq(P_QUOTA + DOT + Quota.P_QUOTA_TYPE, QuotaType.WORK_TIME));
+//        resourceCriteria.setProjection(Projections.distinct(Projections.property(P_DOCTOR + DOT + P_ID)));
+//        criteria.add(Subqueries.propertyIn(P_ID, resourceCriteria));
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 

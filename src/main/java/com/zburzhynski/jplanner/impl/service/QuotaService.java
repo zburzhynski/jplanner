@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +49,11 @@ public class QuotaService implements IQuotaService<String, Quota> {
             deleted = true;
         }
         return deleted;
+    }
+
+    @Override
+    public List<Quota> getIntersecting(Date startDate, Date endDate) {
+        return quotaRepository.findIntersecting(startDate, endDate);
     }
 
     @Override

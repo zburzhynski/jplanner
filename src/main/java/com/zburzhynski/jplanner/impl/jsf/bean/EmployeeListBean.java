@@ -47,6 +47,9 @@ public class EmployeeListBean implements Serializable {
             assistants = employeeService.getByPosition(ASSISTANT);
         } else {
             AvailableEmployeeSearchCriteria availableDoctorCriteria = new AvailableEmployeeSearchCriteria();
+            availableDoctorCriteria.setWorkplaceId(workplace.getId());
+            availableDoctorCriteria.setStartDate(startDate);
+            availableDoctorCriteria.setEndDate(endDate);
             doctors = employeeService.getAvailable(availableDoctorCriteria);
 
             AvailableEmployeeSearchCriteria availableAssistantCriteria = new AvailableEmployeeSearchCriteria();
