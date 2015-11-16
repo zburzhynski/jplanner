@@ -3,6 +3,7 @@ package com.zburzhynski.jplanner.impl.service;
 import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
+import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -87,14 +89,20 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
     @Override
     public List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria) {
         List<Quota> intersectingQuotas = quotaRepository.findIntersecting(searchCriteria.getStartDate(),
-            searchCriteria.getEndDate());
+            searchCriteria.getEndDate(), Arrays.asList(QuotaType.WORK_TIME));
         if (CollectionUtils.isEmpty(intersectingQuotas)) {
             return new ArrayList<>();
         }
         SortedSet<Quota> sortedQuotas = new TreeSet<>(intersectingQuotas);
-        if (sortedQuotas.first().getStartDate().after(searchCriteria.getStartDate()) || sortedQuotas.last().getEndDate().before(searchCriteria.getEndDate())) {
+        if (sortedQuotas.first().getStartDate().after(searchCriteria.getStartDate())
+            || sortedQuotas.last().getEndDate().before(searchCriteria.getEndDate())) {
             return new ArrayList<>();
         }
+        List<String> quotaIds = new ArrayList<>();
+        for (Quota quota : intersectingQuotas) {
+            quotaIds.add(quota.getId());
+        }
+        searchCriteria.setQuotaIds(quotaIds);
         return employeeRepository.findAvailable(searchCriteria);
     }
 

@@ -42,7 +42,7 @@ public class EmployeeListBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        if (workplace == null && startDate == null && endDate == null) {
+        if (workplace == null || startDate == null || endDate == null) {
             doctors = employeeService.getByPosition(DOCTOR);
             assistants = employeeService.getByPosition(ASSISTANT);
         } else {

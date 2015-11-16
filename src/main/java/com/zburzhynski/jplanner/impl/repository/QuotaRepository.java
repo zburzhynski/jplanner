@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.repository;
 
+import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import org.hibernate.Criteria;
@@ -23,10 +24,11 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
     implements IQuotaRepository<String, Quota> {
 
     @Override
-    public List<Quota> findIntersecting(Date startDate, Date endDate) {
+    public List<Quota> findIntersecting(Date startDate, Date endDate, List<QuotaType> types) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.add(Restrictions.gt(Quota.P_END_DATE, startDate));
         criteria.add(Restrictions.lt(Quota.P_START_DATE, endDate));
+        criteria.add(Restrictions.in(Quota.P_QUOTA_TYPE, types));
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 

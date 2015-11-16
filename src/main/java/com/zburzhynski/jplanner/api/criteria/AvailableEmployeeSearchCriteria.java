@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.api.criteria;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Available employee search criteria.
@@ -17,7 +18,7 @@ public class AvailableEmployeeSearchCriteria {
 
     private String workplaceId;
 
-    private String doctorId;
+    private List<String> quotaIds;
 
     public Date getStartDate() {
         return startDate;
@@ -43,12 +44,12 @@ public class AvailableEmployeeSearchCriteria {
         this.workplaceId = workplaceId;
     }
 
-    public String getDoctorId() {
-        return doctorId;
+    public List<String> getQuotaIds() {
+        return quotaIds;
     }
 
-    public void setDoctorId(String doctorId) {
-        this.doctorId = doctorId;
+    public void setQuotaIds(List<String> quotaIds) {
+        this.quotaIds = quotaIds;
     }
 
 }
