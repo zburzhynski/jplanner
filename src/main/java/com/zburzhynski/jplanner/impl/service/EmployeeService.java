@@ -8,12 +8,16 @@ import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Quota;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Implementation of {@link IEmployeeService} interface.
@@ -84,8 +88,13 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
     public List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria) {
         List<Quota> intersectingQuotas = quotaRepository.findIntersecting(searchCriteria.getStartDate(),
             searchCriteria.getEndDate());
-
-
+        if (CollectionUtils.isEmpty(intersectingQuotas)) {
+            return new ArrayList<>();
+        }
+        SortedSet<Quota> sortedQuotas = new TreeSet<>(intersectingQuotas);
+        if (sortedQuotas.first().getStartDate().after(searchCriteria.getStartDate()) || sortedQuotas.last().getEndDate().before(searchCriteria.getEndDate())) {
+            return new ArrayList<>();
+        }
         return employeeRepository.findAvailable(searchCriteria);
     }
 
