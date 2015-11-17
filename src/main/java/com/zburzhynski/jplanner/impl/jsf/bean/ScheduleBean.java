@@ -455,13 +455,7 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent date select event
      */
     public void startDateSelectListener(SelectEvent selectEvent) {
-        EmployeeListBean employeeBean = JsfUtils.getViewBean("employeeListBean");
-        if (employeeBean != null) {
-            employeeBean.setStartDate(event.getStartDate());
-            employeeBean.setEndDate(event.getEndDate());
-            employeeBean.setWorkplace(workplace);
-            employeeBean.init();
-        }
+        initEmployeeListBean();
     }
 
     /**
@@ -470,7 +464,7 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent date select event
      */
     public void endDateSelectListener(SelectEvent selectEvent) {
-
+        initEmployeeListBean();
     }
 
     public String getTimeZone() {
@@ -637,6 +631,16 @@ public class ScheduleBean implements Serializable {
         searchCriteria.setStartDate(startDate);
         searchCriteria.setEndDate(endDate);
         return searchCriteria;
+    }
+
+    private void initEmployeeListBean() {
+        EmployeeListBean employeeBean = JsfUtils.getViewBean("employeeListBean");
+        if (employeeBean != null) {
+            employeeBean.setStartDate(event.getStartDate());
+            employeeBean.setEndDate(event.getEndDate());
+            employeeBean.setWorkplace(workplace);
+            employeeBean.init();
+        }
     }
 
 }

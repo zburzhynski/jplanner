@@ -3,7 +3,9 @@ package com.zburzhynski.jplanner.impl.repository;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.impl.domain.Quota;
+import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +30,10 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.add(Restrictions.gt(Quota.P_END_DATE, startDate));
         criteria.add(Restrictions.lt(Quota.P_START_DATE, endDate));
-        criteria.add(Restrictions.in(Quota.P_QUOTA_TYPE, types));
+        if (CollectionUtils.isNotEmpty(types)) {
+            criteria.add(Restrictions.in(Quota.P_QUOTA_TYPE, types));
+        }
+        criteria.addOrder(Order.asc(Quota.P_START_DATE));
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 

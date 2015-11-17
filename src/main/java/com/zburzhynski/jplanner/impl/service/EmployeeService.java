@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -89,9 +88,14 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
     @Override
     public List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria) {
         List<Quota> intersectingQuotas = quotaRepository.findIntersecting(searchCriteria.getStartDate(),
-            searchCriteria.getEndDate(), Arrays.asList(QuotaType.WORK_TIME));
+            searchCriteria.getEndDate(), null);
         if (CollectionUtils.isEmpty(intersectingQuotas)) {
             return new ArrayList<>();
+        }
+        for (Quota quota : intersectingQuotas) {
+            if (!QuotaType.WORK_TIME.equals(quota.getQuotaType())) {
+                return new ArrayList<>();
+            }
         }
         SortedSet<Quota> sortedQuotas = new TreeSet<>(intersectingQuotas);
         if (sortedQuotas.first().getStartDate().after(searchCriteria.getStartDate())
