@@ -117,6 +117,7 @@
                         <f:selectItems value="#{workplaceListBean.workplaces}" var="workplace"
                                        itemValue="#{workplace}"
                                        itemLabel="#{workplace.cabinet.number} - #{workplace.name}" />
+                        <p:ajax event="change" listener="#{scheduleBean.workplaceSelectListener}" update="doctor" />
                     </p:selectOneMenu>
                     <p:spacer />
                     <h:outputLabel for="doctor" value="#{msgs['schedule.doctor']}:" />

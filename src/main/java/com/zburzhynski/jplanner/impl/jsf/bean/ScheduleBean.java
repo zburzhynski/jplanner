@@ -1,9 +1,7 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.COLON;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.NEWLINE;
-import static com.zburzhynski.jplanner.api.domain.CommonConstant.QUESTION_MARK;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
 import static com.zburzhynski.jplanner.api.domain.Error.EMPLOYEE_NOT_FOUND_EXCEPTION;
 import static com.zburzhynski.jplanner.api.domain.Error.JDENT_UNAVAILABLE_EXCEPTION;
@@ -52,7 +50,9 @@ import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.TimeZone;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
@@ -69,6 +69,16 @@ import javax.faces.bean.SessionScoped;
 @ManagedBean
 @SessionScoped
 public class ScheduleBean implements Serializable {
+
+    public static final String WORKPLACE_PARAM = "workplace";
+
+    public static final String START_DATE_PARAM = "startDate";
+
+    public static final String END_DATE_PARAM = "endDate";
+
+    private static final String SCHEDULE_ID_PARAM = "scheduleId";
+
+    private static final String PATIENT_ID_PARAM = "patientId";
 
     private static final int FIRTH_HOUR = 8;
 
@@ -87,10 +97,6 @@ public class ScheduleBean implements Serializable {
     private static final String START_DENTAL_VISIT_URL = "pages/integration/visit.xhtml";
 
     private static final String GO_TO_CARD_URL = "pages/integration/card.xhtml";
-
-    private static final String SCHEDULE_ID_PARAM = "scheduleId=";
-
-    private static final String PATIENT_ID_PARAM = "patientId=";
 
     private ScheduleModel eventModel;
 
@@ -172,6 +178,7 @@ public class ScheduleBean implements Serializable {
         initialDate = (Date) selectEvent.getObject();
         firstHour = DateUtils.extractHour(initialDate);
         event = buildScheduleEvent(selectEvent);
+        setEmployeeListBeanParams();
         JsfUtils.redirect(SCHEDULE_EVENT.getPath());
     }
 
@@ -279,8 +286,10 @@ public class ScheduleBean implements Serializable {
                     event.getClient().setJdentPatientId(response.getPatientId());
                     event.setStatus(ScheduleStatus.STARTED);
                     saveModel();
-                    String url = jdentUrl + START_DENTAL_VISIT_URL + QUESTION_MARK + SCHEDULE_ID_PARAM
-                        + event.getId() + AMPERSAND + PATIENT_ID_PARAM + event.getClient().getJdentPatientId();
+                    Map<String, Object> params = new HashMap<>();
+                    params.put(SCHEDULE_ID_PARAM, event.getId());
+                    params.put(PATIENT_ID_PARAM, event.getClient().getJdentPatientId());
+                    String url = JsfUtils.buildUrl(jdentUrl + START_DENTAL_VISIT_URL, params);
                     JsfUtils.externalRedirect(url);
                 }
             } catch (PatientNotFoundException e) {
@@ -325,8 +334,9 @@ public class ScheduleBean implements Serializable {
      * Go to patient card.
      */
     public void goToCard() {
-        String url = configBean.getJdentUrl() + GO_TO_CARD_URL + QUESTION_MARK
-            + PATIENT_ID_PARAM + event.getClient().getJdentPatientId();
+        Map<String, Object> params = new HashMap<>();
+        params.put(PATIENT_ID_PARAM, event.getClient().getJdentPatientId());
+        String url = JsfUtils.buildUrl(configBean.getJdentUrl() + GO_TO_CARD_URL, params);
         JsfUtils.externalRedirect(url);
     }
 
@@ -336,6 +346,7 @@ public class ScheduleBean implements Serializable {
      * @return path for navigating
      */
     public String editEvent() {
+        setEmployeeListBeanParams();
         if (configBean.isJdentIntegrationEnabled()) {
             try {
                 SearchVisitResponse response = visitRestClient.getByScheduleId(event.getId(), configBean.getJdentUrl());
@@ -464,6 +475,13 @@ public class ScheduleBean implements Serializable {
      * @param selectEvent date select event
      */
     public void endDateSelectListener(SelectEvent selectEvent) {
+        initEmployeeListBean();
+    }
+
+    /**
+     * Workplace select listener.
+     */
+    public void workplaceSelectListener() {
         initEmployeeListBean();
     }
 
@@ -634,13 +652,16 @@ public class ScheduleBean implements Serializable {
     }
 
     private void initEmployeeListBean() {
-        EmployeeListBean employeeBean = JsfUtils.getViewBean("employeeListBean");
-        if (employeeBean != null) {
-            employeeBean.setStartDate(event.getStartDate());
-            employeeBean.setEndDate(event.getEndDate());
-            employeeBean.setWorkplace(workplace);
-            employeeBean.init();
+        EmployeeListBean employeeListBean = JsfUtils.getViewBean("employeeListBean");
+        if (employeeListBean != null) {
+            employeeListBean.init(workplace, event.getStartDate(), event.getEndDate());
         }
+    }
+
+    private void setEmployeeListBeanParams() {
+        JsfUtils.setFlashAttribute(WORKPLACE_PARAM, workplace);
+        JsfUtils.setFlashAttribute(START_DATE_PARAM, event.getStartDate());
+        JsfUtils.setFlashAttribute(END_DATE_PARAM, event.getEndDate());
     }
 
 }

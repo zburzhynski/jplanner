@@ -2,10 +2,14 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.PositionType.ASSISTANT;
 import static com.zburzhynski.jplanner.api.domain.PositionType.DOCTOR;
+import static com.zburzhynski.jplanner.impl.jsf.bean.ScheduleBean.END_DATE_PARAM;
+import static com.zburzhynski.jplanner.impl.jsf.bean.ScheduleBean.START_DATE_PARAM;
+import static com.zburzhynski.jplanner.impl.jsf.bean.ScheduleBean.WORKPLACE_PARAM;
 import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
+import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -30,10 +34,6 @@ public class EmployeeListBean implements Serializable {
     private List<Employee> assistants;
     private List<Employee> employees;
 
-    private Workplace workplace;
-    private Date startDate;
-    private Date endDate;
-
     @ManagedProperty(value = "#{employeeService}")
     private IEmployeeService employeeService;
 
@@ -42,6 +42,20 @@ public class EmployeeListBean implements Serializable {
      */
     @PostConstruct
     public void init() {
+        Workplace workplace = (Workplace) JsfUtils.getFlashAttribute(WORKPLACE_PARAM);
+        Date startDate = (Date) JsfUtils.getFlashAttribute(START_DATE_PARAM);
+        Date endDate = (Date) JsfUtils.getFlashAttribute(END_DATE_PARAM);
+        init(workplace, startDate, endDate);
+    }
+
+    /**
+     * Inits bean state.
+     *
+     * @param workplace workplace
+     * @param startDate start date
+     * @param endDate   end date
+     */
+    public void init(Workplace workplace, Date startDate, Date endDate) {
         if (workplace == null || startDate == null || endDate == null) {
             doctors = employeeService.getByPosition(DOCTOR);
             assistants = employeeService.getByPosition(ASSISTANT);
@@ -83,19 +97,6 @@ public class EmployeeListBean implements Serializable {
      */
     public List<Employee> getEmployees() {
         return employees;
-    }
-
-
-    public void setWorkplace(Workplace workplace) {
-        this.workplace = workplace;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
     }
 
     /**

@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.impl.util;
 
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.AMPERSAND;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.EQUAL;
+import static com.zburzhynski.jplanner.api.domain.CommonConstant.QUESTION_MARK;
 import org.apache.commons.collections.MapUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.context.RequestContext;
@@ -46,7 +47,7 @@ public final class JsfUtils {
             builder.append(url);
         }
         if (MapUtils.isNotEmpty(params)) {
-            builder.append(AMPERSAND);
+            builder.append(QUESTION_MARK);
             Set<String> parameters = new LinkedHashSet<>();
             for (Map.Entry<String, Object> entry : params.entrySet()) {
                 parameters.add(entry.getKey() + EQUAL + entry.getValue());
