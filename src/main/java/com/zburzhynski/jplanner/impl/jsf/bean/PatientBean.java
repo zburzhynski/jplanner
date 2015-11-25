@@ -1,8 +1,9 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.View.PATIENTS;
-import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import com.zburzhynski.jplanner.api.domain.Gender;
+import com.zburzhynski.jplanner.api.domain.View;
+import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.jsf.loader.PatientLazyDataLoader;
 import com.zburzhynski.jplanner.impl.rest.client.IPatientRestClient;
 import com.zburzhynski.jplanner.impl.rest.domain.PatientDto;
@@ -13,6 +14,7 @@ import org.primefaces.event.UnselectEvent;
 import org.primefaces.model.LazyDataModel;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -35,6 +37,12 @@ public class PatientBean implements Serializable {
 
     private SearchPatientRequest searchPatientRequest = new SearchPatientRequest();
 
+    private Workplace workplace;
+
+    private Date startDate;
+
+    private Date endDate;
+
     @ManagedProperty(value = "#{patientRestClient}")
     private IPatientRestClient patientRestClient;
 
@@ -46,7 +54,10 @@ public class PatientBean implements Serializable {
      */
     @PostConstruct
     public void init() {
-        patientModel = new PatientLazyDataLoader(patientRestClient, configBean, searchPatientRequest);
+        workplace = (Workplace) JsfUtils.getFlashAttribute(ScheduleBean.WORKPLACE_PARAM);
+        startDate = (Date) JsfUtils.getFlashAttribute(ScheduleBean.START_DATE_PARAM);
+        endDate = (Date) JsfUtils.getFlashAttribute(ScheduleBean.END_DATE_PARAM);
+        search();
     }
 
     /**
@@ -55,7 +66,7 @@ public class PatientBean implements Serializable {
      * @return path for navigation
      */
     public String searchPatient() {
-        init();
+        search();
         return PATIENTS.getPath();
     }
 
@@ -64,7 +75,7 @@ public class PatientBean implements Serializable {
      */
     public void cancelSearchPatient() {
         searchPatientRequest = new SearchPatientRequest();
-        init();
+        search();
     }
 
     /**
@@ -91,7 +102,26 @@ public class PatientBean implements Serializable {
                 scheduleBean.getEvent().getClient().getPerson().setGender(Gender.valueOf(patient.getGender()));
             }
         }
-        return SCHEDULE_EVENT.getPath();
+        return redirectToScheduleEvent();
+    }
+
+    /**
+     * Redirects to schedule event form.
+     *
+     * @return path for navigating
+     */
+    public String redirectToScheduleEvent() {
+        JsfUtils.setFlashAttribute(ScheduleBean.WORKPLACE_PARAM, workplace);
+        JsfUtils.setFlashAttribute(ScheduleBean.START_DATE_PARAM, startDate);
+        JsfUtils.setFlashAttribute(ScheduleBean.END_DATE_PARAM, endDate);
+        return View.SCHEDULE_EVENT.getPath();
+    }
+
+    /**
+     * Search patients.
+     */
+    public void search() {
+        patientModel = new PatientLazyDataLoader(patientRestClient, configBean, searchPatientRequest);
     }
 
     /**

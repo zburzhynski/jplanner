@@ -399,8 +399,9 @@ public class ScheduleBean implements Serializable {
         if (patientBean != null) {
             patientBean.setSearchPatientRequest(new SearchPatientRequest());
             patientBean.setPatient(null);
-            patientBean.init();
+            patientBean.search();
         }
+        setEmployeeListBeanParams();
         return View.PATIENTS.getPath();
     }
 

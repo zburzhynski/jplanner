@@ -53,7 +53,7 @@
                                      action="#{patientBean.selectPatient}"
                                      rendered="#{not empty patientBean.patient}" />
                     <h:commandButton value="#{msgs['button.cancel']}"
-                                     action="/pages/event/schedule-event?faces-redirect=true"
+                                     action="#{patientBean.redirectToScheduleEvent}"
                                      immediate="true" />
                 </h:panelGrid>
             </h:form>
