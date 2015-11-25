@@ -399,9 +399,11 @@ public class ScheduleBean implements Serializable {
         if (patientBean != null) {
             patientBean.setSearchPatientRequest(new SearchPatientRequest());
             patientBean.setPatient(null);
+            patientBean.setEmployeeListBeanParams(workplace, event.getStartDate(), event.getEndDate());
             patientBean.search();
+        } else {
+            setEmployeeListBeanParams();
         }
-        setEmployeeListBeanParams();
         return View.PATIENTS.getPath();
     }
 

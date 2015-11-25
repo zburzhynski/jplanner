@@ -125,6 +125,19 @@ public class PatientBean implements Serializable {
     }
 
     /**
+     * Sets employee list bean params.
+     *
+     * @param workplaceParam workplace param
+     * @param startDateParam start date param
+     * @param endDateParam   end date param
+     */
+    public void setEmployeeListBeanParams(Workplace workplaceParam, Date startDateParam, Date endDateParam) {
+        workplace = workplaceParam;
+        startDate = startDateParam;
+        endDate = endDateParam;
+    }
+
+    /**
      * Select patient listener.
      *
      * @param event {@link SelectEvent} select event
