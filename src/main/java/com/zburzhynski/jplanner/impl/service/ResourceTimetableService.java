@@ -11,11 +11,10 @@ import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
 import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
-import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
-import com.zburzhynski.jplanner.api.repository.ITimetableRepository;
-import com.zburzhynski.jplanner.api.service.ITimetableService;
+import com.zburzhynski.jplanner.api.repository.IResourceTimetableRepository;
+import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
-import com.zburzhynski.jplanner.impl.domain.Timetable;
+import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -31,30 +30,27 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 /**
- * Implementation of {@link ITimetableService} interface.
+ * Implementation of {@link IResourceTimetableService} interface.
  * <p/>
  * Date: 04.09.2015
  *
  * @author Vladimir Zburzhynski
  */
-@Service("timetableService")
+@Service("resourceTimetableService")
 @Transactional(readOnly = true)
-public class TimetableService implements ITimetableService<String, Timetable> {
+public class ResourceTimetableService implements IResourceTimetableService<String, ResourceTimetable> {
 
     @Autowired
-    private IAvailableResourceRepository resourceRepository;
-
-    @Autowired
-    private ITimetableRepository timetableRepository;
+    private IResourceTimetableRepository timetableRepository;
 
     @Override
-    public Timetable getById(String id) {
-        return (Timetable) timetableRepository.findById(id);
+    public ResourceTimetable getById(String id) {
+        return (ResourceTimetable) timetableRepository.findById(id);
     }
 
     @Override
     @Transactional(readOnly = false)
-    public boolean saveOrUpdate(Timetable timetable) {
+    public boolean saveOrUpdate(ResourceTimetable timetable) {
         boolean result = false;
         if (timetable != null) {
             if (StringUtils.isBlank(timetable.getId())) {
@@ -70,7 +66,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(Timetable timetable) {
+    public boolean delete(ResourceTimetable timetable) {
         boolean deleted = false;
         if (timetable != null) {
             timetableRepository.delete(timetable);
@@ -80,7 +76,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
     }
 
     @Override
-    public List<Timetable> getAll() {
+    public List<ResourceTimetable> getAll() {
         return timetableRepository.findAll();
     }
 
@@ -101,7 +97,7 @@ public class TimetableService implements ITimetableService<String, Timetable> {
         if (CollectionUtils.isEmpty(quotas)) {
             return;
         }
-        Timetable timetable = (Timetable) timetableRepository.findById(criteria.getTimetableId());
+        ResourceTimetable timetable = (ResourceTimetable) timetableRepository.findById(criteria.getTimetableId());
         if (timetable == null) {
             return;
         }

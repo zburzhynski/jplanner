@@ -3,9 +3,9 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.RESOURCE_ID_PARAM;
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_PARAM;
 import com.zburzhynski.jplanner.api.domain.View;
-import com.zburzhynski.jplanner.api.service.ITimetableService;
+import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
-import com.zburzhynski.jplanner.impl.domain.Timetable;
+import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
@@ -27,10 +27,10 @@ public class TimetableBean implements Serializable {
 
     private String resourceId;
 
-    private Timetable timetable;
+    private ResourceTimetable timetable;
 
     @ManagedProperty(value = "#{timetableService}")
-    private ITimetableService timetableService;
+    private IResourceTimetableService timetableService;
 
     /**
      * Inits bean state.
@@ -38,10 +38,10 @@ public class TimetableBean implements Serializable {
     @PostConstruct
     public void init() {
         resourceId = (String) JsfUtils.getFlashAttribute(RESOURCE_ID_PARAM);
-        Timetable editedTimetable = (Timetable) JsfUtils.getFlashAttribute(TIMETABLE_PARAM);
+        ResourceTimetable editedTimetable = (ResourceTimetable) JsfUtils.getFlashAttribute(TIMETABLE_PARAM);
         if (editedTimetable == null) {
             AvailableResource resource = (AvailableResource) JsfUtils.getFlashAttribute(TimetablesBean.RESOURCE_PARAM);
-            timetable = new Timetable();
+            timetable = new ResourceTimetable();
             timetable.setAvailableResource(resource);
         } else {
             timetable = editedTimetable;
@@ -69,15 +69,15 @@ public class TimetableBean implements Serializable {
         return View.TIMETABLES.getPath();
     }
 
-    public Timetable getTimetable() {
+    public ResourceTimetable getTimetable() {
         return timetable;
     }
 
-    public void setTimetable(Timetable timetable) {
+    public void setTimetable(ResourceTimetable timetable) {
         this.timetable = timetable;
     }
 
-    public void setTimetableService(ITimetableService timetableService) {
+    public void setTimetableService(IResourceTimetableService timetableService) {
         this.timetableService = timetableService;
     }
 

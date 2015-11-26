@@ -17,15 +17,15 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
- * Timetable.
+ * Available resource timetable.
  * <p/>
  * Date: 18.08.2015
  *
  * @author Vladimir Zburzhynski
  */
 @Entity
-@Table(name = "timetable")
-public class Timetable extends Domain implements Comparable<Timetable> {
+@Table(name = "resource_timetable")
+public class ResourceTimetable extends Domain implements Comparable<ResourceTimetable> {
 
     public static final String P_QUOTAS = "quotas";
     public static final String P_QUOTA = "quota";
@@ -119,7 +119,7 @@ public class Timetable extends Domain implements Comparable<Timetable> {
     }
 
     @Override
-    public int compareTo(Timetable o) {
+    public int compareTo(ResourceTimetable o) {
         return this.getStartDate().compareTo(o.startDate);
     }
 
@@ -129,11 +129,11 @@ public class Timetable extends Domain implements Comparable<Timetable> {
             return true;
         }
 
-        if (!(o instanceof Timetable)) {
+        if (!(o instanceof ResourceTimetable)) {
             return false;
         }
 
-        Timetable that = (Timetable) o;
+        ResourceTimetable that = (ResourceTimetable) o;
         return new EqualsBuilder()
             .appendSuper(super.equals(o))
             .append(startDate, that.startDate)

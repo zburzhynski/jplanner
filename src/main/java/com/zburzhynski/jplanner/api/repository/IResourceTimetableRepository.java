@@ -3,7 +3,7 @@ package com.zburzhynski.jplanner.api.repository;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 
 /**
- * Timetable service.
+ * Available resource timetable service.
  * <p/>
  * Date: 06.09.2015
  *
@@ -11,6 +11,6 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
  */
-public interface ITimetableRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
+public interface IResourceTimetableRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
 
 }

@@ -9,7 +9,7 @@ import com.zburzhynski.jplanner.api.domain.CommonConstant;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
 import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
 import com.zburzhynski.jplanner.api.domain.View;
-import com.zburzhynski.jplanner.api.service.ITimetableService;
+import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.jsf.validator.QuotaValidator;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
@@ -70,7 +70,7 @@ public class TemplateBean implements Serializable {
     private String resourceId;
 
     @ManagedProperty(value = "#{timetableService}")
-    private ITimetableService timetableService;
+    private IResourceTimetableService timetableService;
 
     @ManagedProperty(value = "#{quotaValidator}")
     private QuotaValidator quotaValidator;
@@ -284,7 +284,7 @@ public class TemplateBean implements Serializable {
         this.description = description;
     }
 
-    public void setTimetableService(ITimetableService timetableService) {
+    public void setTimetableService(IResourceTimetableService timetableService) {
         this.timetableService = timetableService;
     }
 

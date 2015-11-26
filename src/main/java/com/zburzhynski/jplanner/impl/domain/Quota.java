@@ -34,7 +34,7 @@ public class Quota extends Domain implements Comparable<Quota> {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "timetable_id")
-    private Timetable timetable;
+    private ResourceTimetable timetable;
 
     @Column(name = "start_date")
     private Date startDate;
@@ -49,11 +49,11 @@ public class Quota extends Domain implements Comparable<Quota> {
     @Column(name = "description")
     private String description;
 
-    public Timetable getTimetable() {
+    public ResourceTimetable getTimetable() {
         return timetable;
     }
 
-    public void setTimetable(Timetable timetable) {
+    public void setTimetable(ResourceTimetable timetable) {
         this.timetable = timetable;
     }
 

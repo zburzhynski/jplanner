@@ -40,28 +40,28 @@ databaseChangeLog {
     }
 
     changeSet(id: '2015-09-11-5', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
-        createTable(schemaName: 'jplanner', tableName: 'timetable', tablespace: 'jplanner_data', remarks: 'Timetable') {
-            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of timetable') {
+        createTable(schemaName: 'jplanner', tableName: 'resource_timetable', tablespace: 'jplanner_data', remarks: 'Available resource timetable') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of resource timetable') {
                 constraints(nullable: false)
             }
             column(name: 'available_resource_id', type: 'VARCHAR(128)', remarks: 'The reference to the available resource table') {
                 constraints(nullable: false)
             }
-            column(name: 'start_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of timetable') {
+            column(name: 'start_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of resource timetable') {
                 constraints(nullable: false)
             }
-            column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'End date of timetable') {
+            column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'End date of resource timetable') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The timetable description')
+            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The resource timetable description')
         }
-        addPrimaryKey(schemaName: 'jplanner', tableName: 'timetable', tablespace: 'jplanner_index',
-                columnNames: 'id', constraintName: 'PK_timetable')
+        addPrimaryKey(schemaName: 'jplanner', tableName: 'resource_timetable', tablespace: 'jplanner_index',
+                columnNames: 'id', constraintName: 'PK_resource_timetable')
     }
 
     changeSet(id: '2015-09-11-6', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
-        addForeignKeyConstraint(constraintName: 'FK_timetable_2_available_resource',
-                baseTableName: 'timetable', baseTableSchemaName: 'jplanner', baseColumnNames: 'available_resource_id',
+        addForeignKeyConstraint(constraintName: 'FK_resource_timetable_2_available_resource',
+                baseTableName: 'resource_timetable', baseTableSchemaName: 'jplanner', baseColumnNames: 'available_resource_id',
                 referencedTableName: 'available_resource', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
@@ -70,7 +70,7 @@ databaseChangeLog {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of quota') {
                 constraints(nullable: false)
             }
-            column(name: 'timetable_id', type: 'VARCHAR(128)', remarks: 'The reference to the timetable table') {
+            column(name: 'resource_timetable_id', type: 'VARCHAR(128)', remarks: 'The reference to the resource timetable table') {
                 constraints(nullable: false)
             }
             column(name: 'start_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of quota') {
@@ -89,9 +89,9 @@ databaseChangeLog {
     }
 
     changeSet(id: '2015-09-11-8', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
-        addForeignKeyConstraint(constraintName: 'FK_quota_2_timetable',
-                baseTableName: 'quota', baseTableSchemaName: 'jplanner', baseColumnNames: 'timetable_id',
-                referencedTableName: 'timetable', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
+        addForeignKeyConstraint(constraintName: 'FK_quota_2_resource_timetable',
+                baseTableName: 'quota', baseTableSchemaName: 'jplanner', baseColumnNames: 'resource_timetable_id',
+                referencedTableName: 'resource_timetable', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
 }

@@ -51,7 +51,7 @@ public class AvailableResource extends Domain {
     private String description;
 
     @OneToMany(mappedBy = "availableResource", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<Timetable> timetables;
+    private Set<ResourceTimetable> timetables;
 
     public String getName() {
         return name;
@@ -98,7 +98,7 @@ public class AvailableResource extends Domain {
      *
      * @return timetables
      */
-    public Set<Timetable> getTimetables() {
+    public Set<ResourceTimetable> getTimetables() {
         if (timetables == null) {
             timetables = new TreeSet<>();
         }
@@ -110,7 +110,7 @@ public class AvailableResource extends Domain {
      *
      * @param timetables timetables to set
      */
-    public void setTimetables(Set<Timetable> timetables) {
+    public void setTimetables(Set<ResourceTimetable> timetables) {
         this.timetables = timetables;
     }
 
@@ -119,7 +119,7 @@ public class AvailableResource extends Domain {
      *
      * @param timetable timetable for add
      */
-    public void addTimetable(Timetable timetable) {
+    public void addTimetable(ResourceTimetable timetable) {
         timetable.setAvailableResource(this);
         getTimetables().add(timetable);
     }
@@ -129,7 +129,7 @@ public class AvailableResource extends Domain {
      *
      * @param timetable timetable for remove
      */
-    public void removeTimetable(Timetable timetable) {
+    public void removeTimetable(ResourceTimetable timetable) {
         getTimetables().remove(timetable);
     }
 

@@ -3,7 +3,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
-import com.zburzhynski.jplanner.impl.domain.Timetable;
+import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -75,7 +75,7 @@ public class TimetablesBean implements Serializable {
      * @param editedTimetable edited timetable
      * @return path for navigating
      */
-    public String editTimetable(Timetable editedTimetable) {
+    public String editTimetable(ResourceTimetable editedTimetable) {
         JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
         JsfUtils.setFlashAttribute(TIMETABLE_PARAM, editedTimetable);
         return View.TIMETABLE.getPath();
@@ -86,7 +86,7 @@ public class TimetablesBean implements Serializable {
      *
      * @param removedTimetable timetable to remove
      */
-    public void removeTimetable(Timetable removedTimetable) {
+    public void removeTimetable(ResourceTimetable removedTimetable) {
         resource.removeTimetable(removedTimetable);
         resourceService.saveOrUpdate(resource);
     }
@@ -97,7 +97,7 @@ public class TimetablesBean implements Serializable {
      * @param timetable timetable to add quotas
      * @return path for navigating
      */
-    public String addQuota(Timetable timetable) {
+    public String addQuota(ResourceTimetable timetable) {
         JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
         JsfUtils.setFlashAttribute(TIMETABLE_ID_PARAM, timetable.getId());
         return View.TIMETABLE_TEMPLATE.getPath();
@@ -109,7 +109,7 @@ public class TimetablesBean implements Serializable {
      * @param timetable timetable to edit quotas
      * @return path for navigating
      */
-    public String editQuota(Timetable timetable) {
+    public String editQuota(ResourceTimetable timetable) {
         JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
         JsfUtils.setFlashAttribute(TIMETABLE_ID_PARAM, timetable.getId());
         return View.TIMETABLE_QUOTA.getPath();

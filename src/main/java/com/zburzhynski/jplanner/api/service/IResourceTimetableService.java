@@ -4,7 +4,7 @@ import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 
 /**
- * Timetable service interface.
+ * Available resource timetable service interface.
  * <p/>
  * Date: 04.09.2015
  *
@@ -12,7 +12,7 @@ import com.zburzhynski.jplanner.api.domain.IDomain;
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
  */
-public interface ITimetableService<ID, T extends IDomain> extends IBaseService<ID, T> {
+public interface IResourceTimetableService<ID, T extends IDomain> extends IBaseService<ID, T> {
 
     /**
      * Creates timetable quotas.

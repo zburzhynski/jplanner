@@ -4,9 +4,9 @@ import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.RESOURCE_ID_
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_ID_PARAM;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
-import com.zburzhynski.jplanner.api.service.ITimetableService;
+import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
-import com.zburzhynski.jplanner.impl.domain.Timetable;
+import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
@@ -39,7 +39,7 @@ public class TimetableQuotaBean implements Serializable {
     private ScheduleModel eventModel;
 
     @ManagedProperty(value = "#{timetableService}")
-    private ITimetableService timetableService;
+    private IResourceTimetableService timetableService;
 
     @ManagedProperty(value = "#{quotaService}")
     private IQuotaService quotaService;
@@ -54,7 +54,7 @@ public class TimetableQuotaBean implements Serializable {
     public void init() {
         resourceId = (String) JsfUtils.getFlashAttribute(RESOURCE_ID_PARAM);
         String timetableId = (String) JsfUtils.getFlashAttribute(TIMETABLE_ID_PARAM);
-        Timetable timetable = (Timetable) timetableService.getById(timetableId);
+        ResourceTimetable timetable = (ResourceTimetable) timetableService.getById(timetableId);
         eventModel = new DefaultScheduleModel();
         if (CollectionUtils.isNotEmpty(timetable.getQuotas())) {
             for (Quota quota : timetable.getQuotas()) {
@@ -110,7 +110,7 @@ public class TimetableQuotaBean implements Serializable {
         this.eventModel = eventModel;
     }
 
-    public void setTimetableService(ITimetableService timetableService) {
+    public void setTimetableService(IResourceTimetableService timetableService) {
         this.timetableService = timetableService;
     }
 
