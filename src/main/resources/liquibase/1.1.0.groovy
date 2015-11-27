@@ -94,4 +94,55 @@ databaseChangeLog {
                 referencedTableName: 'resource_timetable', referencedTableSchemaName: 'jplanner', referencedColumnNames: 'id')
     }
 
+    changeSet(id: '2015-09-11-9', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        createTable(schemaName: 'jplanner', tableName: 'organization_timetable', tablespace: 'jplanner_data', remarks: 'Organization timetable') {
+            column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of organization timetable') {
+                constraints(nullable: false)
+            }
+            column(name: 'day_of_week', type: 'VARCHAR(10)', defaultValue: '', remarks: 'Day of week') {
+                constraints(nullable: false)
+            }
+            column(name: 'start_time', type: 'TIME', defaultValue: '00:00:00', remarks: 'Start time of day') {
+                constraints(nullable: false)
+            }
+            column(name: 'end_time', type: 'TIME', defaultValue: '00:00:00', remarks: 'End time of day') {
+                constraints(nullable: false)
+            }
+            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'Description of timetable')
+        }
+        addPrimaryKey(schemaName: 'jplanner', tableName: 'organization_timetable', tablespace: 'jplanner_index',
+                columnNames: 'id', constraintName: 'PK_organization_timetable')
+    }
+
+    changeSet(id: '2015-09-11-10', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
+            column(name: 'id', value: '641864a6-227e-4911-86e1-9d2fbd2bebd3')
+            column(name: 'day_of_week', value: 'MONDAY')
+        }
+        insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
+            column(name: 'id', value: '1deba19d-5b6d-453f-aff9-c645c912e1dc')
+            column(name: 'day_of_week', value: 'TUESDAY')
+        }
+        insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
+            column(name: 'id', value: 'b5c66a7f-de85-4810-ac6e-44d7ef11a00a')
+            column(name: 'day_of_week', value: 'WEDNESDAY')
+        }
+        insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
+            column(name: 'id', value: '913a9468-f45f-4c2d-aa0f-d2afb91908ce')
+            column(name: 'day_of_week', value: 'THURSDAY')
+        }
+        insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
+            column(name: 'id', value: '1556865f-c256-45e6-bf24-c92da1962e42')
+            column(name: 'day_of_week', value: 'FRIDAY')
+        }
+        insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
+            column(name: 'id', value: '71dc5578-f89d-48b3-a6c5-8c75dfeb8f1e')
+            column(name: 'day_of_week', value: 'SATURDAY')
+        }
+        insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
+            column(name: 'id', value: '201ef102-3d73-466b-b14d-28b637b062ee')
+            column(name: 'day_of_week', value: 'SUNDAY')
+        }
+    }
+
 }
