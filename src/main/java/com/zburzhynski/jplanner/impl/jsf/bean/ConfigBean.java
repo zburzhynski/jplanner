@@ -46,7 +46,7 @@ public class ConfigBean implements Serializable {
 
     private Setting setting;
 
-    private Map<String, Setting> settings = new HashMap();
+    private Map<String, Setting> settings;
 
     private List<Setting> commonSettings;
 
@@ -64,6 +64,7 @@ public class ConfigBean implements Serializable {
      */
     @PostConstruct
     public void init() {
+        settings = new HashMap<>();
         List<Setting> all = settingService.getAll();
         for (Setting item : all) {
             settings.put(item.getName(), item);
