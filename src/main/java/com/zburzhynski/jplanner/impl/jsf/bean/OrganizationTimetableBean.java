@@ -105,7 +105,7 @@ public class OrganizationTimetableBean implements Serializable {
         for (OrganizationTimetable item : timetables) {
             times.add(item.getEndTime());
         }
-        return DateUtils.formatDate(times.first(), TIME_FORMAT) ;
+        return DateUtils.formatDate(times.last(), TIME_FORMAT) ;
     }
 
     public OrganizationTimetable getTimetable() {

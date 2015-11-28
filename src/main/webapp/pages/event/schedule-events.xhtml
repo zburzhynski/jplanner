@@ -80,6 +80,8 @@
                             timeZone="#{scheduleBean.timeZone}"
                             view="#{scheduleBean.view}"
                             initialDate="#{scheduleBean.initialDate}"
+                            minTime="#{organizationTimetableBean.minTime}"
+                            maxTime="#{organizationTimetableBean.maxTime}"
                             tooltip="true">
                     <p:ajax event="dateSelect" listener="#{scheduleBean.createEvent}" update="messages" />
                     <p:ajax event="eventSelect" listener="#{scheduleBean.selectEvent}" update="eventMenu" oncomplete="PF('menu').show();" />
