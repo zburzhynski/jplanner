@@ -3,7 +3,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static com.zburzhynski.jplanner.api.domain.View.ABOUT;
 import static com.zburzhynski.jplanner.api.domain.View.CABINETS;
 import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
-import static com.zburzhynski.jplanner.api.domain.View.ORGANIZATION_TIMETABLE;
+import static com.zburzhynski.jplanner.api.domain.View.ORGANIZATION_TIMETABLES;
 import static com.zburzhynski.jplanner.api.domain.View.POSITIONS;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static com.zburzhynski.jplanner.api.domain.View.SETTINGS;
@@ -87,12 +87,12 @@ public class MainMenuBean implements Serializable {
     }
 
     /**
-     * Redirect to organization timetable.xhtml page.
+     * Redirect to organization timetables.xhtml page.
      *
      * @return path to redirect
      */
-    public String organizationTimetable() {
-        return ORGANIZATION_TIMETABLE.getPath();
+    public String organizationTimetables() {
+        return ORGANIZATION_TIMETABLES.getPath();
     }
 
     /**

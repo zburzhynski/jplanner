@@ -5,7 +5,7 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
-import java.sql.Time;
+import java.util.Date;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -28,10 +28,10 @@ public class OrganizationTimetable extends Domain implements Comparable<Organiza
     private DayOfWeek dayOfWeek;
 
     @Column(name = "start_time")
-    private Time startTime;
+    private Date startTime;
 
     @Column(name = "end_time")
-    private Time endTime;
+    private Date endTime;
 
     @Column(name = "description")
     private String description;
@@ -44,19 +44,19 @@ public class OrganizationTimetable extends Domain implements Comparable<Organiza
         this.dayOfWeek = dayOfWeek;
     }
 
-    public Time getStartTime() {
+    public Date getStartTime() {
         return startTime;
     }
 
-    public void setStartTime(Time startTime) {
+    public void setStartTime(Date startTime) {
         this.startTime = startTime;
     }
 
-    public Time getEndTime() {
+    public Date getEndTime() {
         return endTime;
     }
 
-    public void setEndTime(Time endTime) {
+    public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
 

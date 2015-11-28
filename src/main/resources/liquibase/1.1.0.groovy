@@ -102,10 +102,10 @@ databaseChangeLog {
             column(name: 'day_of_week', type: 'VARCHAR(10)', defaultValue: '', remarks: 'Day of week') {
                 constraints(nullable: false)
             }
-            column(name: 'start_time', type: 'TIME', defaultValue: '00:00:00', remarks: 'Start time of day') {
+            column(name: 'start_time', type: 'TIMESTAMP', defaultValue: '1970.01.01 00:00:00', remarks: 'Start time of day') {
                 constraints(nullable: false)
             }
-            column(name: 'end_time', type: 'TIME', defaultValue: '00:00:00', remarks: 'End time of day') {
+            column(name: 'end_time', type: 'TIMESTAMP', defaultValue: '1970.01.01 00:00:00', remarks: 'End time of day') {
                 constraints(nullable: false)
             }
             column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'Description of timetable')
@@ -118,30 +118,44 @@ databaseChangeLog {
         insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
             column(name: 'id', value: '641864a6-227e-4911-86e1-9d2fbd2bebd3')
             column(name: 'day_of_week', value: 'MONDAY')
+            column(name: 'start_time', value: '1970.01.01 08:00:00')
+            column(name: 'end_time', value: '1970.01.01 20:00:00')
         }
         insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
             column(name: 'id', value: '1deba19d-5b6d-453f-aff9-c645c912e1dc')
             column(name: 'day_of_week', value: 'TUESDAY')
+            column(name: 'start_time', value: '1970.01.01 08:00:00')
+            column(name: 'end_time', value: '1970.01.01 20:00:00')
         }
         insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
             column(name: 'id', value: 'b5c66a7f-de85-4810-ac6e-44d7ef11a00a')
             column(name: 'day_of_week', value: 'WEDNESDAY')
+            column(name: 'start_time', value: '1970.01.01 08:00:00')
+            column(name: 'end_time', value: '1970.01.01 20:00:00')
         }
         insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
             column(name: 'id', value: '913a9468-f45f-4c2d-aa0f-d2afb91908ce')
             column(name: 'day_of_week', value: 'THURSDAY')
+            column(name: 'start_time', value: '1970.01.01 08:00:00')
+            column(name: 'end_time', value: '1970.01.01 20:00:00')
         }
         insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
             column(name: 'id', value: '1556865f-c256-45e6-bf24-c92da1962e42')
             column(name: 'day_of_week', value: 'FRIDAY')
+            column(name: 'start_time', value: '1970.01.01 08:00:00')
+            column(name: 'end_time', value: '1970.01.01 20:00:00')
         }
         insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
             column(name: 'id', value: '71dc5578-f89d-48b3-a6c5-8c75dfeb8f1e')
             column(name: 'day_of_week', value: 'SATURDAY')
+            column(name: 'start_time', value: '1970.01.01 08:00:00')
+            column(name: 'end_time', value: '1970.01.01 20:00:00')
         }
         insert(schemaName: 'jplanner', tableName: 'organization_timetable') {
             column(name: 'id', value: '201ef102-3d73-466b-b14d-28b637b062ee')
             column(name: 'day_of_week', value: 'SUNDAY')
+            column(name: 'start_time', value: '1970.01.01 08:00:00')
+            column(name: 'end_time', value: '1970.01.01 20:00:00')
         }
     }
 

@@ -9,32 +9,63 @@
 
     <ui:define name="content">
         <p:panel>
+            <style type="text/css">
+                .name {
+                    font-weight: bold;
+                    width: 25%;
+                }
+                .val {
+                    width: 40%;
+                }
+                .msg {
+                    width: 35%;
+                }
+            </style>
             <h:form id="organizationTimetableForm">
-                <h4>#{msgs['organizationTimetables.header']}</h4>
-                <p:dataTable value="#{organizationTimetablesBean.timetables}" var="timetable">
-                    <p:column headerText="#{msgs['organizationTimetable.dayOfWeek']}" width="20%">
-                        <h:outputText value="#{msgs[timetable.dayOfWeek.name]}" />
-                    </p:column>
-                    <p:column headerText="#{msgs['organizationTimetable.startTime']}" width="20%">
-                        <h:outputText value="#{timetable.startTime}" />
-                    </p:column>
-                    <p:column headerText="#{msgs['organizationTimetable.endTime']}" width="20%">
-                        <h:outputText value="#{timetable.endTime}" />
-                    </p:column>
-                    <p:column headerText="#{msgs['organizationTimetable.description']}" width="36%">
-                        <h:outputText value="#{timetable.description}" />
-                    </p:column>
-                    <p:column width="4%">
-                        <h:panelGroup>
-                            <p:commandLink action="/pages/setting/setting?faces-redirect=true"
-                                           style="padding-right: 5px">
-                                <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
-                                <f:setPropertyActionListener
-                                        target="#{configBean.setting}" value="#{setting}" />
-                            </p:commandLink>
-                        </h:panelGroup>
-                    </p:column>
-                </p:dataTable>
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="80%">
+                    <h:outputLabel value="#{msgs[organizationTimetableBean.timetable.dayOfWeek.name]}" />
+                    <h:outputLabel />
+                    <h:outputLabel />
+                    <h:outputLabel for="startTime" value="#{msgs['organizationTimetable.startTime']}:" />
+                    <p:calendar id="startTime"
+                                value="#{organizationTimetableBean.timetable.startTime}"
+                                label="#{msgs['organizationTimetable.startTime']}"
+                                pattern="HH:mm"
+                                navigator="true"
+                                showButtonPanel="true"
+                                timeOnly="true"
+                                locale="ru"
+                                required="true" />
+                    <p:message for="startTime" />
+                    <h:outputLabel for="endTime" value="#{msgs['organizationTimetable.endTime']}:" />
+                    <p:calendar id="endTime"
+                                value="#{organizationTimetableBean.timetable.endTime}"
+                                label="#{msgs['organizationTimetable.endTime']}"
+                                pattern="HH:mm"
+                                navigator="true"
+                                showButtonPanel="true"
+                                timeOnly="true"
+                                locale="ru"
+                                required="true" />
+                    <p:message for="endTime" />
+                    <h:outputLabel for="description" value="#{msgs['organizationTimetable.description']}:" />
+                    <p:inputTextarea id="description"
+                                     value="#{organizationTimetableBean.timetable.description}"
+                                     label="#{msgs['organizationTimetable.description']}"
+                                     maxlength="500"
+                                     style="width: 97%" />
+                    <p:message for="description" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="saveTimetable"
+                                     value="#{msgs['button.save']}"
+                                     action="#{organizationTimetableBean.saveTimetable}" />
+                    <h:commandButton id="cancelUpdateTimetable"
+                                     value="#{msgs['button.cancel']}"
+                                     action="/pages/organization-timetable/timetables?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+                <ui:include src="/pages/localization/calendar-localization.xhtml" />
             </h:form>
         </p:panel>
     </ui:define>

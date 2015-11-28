@@ -17,6 +17,7 @@ public enum View {
     WORKPLACE("/pages/cabinet/workplace?faces-redirect=true"),
     POSITIONS("/pages/position/positions?faces-redirect=true"),
     POSITION("/pages/position/position?faces-redirect=true"),
+    ORGANIZATION_TIMETABLES("/pages/organization-timetable/timetables?faces-redirect=true"),
     ORGANIZATION_TIMETABLE("/pages/organization-timetable/timetable?faces-redirect=true"),
     TIMETABLES("/pages/timetable/timetables?faces-redirect=true"),
     TIMETABLE("/pages/timetable/timetable?faces-redirect=true"),
