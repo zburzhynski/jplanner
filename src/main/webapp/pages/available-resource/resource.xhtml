@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <style type="text/css">
+            .name {
+                font-weight: bold;
+                width: 25%;
+            }
+            .val {
+                width: 40%;
+            }
+            .msg {
+                width: 30%;
+            }
+        </style>
+        <p:panel>
+            <h:form id="resourceForm">
+                <p:focus />
+                <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
+                    <h:outputLabel for="name" value="#{msgs['availableResource.name']}:" />
+                    <p:inputTextarea id="name" value="#{availableResourceBean.resource.name}"
+                                     required="true"
+                                     maxlength="100"
+                                     style="width: 97%" />
+                    <p:message for="name" />
+                    <h:outputLabel for="workplace" value="#{msgs['availableResource.workplace']}:" />
+                    <p:selectOneMenu id="workplace"
+                                     value="#{availableResourceBean.resource.workplace}"
+                                     label="#{msgs['availableResource.workplace']}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     style="width: 100%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{workplaceListBean.workplaces}" var="workplace"
+                                       itemValue="#{workplace}"
+                                       itemLabel="#{workplace.cabinet.number} - #{workplace.name}" />
+                    </p:selectOneMenu>
+                    <p:message for="workplace" />
+                    <h:outputLabel for="doctor" value="#{msgs['availableResource.doctor']}:" />
+                    <p:selectOneMenu id="doctor"
+                                     value="#{availableResourceBean.resource.doctor}"
+                                     label="#{msgs['availableResource.doctor']}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     style="width: 100%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{employeeListBean.doctors}" var="doctor"
+                                       itemValue="#{doctor}"
+                                       itemLabel="#{doctor.person.fullName}" />
+                    </p:selectOneMenu>
+                    <p:message for="doctor" />
+                    <h:outputLabel for="assistant" value="#{msgs['availableResource.assistant']}:" />
+                    <p:selectOneMenu id="assistant"
+                                     value="#{availableResourceBean.resource.assistant}"
+                                     label="#{msgs['availableResource.assistant']}"
+                                     converter="entityConverter"
+                                     style="width: 100%">
+                        <f:selectItem itemLabel="" noSelectionOption="true" />
+                        <f:selectItems value="#{employeeListBean.assistants}" var="assistant"
+                                       itemValue="#{doctor}"
+                                       itemLabel="#{doctor.person.fullName}" />
+                    </p:selectOneMenu>
+                    <p:message for="assistant" />
+                    <h:outputLabel for="description" value="#{msgs['availableResource.description']}:" />
+                    <p:inputTextarea id="description"
+                                     value="#{availableResourceBean.resource.description}"
+                                     maxlength="500"
+                                     style="width: 97%" />
+                    <p:message for="description" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <h:commandButton id="savePosition" value="#{msgs['button.save']}"
+                                     action="#{availableResourceBean.saveResource}" />
+                    <h:commandButton id="cancelUpdatePosition" value="#{msgs['button.cancel']}"
+                                     action="/pages/available-resource/resources?faces-redirect=true"
+                                     immediate="true" />
+                </h:panelGrid>
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>

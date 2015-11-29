@@ -26,6 +26,7 @@ import javax.persistence.Table;
 @Table(schema = "jplanner", name = "available_resource")
 public class AvailableResource extends Domain {
 
+    public static final String P_NAME = "name";
     public static final String P_TIMETABLES = "timetables";
     public static final String P_TIMETABLE = "timetable";
     public static final String P_DOCTOR = "doctor";

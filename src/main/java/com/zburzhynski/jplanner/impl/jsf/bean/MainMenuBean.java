@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.api.domain.View.ABOUT;
+import static com.zburzhynski.jplanner.api.domain.View.AVAILABLE_RESOURCES;
 import static com.zburzhynski.jplanner.api.domain.View.CABINETS;
 import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
 import static com.zburzhynski.jplanner.api.domain.View.ORGANIZATION_TIMETABLES;
@@ -93,6 +94,15 @@ public class MainMenuBean implements Serializable {
      */
     public String organizationTimetables() {
         return ORGANIZATION_TIMETABLES.getPath();
+    }
+
+    /**
+     * Redirects to resources.xhtml page.
+     *
+     * @return path to redirect
+     */
+    public String availableResources() {
+        return AVAILABLE_RESOURCES.getPath();
     }
 
     /**

@@ -1,15 +1,22 @@
 package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
+import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
+import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
+import com.zburzhynski.jplanner.impl.domain.Quota;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 /**
  * Implementation of {@link IAvailableResourceService} interface.
@@ -24,6 +31,9 @@ public class AvailableResourceService implements IAvailableResourceService<Strin
 
     @Autowired
     private IAvailableResourceRepository availableResourceRepository;
+
+    @Autowired
+    private IQuotaRepository quotaRepository;
 
     @Override
     public AvailableResource getById(String id) {
@@ -59,6 +69,28 @@ public class AvailableResourceService implements IAvailableResourceService<Strin
 
     @Override
     public List<AvailableResource> getByCriteria(AvailableResourceSearchCriteria searchCriteria) {
+        if (searchCriteria.getQuotaStartDate() != null && searchCriteria.getQuotaEndDate() != null) {
+            List<Quota> intersectingQuotas = quotaRepository.findIntersecting(searchCriteria.getQuotaStartDate(),
+                searchCriteria.getQuotaEndDate(), null);
+            if (CollectionUtils.isEmpty(intersectingQuotas)) {
+                return new ArrayList<>();
+            }
+            for (Quota quota : intersectingQuotas) {
+                if (!QuotaType.WORK_TIME.equals(quota.getQuotaType())) {
+                    return new ArrayList<>();
+                }
+            }
+            SortedSet<Quota> sortedQuotas = new TreeSet<>(intersectingQuotas);
+            if (sortedQuotas.first().getStartDate().after(searchCriteria.getQuotaStartDate())
+                || sortedQuotas.last().getEndDate().before(searchCriteria.getQuotaEndDate())) {
+                return new ArrayList<>();
+            }
+            List<String> quotaIds = new ArrayList<>();
+            for (Quota quota : intersectingQuotas) {
+                quotaIds.add(quota.getId());
+            }
+            searchCriteria.setQuotaIds(quotaIds);
+        }
         return availableResourceRepository.findByCriteria(searchCriteria);
     }
 

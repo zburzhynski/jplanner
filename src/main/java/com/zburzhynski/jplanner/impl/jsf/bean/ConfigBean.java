@@ -40,6 +40,8 @@ public class ConfigBean implements Serializable {
 
     private static final String POSITIONS_PER_PAGE = "job_positions_per_page";
 
+    private static final String AVAILABLE_RESOURCES_PER_PAGE = "available_resources_per_page";
+
     private static final String JDENT_INTEGRATION_ENABLED = "jdent_integration_enabled";
 
     private static final String JDENT_URL = "jdent_url";
@@ -164,6 +166,15 @@ public class ConfigBean implements Serializable {
      */
     public int getPositionsPerPageCount() {
         return Integer.parseInt(settings.get(POSITIONS_PER_PAGE).getValue());
+    }
+
+    /**
+     * Gets available resources per page count.
+     *
+     * @return available resources  per page count
+     */
+    public int getAvailableResourcesPerPageCount() {
+        return Integer.parseInt(settings.get(AVAILABLE_RESOURCES_PER_PAGE).getValue());
     }
 
     /**

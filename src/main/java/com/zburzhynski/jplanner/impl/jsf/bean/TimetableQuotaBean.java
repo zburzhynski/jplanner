@@ -38,7 +38,7 @@ public class TimetableQuotaBean implements Serializable {
 
     private ScheduleModel eventModel;
 
-    @ManagedProperty(value = "#{timetableService}")
+    @ManagedProperty(value = "#{resourceTimetableService}")
     private IResourceTimetableService timetableService;
 
     @ManagedProperty(value = "#{quotaService}")

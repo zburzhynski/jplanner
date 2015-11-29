@@ -69,7 +69,7 @@ public class TemplateBean implements Serializable {
 
     private String resourceId;
 
-    @ManagedProperty(value = "#{timetableService}")
+    @ManagedProperty(value = "#{resourceTimetableService}")
     private IResourceTimetableService timetableService;
 
     @ManagedProperty(value = "#{quotaValidator}")

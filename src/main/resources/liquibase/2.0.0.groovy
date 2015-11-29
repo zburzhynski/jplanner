@@ -159,4 +159,16 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2015-09-11-11', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        insert(schemaName: 'jplanner', tableName: 'setting') {
+            column(name: 'id', value: '3e0c1587-fd3a-4453-afa8-c352bb02d245')
+            column(name: 'category', value: 'VIEW')
+            column(name: 'name', value: 'available_resources_per_page')
+            column(name: 'value', value: '20')
+            column(name: 'type', value: 'INTEGER')
+            column(name: 'description', value: 'Количество доступных ресурсов на странице')
+            column(name: 'sort_order', value: '5')
+        }
+    }
+
 }

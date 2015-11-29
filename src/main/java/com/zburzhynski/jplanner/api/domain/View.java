@@ -23,6 +23,8 @@ public enum View {
     TIMETABLE("/pages/timetable/timetable?faces-redirect=true"),
     TIMETABLE_TEMPLATE("/pages/timetable/timetable-template?faces-redirect=true"),
     TIMETABLE_QUOTA("/pages/timetable/timetable-quota?faces-redirect=true"),
+    AVAILABLE_RESOURCES("/pages/available-resource/resources?faces-redirect=true"),
+    AVAILABLE_RESOURCE("/pages/available-resource/resource?faces-redirect=true"),
     EMPLOYEES("/pages/employee/employees?faces-redirect=true"),
     EMPLOYEE("/pages/employee/employee?faces-redirect=true"),
     PATIENTS("/pages/patient/patients?faces-redirect=true"),

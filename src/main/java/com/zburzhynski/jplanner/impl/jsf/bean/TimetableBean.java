@@ -29,7 +29,7 @@ public class TimetableBean implements Serializable {
 
     private ResourceTimetable timetable;
 
-    @ManagedProperty(value = "#{timetableService}")
+    @ManagedProperty(value = "#{resourceTimetableService}")
     private IResourceTimetableService timetableService;
 
     /**
