@@ -33,7 +33,7 @@ public class Quota extends Domain implements Comparable<Quota> {
     public static final String P_DESCRIPTION = "description";
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "timetable_id")
+    @JoinColumn(name = "resource_timetable_id")
     private ResourceTimetable timetable;
 
     @Column(name = "start_date")
