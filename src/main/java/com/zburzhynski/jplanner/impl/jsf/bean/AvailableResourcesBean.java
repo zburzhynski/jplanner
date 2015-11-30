@@ -2,9 +2,11 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.View;
+import com.zburzhynski.jplanner.api.exception.AvailableResourceHasLinkedTimetablesException;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import com.zburzhynski.jplanner.impl.util.MessageHelper;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -28,11 +30,15 @@ import javax.faces.bean.ViewScoped;
 public class AvailableResourcesBean implements Serializable {
 
     public static final String AVAILABLE_RESOURCE_ID_PARAM = "availableResourceId";
+    public static final String RESOURCE_HAS_LINKED_TIMETABLES = "availableResource.resourceHasLinkedTimetables";
 
     private LazyDataModel<AvailableResource> resourceModel;
 
     @ManagedProperty(value = "#{availableResourceService}")
     private IAvailableResourceService resourceService;
+
+    @ManagedProperty(value = "#{messageHelper}")
+    private MessageHelper messageHelper;
 
     @ManagedProperty(value = "#{configBean}")
     private ConfigBean configBean;
@@ -83,7 +89,11 @@ public class AvailableResourcesBean implements Serializable {
      * @param removedResource removed available resource
      */
     public void removeResource(AvailableResource removedResource) {
-        resourceService.delete(removedResource);
+        try {
+            resourceService.delete(removedResource);
+        } catch (AvailableResourceHasLinkedTimetablesException e) {
+            messageHelper.addMessage(RESOURCE_HAS_LINKED_TIMETABLES);
+        }
     }
 
     public LazyDataModel<AvailableResource> getResourceModel() {
@@ -96,6 +106,10 @@ public class AvailableResourcesBean implements Serializable {
 
     public void setResourceService(IAvailableResourceService resourceService) {
         this.resourceService = resourceService;
+    }
+
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
     }
 
     public void setConfigBean(ConfigBean configBean) {
