@@ -48,13 +48,8 @@ public class ScheduleService implements IScheduleService<String, Schedule> {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(Schedule schedule) {
-        boolean deleted = false;
-        if (schedule != null) {
-            scheduleRepository.delete(schedule);
-            deleted = true;
-        }
-        return deleted;
+    public void delete(Schedule schedule) {
+        scheduleRepository.delete(schedule);
     }
 
     @Override

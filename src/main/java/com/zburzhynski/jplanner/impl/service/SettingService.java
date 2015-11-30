@@ -48,13 +48,8 @@ public class SettingService implements ISettingService<String, Setting> {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(Setting setting) {
-        boolean deleted = false;
-        if (setting != null) {
-            settingRepository.delete(setting);
-            deleted = true;
-        }
-        return deleted;
+    public void delete(Setting setting) {
+        settingRepository.delete(setting);
     }
 
     @Override

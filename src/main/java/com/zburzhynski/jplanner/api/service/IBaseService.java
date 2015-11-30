@@ -35,9 +35,8 @@ public interface IBaseService<ID, T extends IDomain> {
      * Deletes entity.
      *
      * @param object entity to delete
-     * @return true if success, false otherwise
      */
-    boolean delete(T object);
+    void delete(T object);
 
     /**
      * Gets list of all entities from database.

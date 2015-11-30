@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.exception.AvailableResourceHasLinkedTimetablesException;
 import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
@@ -58,13 +59,11 @@ public class AvailableResourceService implements IAvailableResourceService<Strin
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(AvailableResource resource) {
-        boolean deleted = false;
-        if (resource != null) {
-            availableResourceRepository.delete(resource);
-            deleted = true;
+    public void delete(AvailableResource resource) throws AvailableResourceHasLinkedTimetablesException {
+        if (CollectionUtils.isNotEmpty(resource.getTimetables())) {
+            throw new AvailableResourceHasLinkedTimetablesException();
         }
-        return deleted;
+        availableResourceRepository.delete(resource);
     }
 
     @Override
@@ -102,11 +101,6 @@ public class AvailableResourceService implements IAvailableResourceService<Strin
     @Override
     public List<AvailableResource> getAll() {
         return availableResourceRepository.findAll();
-    }
-
-    @Override
-    public boolean isUsed(AvailableResource resource) {
-        return availableResourceRepository.isUsed(resource);
     }
 
 }

@@ -66,13 +66,8 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(Employee employee) {
-        boolean deleted = false;
-        if (employee != null) {
-            employeeRepository.delete(employee);
-            deleted = true;
-        }
-        return deleted;
+    public void delete(Employee employee) {
+        employeeRepository.delete(employee);
     }
 
     @Override

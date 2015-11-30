@@ -42,13 +42,8 @@ public class CabinetService implements ICabinetService<String, Cabinet> {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(Cabinet cabinet) {
-        boolean deleted = false;
-        if (cabinet != null) {
-            cabinetRepository.delete(cabinet);
-            deleted = true;
-        }
-        return deleted;
+    public void delete(Cabinet cabinet) {
+        cabinetRepository.delete(cabinet);
     }
 
     @Override

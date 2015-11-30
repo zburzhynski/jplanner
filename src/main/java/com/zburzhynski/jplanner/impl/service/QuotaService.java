@@ -43,13 +43,8 @@ public class QuotaService implements IQuotaService<String, Quota> {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(Quota quota) {
-        boolean deleted = false;
-        if (quota != null) {
-            quotaRepository.delete(quota);
-            deleted = true;
-        }
-        return deleted;
+    public void delete(Quota quota) {
+        quotaRepository.delete(quota);
     }
 
     @Override

@@ -47,13 +47,8 @@ public class OrganizationTimetableService implements IOrganizationTimetableServi
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(OrganizationTimetable timetable) {
-        boolean deleted = false;
-        if (timetable != null) {
-            timetableRepository.delete(timetable);
-            deleted = true;
-        }
-        return deleted;
+    public void delete(OrganizationTimetable timetable) {
+        timetableRepository.delete(timetable);
     }
 
     @Override

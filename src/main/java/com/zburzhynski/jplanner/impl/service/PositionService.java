@@ -48,13 +48,8 @@ public class PositionService implements IPositionService<String, Position> {
 
     @Override
     @Transactional(readOnly = false)
-    public boolean delete(Position position) {
-        boolean deleted = false;
-        if (position != null) {
-            positionRepository.delete(position);
-            deleted = true;
-        }
-        return deleted;
+    public void delete(Position position) {
+        positionRepository.delete(position);
     }
 
     @Override

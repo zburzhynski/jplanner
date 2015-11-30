@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.api.service;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
+import com.zburzhynski.jplanner.api.exception.AvailableResourceHasLinkedTimetablesException;
 
 import java.util.List;
 
@@ -15,6 +16,14 @@ import java.util.List;
  * @author Vladimir Zburzhynski
  */
 public interface IAvailableResourceService<ID, T extends IDomain> extends IBaseService<ID, T> {
+
+    /**
+     * Deletes available resource.
+     *
+     * @param resource available resource to delete
+     * @throws AvailableResourceHasLinkedTimetablesException if resource has linked timetables
+     */
+    void delete(T resource) throws AvailableResourceHasLinkedTimetablesException;
 
     /**
      * Gets available resources by criteria.
@@ -31,13 +40,5 @@ public interface IAvailableResourceService<ID, T extends IDomain> extends IBaseS
      * @return available resources count
      */
     int countByCriteria(AvailableResourceSearchCriteria searchCriteria);
-
-    /**
-     * Checks is available resource used.
-     *
-     * @param resource available resource to check
-     * @return true if used, else false
-     */
-    boolean isUsed(T resource);
 
 }
