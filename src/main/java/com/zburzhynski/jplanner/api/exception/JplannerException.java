@@ -7,7 +7,7 @@ package com.zburzhynski.jplanner.api.exception;
  *
  * @author Vladimir Zburzhynski
  */
-public class JplannerException extends RuntimeException {
+public class JplannerException extends Exception {
 
     /**
      * Default constructor.
@@ -28,7 +28,7 @@ public class JplannerException extends RuntimeException {
      * Constructor.
      *
      * @param message message
-     * @param cause cause
+     * @param cause   cause
      */
     public JplannerException(String message, Throwable cause) {
         super(message, cause);

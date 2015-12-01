@@ -10,6 +10,7 @@
     <ui:define name="content">
         <p:panel>
             <h:form id="resourcesForm">
+                <p:growl id="messages" showDetail="true" />
                 <h4>#{msgs['availableResources.header']}</h4>
                 <p:dataTable id="availableResources"
                              value="#{availableResourcesBean.resourceModel}"
@@ -39,7 +40,7 @@
                                 <p:graphicImage url="/resources/css/css-images/edit.gif" title="#{msgs['button.edit']}" />
                             </p:commandLink>
                             <p:commandLink action="#{availableResourcesBean.removeResource(availableResource)}"
-                                           update="availableResources">
+                                           update="resourcesForm:messages,availableResources">
                                 <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
                                 <p:confirm header="#{msgs['removeAvailableResourceConfirm.header']}"
                                            message="#{msgs['removeAvailableResourceConfirm.message']}?"

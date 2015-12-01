@@ -2,7 +2,7 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
-import com.zburzhynski.jplanner.api.exception.AvailableResourceHasLinkedTimetablesException;
+import com.zburzhynski.jplanner.api.exception.LinkedTimetablesExistException;
 import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
@@ -59,9 +59,9 @@ public class AvailableResourceService implements IAvailableResourceService<Strin
 
     @Override
     @Transactional(readOnly = false)
-    public void delete(AvailableResource resource) throws AvailableResourceHasLinkedTimetablesException {
+    public void delete(AvailableResource resource) throws LinkedTimetablesExistException {
         if (CollectionUtils.isNotEmpty(resource.getTimetables())) {
-            throw new AvailableResourceHasLinkedTimetablesException();
+            throw new LinkedTimetablesExistException();
         }
         availableResourceRepository.delete(resource);
     }
