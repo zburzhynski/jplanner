@@ -11,6 +11,7 @@ import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
 import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
+import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.repository.IResourceTimetableRepository;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
@@ -24,6 +25,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -99,10 +101,78 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         timetable.setStartDate(quotas.first().getStartDate());
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
-        for (Quota quota : quotas) {
-            timetable.addQuota(quota);
-        }
+        mergeQuotas(timetable, quotas);
         timetableRepository.saveOrUpdate(timetable);
+    }
+    public void mergeQuotas(ResourceTimetable timetable, Set<Quota> newQuotas) {
+        Set<Quota> quotasToDelete = new HashSet<>();
+        Set<Quota> quotasToAdd = new HashSet<>();
+        List<Quota> tempQuotas = new ArrayList<>(timetable.getQuotas());
+        tempQuotas.addAll(newQuotas);
+        outer: for (int k = 0; k < tempQuotas.size(); k++) {
+            Quota target = tempQuotas.get(k);
+            if (quotasToDelete.contains(target)) {
+                continue;
+            }
+            for (int i = 0; i < tempQuotas.size(); i++) {
+                Quota quota = tempQuotas.get(i);
+                if (target.equals(quota)) {
+                    continue;
+                }
+                boolean higherPriority = !QuotaType.WORK_TIME.equals(target.getQuotaType()) &&
+                    QuotaType.WORK_TIME.equals(quota.getQuotaType());
+                boolean lowerPriority = QuotaType.WORK_TIME.equals(target.getQuotaType()) &&
+                    !QuotaType.WORK_TIME.equals(quota.getQuotaType());
+                boolean someType = target.getQuotaType().equals(quota.getQuotaType());
+                if (target.getEndDate().after(quota.getStartDate())) {
+                    if (target.getEndDate().before(quota.getEndDate())) {
+                        if (target.getStartDate().before(quota.getStartDate())) {
+                            if (higherPriority) {
+                                quota.setStartDate(target.getEndDate());
+                            } else if (someType) {
+                                quota.setStartDate(target.getStartDate());
+                                quotasToDelete.add(target);
+                                continue outer;
+                            }
+                        }
+                    }
+                }
+                if (target.getStartDate().after(quota.getStartDate())) {
+                    if (target.getEndDate().before(quota.getEndDate())) {
+                        if (higherPriority) {
+                            Quota quotaPart = new Quota();
+                            quotaPart.setStartDate(quota.getStartDate());
+                            quotaPart.setEndDate(target.getStartDate());
+                            quotaPart.setQuotaType(quota.getQuotaType());
+                            quotaPart.setTimetable(quota.getTimetable());
+                            quotaPart.setDescription(quota.getDescription());
+                            quota.setStartDate(target.getEndDate());
+                            quota.setStartDate(target.getEndDate());
+                            tempQuotas.add(quotaPart);
+                        } else if (someType || lowerPriority) {
+                            quotasToDelete.add(target);
+                            continue outer;
+                        }
+                    }
+                }
+                if (target.getStartDate().after(quota.getStartDate())) {
+                    if (target.getStartDate().before(quota.getEndDate())) {
+                        if (target.getEndDate().after(quota.getEndDate())) {
+                            if (higherPriority) {
+                                quota.setStartDate(target.getEndDate());
+                            } else if (someType) {
+                                quota.setEndDate(target.getEndDate());
+                                quotasToDelete.add(target);
+                                continue outer;
+                            }
+                        }
+                    }
+                }
+            }
+            quotasToAdd.add(target);
+        }
+        timetable.getQuotas().removeAll(quotasToDelete);
+        timetable.getQuotas().addAll(quotasToAdd);
     }
 
     private void createDayOfWeekQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
