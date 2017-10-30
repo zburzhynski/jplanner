@@ -24,8 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.SortedSet;
@@ -104,75 +104,64 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         mergeQuotas(timetable, quotas);
         timetableRepository.saveOrUpdate(timetable);
     }
-    public void mergeQuotas(ResourceTimetable timetable, Set<Quota> newQuotas) {
-        Set<Quota> quotasToDelete = new HashSet<>();
-        Set<Quota> quotasToAdd = new HashSet<>();
-        List<Quota> tempQuotas = new ArrayList<>(timetable.getQuotas());
-        tempQuotas.addAll(newQuotas);
-        outer: for (int k = 0; k < tempQuotas.size(); k++) {
-            Quota target = tempQuotas.get(k);
-            if (quotasToDelete.contains(target)) {
-                continue;
+
+    public void mergeQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd) {
+        if (timetable.getQuotas().size() + quotasToAdd.size() < 2) {
+            for (Quota quota : quotasToAdd) {
+                timetable.addQuota(quota);
             }
-            for (int i = 0; i < tempQuotas.size(); i++) {
-                Quota quota = tempQuotas.get(i);
-                if (target.equals(quota)) {
-                    continue;
-                }
-                boolean higherPriority = !QuotaType.WORK_TIME.equals(target.getQuotaType()) &&
-                    QuotaType.WORK_TIME.equals(quota.getQuotaType());
-                boolean lowerPriority = QuotaType.WORK_TIME.equals(target.getQuotaType()) &&
-                    !QuotaType.WORK_TIME.equals(quota.getQuotaType());
-                boolean someType = target.getQuotaType().equals(quota.getQuotaType());
-                if (target.getEndDate().after(quota.getStartDate())) {
-                    if (target.getEndDate().before(quota.getEndDate())) {
-                        if (target.getStartDate().before(quota.getStartDate())) {
-                            if (higherPriority) {
-                                quota.setStartDate(target.getEndDate());
-                            } else if (someType) {
-                                quota.setStartDate(target.getStartDate());
-                                quotasToDelete.add(target);
-                                continue outer;
-                            }
-                        }
-                    }
-                }
-                if (target.getStartDate().after(quota.getStartDate())) {
-                    if (target.getEndDate().before(quota.getEndDate())) {
-                        if (higherPriority) {
-                            Quota quotaPart = new Quota();
-                            quotaPart.setStartDate(quota.getStartDate());
-                            quotaPart.setEndDate(target.getStartDate());
-                            quotaPart.setQuotaType(quota.getQuotaType());
-                            quotaPart.setTimetable(quota.getTimetable());
-                            quotaPart.setDescription(quota.getDescription());
-                            quota.setStartDate(target.getEndDate());
-                            quota.setStartDate(target.getEndDate());
-                            tempQuotas.add(quotaPart);
-                        } else if (someType || lowerPriority) {
-                            quotasToDelete.add(target);
-                            continue outer;
-                        }
-                    }
-                }
-                if (target.getStartDate().after(quota.getStartDate())) {
-                    if (target.getStartDate().before(quota.getEndDate())) {
-                        if (target.getEndDate().after(quota.getEndDate())) {
-                            if (higherPriority) {
-                                quota.setStartDate(target.getEndDate());
-                            } else if (someType) {
-                                quota.setEndDate(target.getEndDate());
-                                quotasToDelete.add(target);
-                                continue outer;
-                            }
-                        }
-                    }
-                }
-            }
-            quotasToAdd.add(target);
+            return;
         }
-        timetable.getQuotas().removeAll(quotasToDelete);
-        timetable.getQuotas().addAll(quotasToAdd);
+        List<Quota> quotas = new ArrayList<>(timetable.getQuotas());
+        quotas.addAll(quotasToAdd);
+        Collections.sort(quotas);
+        timetable.getQuotas().clear();
+        for (int i = 0; i < quotas.size(); i++) {
+            Quota target = quotas.get(i);
+            for (int k = i + 1; k < quotas.size(); k++) {
+                Quota quota = quotas.get(k);
+                if (target.getEndDate().after(quota.getStartDate())) {
+                    boolean lowerPriority = QuotaType.WORK_TIME.equals(target.getQuotaType())
+                        && !QuotaType.WORK_TIME.equals(quota.getQuotaType());
+                    if (target.getEndDate().after(quota.getEndDate())) {
+                        if (lowerPriority) {
+                            Quota targetQuotaPart = new Quota();
+                            targetQuotaPart.setStartDate(quota.getEndDate());
+                            targetQuotaPart.setEndDate(target.getEndDate());
+                            targetQuotaPart.setTimetable(target.getTimetable());
+                            targetQuotaPart.setQuotaType(target.getQuotaType());
+                            targetQuotaPart.setDescription(target.getDescription());
+                            target.setEndDate(quota.getStartDate());
+                            quotas.add(targetQuotaPart);
+                            Collections.sort(quotas);
+                            timetable.getQuotas().add(target);
+                        }
+                    } else if (target.getEndDate().before(quota.getEndDate())) {
+                        if (target.getQuotaType().equals(quota.getQuotaType())) {
+                            target.setEndDate(quota.getEndDate());
+                        } else if (!QuotaType.WORK_TIME.equals(target.getQuotaType())
+                            && QuotaType.WORK_TIME.equals(quota.getQuotaType())) {
+                            quota.setStartDate(target.getEndDate());
+                            Collections.sort(quotas);
+                        } else if (lowerPriority) {
+                            target.setEndDate(quota.getStartDate());
+                        }
+                    }
+                }
+            }
+        }
+        for (Quota target : quotas) {
+            int imposed = 0;
+            for (Quota quota : quotas) {
+                if (DateUtils.afterOrEquals(target.getStartDate(), quota.getStartDate())
+                    && DateUtils.beforeOrEquals(target.getEndDate(), quota.getEndDate())) {
+                    imposed++;
+                }
+            }
+            if (imposed < 2) {
+                timetable.addQuota(target);
+            }
+        }
     }
 
     private void createDayOfWeekQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
