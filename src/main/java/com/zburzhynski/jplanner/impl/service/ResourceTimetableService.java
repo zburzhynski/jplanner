@@ -24,7 +24,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -101,65 +100,42 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         timetable.setStartDate(quotas.first().getStartDate());
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
-        mergeQuotas(timetable, quotas);
+        saveQuotas(timetable, quotas);
         timetableRepository.saveOrUpdate(timetable);
     }
 
-    public void mergeQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd) {
-        if (timetable.getQuotas().size() + quotasToAdd.size() < 2) {
-            for (Quota quota : quotasToAdd) {
-                timetable.addQuota(quota);
-            }
-            return;
-        }
-        List<Quota> quotas = new ArrayList<>(timetable.getQuotas());
-        quotas.addAll(quotasToAdd);
-        Collections.sort(quotas);
+    private void saveQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd) {
+        List<Quota> quotaList = new ArrayList<>();
+        quotaList.addAll(timetable.getQuotas());
+        quotaList.addAll(quotasToAdd);
         timetable.getQuotas().clear();
-        for (int i = 0; i < quotas.size(); i++) {
-            Quota target = quotas.get(i);
-            for (int k = i + 1; k < quotas.size(); k++) {
-                Quota quota = quotas.get(k);
-                if (target.getEndDate().after(quota.getStartDate())) {
-                    boolean lowerPriority = QuotaType.WORK_TIME.equals(target.getQuotaType())
-                        && !QuotaType.WORK_TIME.equals(quota.getQuotaType());
-                    if (target.getEndDate().after(quota.getEndDate())) {
-                        if (lowerPriority) {
-                            Quota targetQuotaPart = new Quota();
-                            targetQuotaPart.setStartDate(quota.getEndDate());
-                            targetQuotaPart.setEndDate(target.getEndDate());
-                            targetQuotaPart.setTimetable(target.getTimetable());
-                            targetQuotaPart.setQuotaType(target.getQuotaType());
-                            targetQuotaPart.setDescription(target.getDescription());
-                            target.setEndDate(quota.getStartDate());
-                            quotas.add(targetQuotaPart);
-                            Collections.sort(quotas);
-                            timetable.getQuotas().add(target);
-                        }
-                    } else if (target.getEndDate().before(quota.getEndDate())) {
-                        if (target.getQuotaType().equals(quota.getQuotaType())) {
-                            target.setEndDate(quota.getEndDate());
-                        } else if (!QuotaType.WORK_TIME.equals(target.getQuotaType())
-                            && QuotaType.WORK_TIME.equals(quota.getQuotaType())) {
-                            quota.setStartDate(target.getEndDate());
-                            Collections.sort(quotas);
-                        } else if (lowerPriority) {
-                            target.setEndDate(quota.getStartDate());
-                        }
-                    }
-                }
-            }
+        Set<Range> ranges = new TreeSet<>();
+        for (Quota quota : quotaList) {
+            ranges.add(new Range(quota.getStartDate(), 1, quota.getQuotaType()));
+            ranges.add(new Range(quota.getEndDate(), -1, quota.getQuotaType()));
         }
-        for (Quota target : quotas) {
-            int imposed = 0;
-            for (Quota quota : quotas) {
-                if (DateUtils.afterOrEquals(target.getStartDate(), quota.getStartDate())
-                    && DateUtils.beforeOrEquals(target.getEndDate(), quota.getEndDate())) {
-                    imposed++;
+        Range startRange = null;
+        int workRangeCount = 0;
+        int offTimeRangeCount = 0;
+        for (Range range : ranges) {
+            if (startRange == null) startRange = range;
+            if (QuotaType.WORK_TIME.equals(range.getType())) {
+                workRangeCount += range.getLim();
+                if (workRangeCount == 0 && offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
+                    startRange = null;
                 }
             }
-            if (imposed < 2) {
-                timetable.addQuota(target);
+            if (!QuotaType.WORK_TIME.equals(range.getType())) {
+                if (workRangeCount > 0 && offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), startRange.getType()));
+                    startRange = range;
+                }
+                offTimeRangeCount += range.getLim();
+                if (offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
+                    startRange = workRangeCount == 0 ? null : range;
+                }
             }
         }
     }
@@ -255,4 +231,62 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         return false;
     }
 
+    static class Range implements Comparable<Range> {
+
+        private Date date;
+
+        private int lim;
+
+        private QuotaType type;
+
+        public Range(Date date, int lim, QuotaType type) {
+            this.date = date;
+            this.lim = lim;
+            this.type = type;
+        }
+
+        public Date getDate() {
+            return date;
+        }
+
+        public void setDate(Date date) {
+            this.date = date;
+        }
+
+        public int getLim() {
+            return lim;
+        }
+
+        public void setLim(int lim) {
+            this.lim = lim;
+        }
+
+        public QuotaType getType() {
+            return type;
+        }
+
+        public void setType(QuotaType type) {
+            this.type = type;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int compareTo(Range o) {
+            int result = this.getDate().compareTo(o.getDate());
+            if (result != 0) {
+                return result;
+            }
+            if (this.getType() != o.getType()) {
+                return this.getType() != QuotaType.WORK_TIME ? -1 : 1;
+            }
+            result = o.getLim() - this.getLim();
+            if (result != 0) {
+                return result;
+            }
+            return 1;
+        }
+
+    }
 }
