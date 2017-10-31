@@ -101,43 +101,6 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
         saveQuotas(timetable, quotas);
-        timetableRepository.saveOrUpdate(timetable);
-    }
-
-    private void saveQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd) {
-        List<Quota> quotaList = new ArrayList<>();
-        quotaList.addAll(timetable.getQuotas());
-        quotaList.addAll(quotasToAdd);
-        timetable.getQuotas().clear();
-        Set<Range> ranges = new TreeSet<>();
-        for (Quota quota : quotaList) {
-            ranges.add(new Range(quota.getStartDate(), 1, quota.getQuotaType()));
-            ranges.add(new Range(quota.getEndDate(), -1, quota.getQuotaType()));
-        }
-        Range startRange = null;
-        int workRangeCount = 0;
-        int offTimeRangeCount = 0;
-        for (Range range : ranges) {
-            if (startRange == null) startRange = range;
-            if (QuotaType.WORK_TIME.equals(range.getType())) {
-                workRangeCount += range.getLim();
-                if (workRangeCount == 0 && offTimeRangeCount == 0) {
-                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
-                    startRange = null;
-                }
-            }
-            if (!QuotaType.WORK_TIME.equals(range.getType())) {
-                if (workRangeCount > 0 && offTimeRangeCount == 0) {
-                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), startRange.getType()));
-                    startRange = range;
-                }
-                offTimeRangeCount += range.getLim();
-                if (offTimeRangeCount == 0) {
-                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
-                    startRange = workRangeCount == 0 ? null : range;
-                }
-            }
-        }
     }
 
     private void createDayOfWeekQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
@@ -178,6 +141,43 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
                 quotas.addAll(createQuotas(date, criteria));
             }
         }
+    }
+
+    private void saveQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd) {
+        List<Quota> quotaList = new ArrayList<>();
+        quotaList.addAll(timetable.getQuotas());
+        quotaList.addAll(quotasToAdd);
+        timetable.getQuotas().clear();
+        Set<Range> ranges = new TreeSet<>();
+        for (Quota quota : quotaList) {
+            ranges.add(new Range(quota.getStartDate(), 1, quota.getQuotaType()));
+            ranges.add(new Range(quota.getEndDate(), -1, quota.getQuotaType()));
+        }
+        Range startRange = null;
+        int workRangeCount = 0;
+        int offTimeRangeCount = 0;
+        for (Range range : ranges) {
+            if (startRange == null) startRange = range;
+            if (QuotaType.WORK_TIME.equals(range.getType())) {
+                workRangeCount += range.getLimit();
+                if (workRangeCount == 0 && offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
+                    startRange = null;
+                }
+            }
+            if (!QuotaType.WORK_TIME.equals(range.getType())) {
+                if (workRangeCount > 0 && offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), startRange.getType()));
+                    startRange = range;
+                }
+                offTimeRangeCount += range.getLimit();
+                if (offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
+                    startRange = workRangeCount == 0 ? null : range;
+                }
+            }
+        }
+        timetableRepository.saveOrUpdate(timetable);
     }
 
     private List<Quota> createQuotas(Date currentDate, QuotaCreateCriteria createCriteria) {
@@ -231,17 +231,17 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         return false;
     }
 
-    static class Range implements Comparable<Range> {
+    private class Range implements Comparable<Range> {
 
         private Date date;
 
-        private int lim;
+        private int limit;
 
         private QuotaType type;
 
-        public Range(Date date, int lim, QuotaType type) {
+        public Range(Date date, int limit, QuotaType type) {
             this.date = date;
-            this.lim = lim;
+            this.limit = limit;
             this.type = type;
         }
 
@@ -253,12 +253,12 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
             this.date = date;
         }
 
-        public int getLim() {
-            return lim;
+        public int getLimit() {
+            return limit;
         }
 
-        public void setLim(int lim) {
-            this.lim = lim;
+        public void setLimit(int limit) {
+            this.limit = limit;
         }
 
         public QuotaType getType() {
@@ -281,7 +281,7 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
             if (this.getType() != o.getType()) {
                 return this.getType() != QuotaType.WORK_TIME ? -1 : 1;
             }
-            result = o.getLim() - this.getLim();
+            result = o.getLimit() - this.getLimit();
             if (result != 0) {
                 return result;
             }
