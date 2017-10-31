@@ -11,6 +11,7 @@ import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
 import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
+import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.repository.IResourceTimetableRepository;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
@@ -99,10 +100,44 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         timetable.setStartDate(quotas.first().getStartDate());
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
-        for (Quota quota : quotas) {
-            timetable.addQuota(quota);
-        }
+        saveQuotas(timetable, quotas);
         timetableRepository.saveOrUpdate(timetable);
+    }
+
+    private void saveQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd) {
+        List<Quota> quotaList = new ArrayList<>();
+        quotaList.addAll(timetable.getQuotas());
+        quotaList.addAll(quotasToAdd);
+        timetable.getQuotas().clear();
+        Set<Range> ranges = new TreeSet<>();
+        for (Quota quota : quotaList) {
+            ranges.add(new Range(quota.getStartDate(), 1, quota.getQuotaType()));
+            ranges.add(new Range(quota.getEndDate(), -1, quota.getQuotaType()));
+        }
+        Range startRange = null;
+        int workRangeCount = 0;
+        int offTimeRangeCount = 0;
+        for (Range range : ranges) {
+            if (startRange == null) startRange = range;
+            if (QuotaType.WORK_TIME.equals(range.getType())) {
+                workRangeCount += range.getLim();
+                if (workRangeCount == 0 && offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
+                    startRange = null;
+                }
+            }
+            if (!QuotaType.WORK_TIME.equals(range.getType())) {
+                if (workRangeCount > 0 && offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), startRange.getType()));
+                    startRange = range;
+                }
+                offTimeRangeCount += range.getLim();
+                if (offTimeRangeCount == 0) {
+                    timetable.addQuota(new Quota(startRange.getDate(), range.getDate(), range.getType()));
+                    startRange = workRangeCount == 0 ? null : range;
+                }
+            }
+        }
     }
 
     private void createDayOfWeekQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
@@ -196,4 +231,62 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         return false;
     }
 
+    static class Range implements Comparable<Range> {
+
+        private Date date;
+
+        private int lim;
+
+        private QuotaType type;
+
+        public Range(Date date, int lim, QuotaType type) {
+            this.date = date;
+            this.lim = lim;
+            this.type = type;
+        }
+
+        public Date getDate() {
+            return date;
+        }
+
+        public void setDate(Date date) {
+            this.date = date;
+        }
+
+        public int getLim() {
+            return lim;
+        }
+
+        public void setLim(int lim) {
+            this.lim = lim;
+        }
+
+        public QuotaType getType() {
+            return type;
+        }
+
+        public void setType(QuotaType type) {
+            this.type = type;
+        }
+
+        /**
+         * {@inheritDoc}
+         */
+        @Override
+        public int compareTo(Range o) {
+            int result = this.getDate().compareTo(o.getDate());
+            if (result != 0) {
+                return result;
+            }
+            if (this.getType() != o.getType()) {
+                return this.getType() != QuotaType.WORK_TIME ? -1 : 1;
+            }
+            result = o.getLim() - this.getLim();
+            if (result != 0) {
+                return result;
+            }
+            return 1;
+        }
+
+    }
 }

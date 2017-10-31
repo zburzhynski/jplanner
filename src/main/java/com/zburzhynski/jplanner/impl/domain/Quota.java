@@ -49,6 +49,24 @@ public class Quota extends Domain implements Comparable<Quota> {
     @Column(name = "description")
     private String description;
 
+    /**
+     * Default constructor.
+     */
+    public Quota() {}
+
+    /**
+     * Constructor.
+     *
+     * @param startDate     start date
+     * @param endDate       end date
+     * @param quotaType     quota type
+     */
+    public Quota(Date startDate, Date endDate, QuotaType quotaType) {
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.quotaType = quotaType;
+    }
+
     public ResourceTimetable getTimetable() {
         return timetable;
     }
