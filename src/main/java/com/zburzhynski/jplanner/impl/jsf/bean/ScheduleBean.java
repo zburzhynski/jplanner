@@ -12,17 +12,23 @@ import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.apache.commons.lang3.StringUtils.EMPTY;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.Gender;
 import com.zburzhynski.jplanner.api.domain.PositionType;
+import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.domain.ScheduleStatus;
 import com.zburzhynski.jplanner.api.domain.ScheduleViewType;
 import com.zburzhynski.jplanner.api.domain.View;
+import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
+import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.domain.Quota;
+import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
@@ -44,6 +50,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
+import org.primefaces.model.DefaultScheduleEvent;
 import org.primefaces.model.LazyScheduleModel;
 import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
@@ -98,6 +105,10 @@ public class ScheduleBean implements Serializable {
 
     private static final String GO_TO_CARD_URL = "pages/integration/card.xhtml";
 
+    private static final String WORK_TIME_STYLE_CLASS = "workTime";
+
+    private static final String OFF_TIME_STYLE_CLASS = "offTime";
+
     private ScheduleModel eventModel;
 
     private Cabinet cabinet;
@@ -115,6 +126,9 @@ public class ScheduleBean implements Serializable {
     private int firstHour = FIRTH_HOUR;
 
     private ScheduleViewType viewType = ScheduleViewType.EMPLOYEE;
+
+    @ManagedProperty(value = "#{availableResourceService}")
+    private IAvailableResourceService resourceService;
 
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
@@ -165,6 +179,18 @@ public class ScheduleBean implements Serializable {
                 ScheduleSearchCriteria searchCriteria = buildScheduleSearchCriteria(start, end);
                 List<Schedule> events = scheduleService.getByCriteria(searchCriteria);
                 eventModel.getEvents().addAll(events);
+                if (ScheduleViewType.EMPLOYEE.equals(viewType)) {
+                    AvailableResourceSearchCriteria resourceCriteria = new AvailableResourceSearchCriteria();
+                    resourceCriteria.setDoctor(doctor);
+                    List<AvailableResource> resources = resourceService.getByCriteria(resourceCriteria);
+                    for (AvailableResource resource : resources) {
+                        for (ResourceTimetable timetable : resource.getTimetables()) {
+                            for (Quota quota : timetable.getQuotas()) {
+                                eventModel.getEvents().add(createQuotaEvent(quota));
+                            }
+                        }
+                    }
+                }
             }
         };
     }
@@ -564,6 +590,10 @@ public class ScheduleBean implements Serializable {
         this.viewType = viewType;
     }
 
+    public void setResourceService(IAvailableResourceService resourceService) {
+        this.resourceService = resourceService;
+    }
+
     public void setScheduleService(IScheduleService scheduleService) {
         this.scheduleService = scheduleService;
     }
@@ -667,4 +697,11 @@ public class ScheduleBean implements Serializable {
         JsfUtils.setFlashAttribute(END_DATE_PARAM, event.getEndDate());
     }
 
+    private ScheduleEvent createQuotaEvent(Quota quota) {
+        return new DefaultScheduleEvent(
+            propertyReader.readProperty(quota.getQuotaType().getValue()),
+            quota.getStartDate(),
+            quota.getEndDate(),
+            QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? WORK_TIME_STYLE_CLASS : OFF_TIME_STYLE_CLASS);
+    }
 }

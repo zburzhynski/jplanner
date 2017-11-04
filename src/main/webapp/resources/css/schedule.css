@@ -1,13 +1,38 @@
+.planned {
+    left: 0 !important;
+    right: 0 !important;
+}
 .started {
+    left: 0 !important;
+    right: 0 !important;
     background: #2b802f;
 }
 .finished {
+    left: 0 !important;
+    right: 0 !important;
     background: #8b5333;
 }
 .canceled {
+    left: 0 !important;
+    right: 0 !important;
     background: #ff4b43;
 }
-
+.workTime {
+    opacity: 0.3;
+    background: green;
+    left: 0 !important;
+    right: 0 !important;
+    margin-right: 0 !important;
+    pointer-events: none !important;
+}
+.offTime {
+    opacity: 0.3;
+    background: brown;
+    left: 0 !important;
+    right: 0 !important;
+    margin-right: 0 !important;
+    pointer-events: none !important;
+}
 .cabinetLabel {
     width: 10%;
     text-align: right;
