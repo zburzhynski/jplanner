@@ -176,21 +176,10 @@ public class ScheduleBean implements Serializable {
         eventModel = new LazyScheduleModel() {
             @Override
             public void loadEvents(Date start, Date end) {
+                fillQuotas();
                 ScheduleSearchCriteria searchCriteria = buildScheduleSearchCriteria(start, end);
                 List<Schedule> events = scheduleService.getByCriteria(searchCriteria);
                 eventModel.getEvents().addAll(events);
-                if (ScheduleViewType.EMPLOYEE.equals(viewType)) {
-                    AvailableResourceSearchCriteria resourceCriteria = new AvailableResourceSearchCriteria();
-                    resourceCriteria.setDoctor(doctor);
-                    List<AvailableResource> resources = resourceService.getByCriteria(resourceCriteria);
-                    for (AvailableResource resource : resources) {
-                        for (ResourceTimetable timetable : resource.getTimetables()) {
-                            for (Quota quota : timetable.getQuotas()) {
-                                eventModel.getEvents().add(createQuotaEvent(quota));
-                            }
-                        }
-                    }
-                }
             }
         };
     }
@@ -697,11 +686,29 @@ public class ScheduleBean implements Serializable {
         JsfUtils.setFlashAttribute(END_DATE_PARAM, event.getEndDate());
     }
 
-    private ScheduleEvent createQuotaEvent(Quota quota) {
+    private void fillQuotas() {
+        AvailableResourceSearchCriteria resourceCriteria = new AvailableResourceSearchCriteria();
+        if (ScheduleViewType.EMPLOYEE.equals(viewType)) {
+            resourceCriteria.setDoctor(doctor);
+        } else {
+            resourceCriteria.setWorkplace(workplace);
+        }
+        List<AvailableResource> resources = resourceService.getByCriteria(resourceCriteria);
+        for (AvailableResource resource : resources) {
+            for (ResourceTimetable timetable : resource.getTimetables()) {
+                for (Quota quota : timetable.getQuotas()) {
+                    eventModel.getEvents().add(createScheduleEvent(quota));
+                }
+            }
+        }
+    }
+
+    private ScheduleEvent createScheduleEvent(Quota quota) {
         return new DefaultScheduleEvent(
             propertyReader.readProperty(quota.getQuotaType().getValue()),
             quota.getStartDate(),
             quota.getEndDate(),
             QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? WORK_TIME_STYLE_CLASS : OFF_TIME_STYLE_CLASS);
     }
+
 }
