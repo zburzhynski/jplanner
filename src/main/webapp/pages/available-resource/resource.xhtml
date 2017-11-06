@@ -64,8 +64,8 @@
                                      style="width: 100%">
                         <f:selectItem itemLabel="" noSelectionOption="true" />
                         <f:selectItems value="#{employeeListBean.assistants}" var="assistant"
-                                       itemValue="#{doctor}"
-                                       itemLabel="#{doctor.person.fullName}" />
+                                       itemValue="#{assistant}"
+                                       itemLabel="#{assistant.person.fullName}" />
                     </p:selectOneMenu>
                     <p:message for="assistant" />
                     <h:outputLabel for="description" value="#{msgs['availableResource.description']}:" />
