@@ -704,11 +704,14 @@ public class ScheduleBean implements Serializable {
     }
 
     private ScheduleEvent createScheduleEvent(Quota quota) {
-        return new DefaultScheduleEvent(
+        DefaultScheduleEvent event = new DefaultScheduleEvent(
             propertyReader.readProperty(quota.getQuotaType().getValue()),
             quota.getStartDate(),
             quota.getEndDate(),
             QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? WORK_TIME_STYLE_CLASS : OFF_TIME_STYLE_CLASS);
+        event.setId(quota.getId());
+        event.setData(event.getTitle());
+        return event;
     }
 
 }
