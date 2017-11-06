@@ -157,7 +157,9 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         int workRangeCount = 0;
         int offTimeRangeCount = 0;
         for (Range range : ranges) {
-            if (startRange == null) startRange = range;
+            if (startRange == null) {
+                startRange = range;
+            }
             if (QuotaType.WORK_TIME.equals(range.getType())) {
                 workRangeCount += range.getLimit();
                 if (workRangeCount == 0 && offTimeRangeCount == 0) {
