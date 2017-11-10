@@ -705,12 +705,13 @@ public class ScheduleBean implements Serializable {
 
     private ScheduleEvent createScheduleEvent(Quota quota) {
         DefaultScheduleEvent scheduleEvent = new DefaultScheduleEvent(
-            propertyReader.readProperty(quota.getQuotaType().getValue()),
+            StringUtils.EMPTY,
             quota.getStartDate(),
             quota.getEndDate(),
             QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? WORK_TIME_STYLE_CLASS : OFF_TIME_STYLE_CLASS);
         scheduleEvent.setId(quota.getId());
-        scheduleEvent.setData(scheduleEvent.getTitle());
+        scheduleEvent.setData(StringUtils.EMPTY);
+        scheduleEvent.setEditable(false);
         return scheduleEvent;
     }
 
