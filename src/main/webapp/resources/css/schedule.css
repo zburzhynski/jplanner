@@ -1,26 +1,26 @@
 .planned {
-    left: 7px !important;
-    width: 94%;
+    left: 10px !important;
+    width: 93%;
 }
 .started {
     background: #2b802f;
-    left: 7px !important;
-    width: 94%;
+    left: 10px !important;
+    width: 93%;
 }
 .finished {
     background: #8b5333;
-    left: 7px !important;
-    width: 94%;
+    left: 10px !important;
+    width: 93%;
 }
 .canceled {
     background: #ff4b43;
-    left: 7px !important;
-    width: 94%;
+    left: 10px !important;
+    width: 93%;
 }
 .workTime {
     left: 0 !important;
     background: green;
-    width: 5px;
+    width: 8px;
     border: 0 green;
 }
 .workTime .fc-time {
@@ -29,7 +29,7 @@
 .offTime {
     left: 0 !important;
     background: red;
-    width: 5px;
+    width: 8px;
     border: 0 red;
 }
 .offTime .fc-time {
