@@ -27,6 +27,7 @@ import javax.persistence.Table;
 @Table(name = "resource_timetable")
 public class ResourceTimetable extends Domain implements Comparable<ResourceTimetable> {
 
+    public static final String P_AVAILABLE_RESOURCE = "availableResource";
     public static final String P_QUOTAS = "quotas";
     public static final String P_QUOTA = "quota";
 
