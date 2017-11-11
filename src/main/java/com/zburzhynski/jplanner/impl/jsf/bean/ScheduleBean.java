@@ -23,6 +23,7 @@ import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
+import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
@@ -56,6 +57,7 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -109,6 +111,8 @@ public class ScheduleBean implements Serializable {
 
     private static final String OFF_TIME_STYLE_CLASS = "offTime";
 
+    private static final String EVENT_NOT_IN_WORK_TIME = "scheduleValidator.eventNotInWorkTime";
+
     private ScheduleModel eventModel;
 
     private Cabinet cabinet;
@@ -132,6 +136,9 @@ public class ScheduleBean implements Serializable {
 
     @ManagedProperty(value = "#{scheduleService}")
     private IScheduleService scheduleService;
+
+    @ManagedProperty(value = "#{quotaService}")
+    private IQuotaService quotaService;
 
     @ManagedProperty(value = "#{cabinetService}")
     private ICabinetService cabinetService;
@@ -193,6 +200,11 @@ public class ScheduleBean implements Serializable {
         initialDate = (Date) selectEvent.getObject();
         firstHour = DateUtils.extractHour(initialDate);
         event = buildScheduleEvent(selectEvent);
+        if (!quotaService.isWorkPeriod(new Timestamp(event.getStartDate().getTime()),
+            new Timestamp(event.getEndDate().getTime()), null)) {
+            messageHelper.addMessage(EVENT_NOT_IN_WORK_TIME);
+            return;
+        }
         setEmployeeListBeanParams();
         JsfUtils.redirect(SCHEDULE_EVENT.getPath());
     }
@@ -585,6 +597,10 @@ public class ScheduleBean implements Serializable {
 
     public void setScheduleService(IScheduleService scheduleService) {
         this.scheduleService = scheduleService;
+    }
+
+    public void setQuotaService(IQuotaService quotaService) {
+        this.quotaService = quotaService;
     }
 
     public void setCabinetService(ICabinetService cabinetService) {
