@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
+import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.exception.LinkedTimetablesExistException;
 import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
@@ -69,8 +70,11 @@ public class AvailableResourceService implements IAvailableResourceService<Strin
     @Override
     public List<AvailableResource> getByCriteria(AvailableResourceSearchCriteria searchCriteria) {
         if (searchCriteria.getQuotaStartDate() != null && searchCriteria.getQuotaEndDate() != null) {
-            List<Quota> intersectingQuotas = quotaRepository.findIntersecting(searchCriteria.getQuotaStartDate(),
-                searchCriteria.getQuotaEndDate(), null);
+            IntersectedQuotaSearchCriteria quotaSearchCriteria = new IntersectedQuotaSearchCriteria();
+            quotaSearchCriteria.setStartDate(searchCriteria.getQuotaStartDate());
+            quotaSearchCriteria.setEndDate(searchCriteria.getQuotaEndDate());
+            quotaSearchCriteria.setDoctorId(searchCriteria.getDoctor().getId());
+            List<Quota> intersectingQuotas = quotaRepository.findIntersecting(quotaSearchCriteria);
             if (CollectionUtils.isEmpty(intersectingQuotas)) {
                 return new ArrayList<>();
             }

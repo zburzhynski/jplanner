@@ -1,15 +1,15 @@
 package com.zburzhynski.jplanner.impl.repository;
 
-import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,12 +26,16 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
     implements IQuotaRepository<String, Quota> {
 
     @Override
-    public List<Quota> findIntersecting(Date startDate, Date endDate, List<QuotaType> types) {
+    public List<Quota> findIntersecting(IntersectedQuotaSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
-        criteria.add(Restrictions.gt(Quota.P_END_DATE, startDate));
-        criteria.add(Restrictions.lt(Quota.P_START_DATE, endDate));
-        if (CollectionUtils.isNotEmpty(types)) {
-            criteria.add(Restrictions.in(Quota.P_QUOTA_TYPE, types));
+        criteria.add(Restrictions.gt(Quota.P_END_DATE, searchCriteria.getStartDate()));
+        criteria.add(Restrictions.lt(Quota.P_START_DATE, searchCriteria.getEndDate()));
+        if (StringUtils.isNotBlank(searchCriteria.getDoctorId())) {
+            //TODO: fix.
+            criteria.add(Restrictions.eq("timetable.availableResource.doctor.id", searchCriteria.getDoctorId()));
+        }
+        if (CollectionUtils.isNotEmpty(searchCriteria.getTypes())) {
+            criteria.add(Restrictions.in(Quota.P_QUOTA_TYPE, searchCriteria.getTypes()));
         }
         criteria.addOrder(Order.asc(Quota.P_START_DATE));
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();

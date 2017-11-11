@@ -1,6 +1,6 @@
 package com.zburzhynski.jplanner.impl.service;
 
-import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,8 +47,8 @@ public class QuotaService implements IQuotaService<String, Quota> {
     }
 
     @Override
-    public List<Quota> getIntersecting(Date startDate, Date endDate, List<QuotaType> types) {
-        return quotaRepository.findIntersecting(startDate, endDate, types);
+    public List<Quota> getIntersecting(IntersectedQuotaSearchCriteria searchCriteria) {
+        return quotaRepository.findIntersecting(searchCriteria);
     }
 
     @Override

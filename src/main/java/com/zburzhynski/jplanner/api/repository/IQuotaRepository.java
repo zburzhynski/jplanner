@@ -1,9 +1,8 @@
 package com.zburzhynski.jplanner.api.repository;
 
+import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
-import com.zburzhynski.jplanner.api.domain.QuotaType;
 
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,11 +19,9 @@ public interface IQuotaRepository<ID, T extends IDomain> extends IBaseRepository
     /**
      * Finds intersecting of quotas.
      *
-     * @param startDate start date
-     * @param endDate end date
-     * @param types quota types
+     * @param searchCriteria {@link IntersectedQuotaSearchCriteria}
      * @return intersecting of quotas
      */
-    List<T> findIntersecting(Date startDate, Date endDate, List<QuotaType> types);
+    List<T> findIntersecting(IntersectedQuotaSearchCriteria searchCriteria);
 
 }
