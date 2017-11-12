@@ -200,8 +200,7 @@ public class ScheduleBean implements Serializable {
         initialDate = (Date) selectEvent.getObject();
         firstHour = DateUtils.extractHour(initialDate);
         event = buildScheduleEvent(selectEvent);
-        if (!quotaService.isWorkPeriod(new Timestamp(event.getStartDate().getTime()),
-            new Timestamp(event.getEndDate().getTime()), null)) {
+        if (event == null) {
             messageHelper.addMessage(EVENT_NOT_IN_WORK_TIME);
             return;
         }
@@ -659,12 +658,18 @@ public class ScheduleBean implements Serializable {
     }
 
     private Schedule buildScheduleEvent(SelectEvent selectEvent) {
-        Date startDate = (Date) selectEvent.getObject();
-        Date endDate = DateUtils.addMinuteToDate(startDate, configBean.getEventDuration());
-        Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
-        scheduleEvent.setWorkplace(workplace);
-        scheduleEvent.setDoctor(doctor);
-        return scheduleEvent;
+        Date startDate = new Timestamp(((Date) selectEvent.getObject()).getTime());
+        Date endDate = new Timestamp(DateUtils.addMinuteToDate(startDate, configBean.getEventDuration()).getTime());
+        String doctorId = ScheduleViewType.EMPLOYEE.equals(viewType) ? doctor.getId() : null;
+        String workplaceId = ScheduleViewType.WORKPLACE.equals(viewType) ? workplace.getId() : null;
+        Quota workPeriod = quotaService.getWorkPeriod(startDate, endDate, doctorId, workplaceId);
+        if (workPeriod != null) {
+            Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
+            scheduleEvent.setDoctor(workPeriod.getTimetable().getAvailableResource().getDoctor());
+            scheduleEvent.setWorkplace(workPeriod.getTimetable().getAvailableResource().getWorkplace());
+            return scheduleEvent;
+        }
+        return null;
     }
 
     private ScheduleSearchCriteria buildScheduleSearchCriteria(Date start, Date end) {

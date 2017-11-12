@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.api.service;
 
 import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
+import com.zburzhynski.jplanner.impl.domain.Quota;
 
 import java.util.Date;
 import java.util.List;
@@ -26,13 +27,14 @@ public interface IQuotaService<ID, T extends IDomain> extends IBaseService<ID, T
     List<T> getIntersecting(IntersectedQuotaSearchCriteria searchCriteria);
 
     /**
-     * Checks if interval is work period.
+     * Gets work period from interval.
      *
      * @param startDate start date
      * @param endDate end date
      * @param doctorId doctor id
-     * @return true if interval is work period, else false
+     * @param workplaceId workplace id
+     * @return quota period if exist
      */
-    boolean isWorkPeriod(Date startDate, Date endDate, String doctorId);
+    Quota getWorkPeriod(Date startDate, Date endDate, String doctorId, String workplaceId);
 
 }

@@ -21,6 +21,8 @@ public class IntersectedQuotaSearchCriteria implements Serializable {
 
     private String doctorId;
 
+    private String workplaceId;
+
     private List<QuotaType> types;
 
     public Date getStartDate() {
@@ -45,6 +47,14 @@ public class IntersectedQuotaSearchCriteria implements Serializable {
 
     public void setDoctorId(String doctorId) {
         this.doctorId = doctorId;
+    }
+
+    public String getWorkplaceId() {
+        return workplaceId;
+    }
+
+    public void setWorkplaceId(String workplaceId) {
+        this.workplaceId = workplaceId;
     }
 
     public List<QuotaType> getTypes() {

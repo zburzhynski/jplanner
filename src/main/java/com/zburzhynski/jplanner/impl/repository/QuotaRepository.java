@@ -3,6 +3,7 @@ package com.zburzhynski.jplanner.impl.repository;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.DOT;
 import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_DOCTOR;
 import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_TIMETABLE;
+import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_WORKPLACE;
 import static com.zburzhynski.jplanner.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_AVAILABLE_RESOURCE;
 import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
@@ -35,11 +36,18 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.add(Restrictions.gt(Quota.P_END_DATE, searchCriteria.getStartDate()));
         criteria.add(Restrictions.lt(Quota.P_START_DATE, searchCriteria.getEndDate()));
-        if (StringUtils.isNotBlank(searchCriteria.getDoctorId())) {
+        if (StringUtils.isNotBlank(searchCriteria.getDoctorId()) ||
+            StringUtils.isNotBlank(searchCriteria.getWorkplaceId())) {
             criteria.createAlias(P_TIMETABLE, P_TIMETABLE);
             criteria.createAlias(P_TIMETABLE + DOT + P_AVAILABLE_RESOURCE, P_AVAILABLE_RESOURCE);
             criteria.createAlias(P_AVAILABLE_RESOURCE  + DOT + P_DOCTOR, P_DOCTOR);
+            criteria.createAlias(P_AVAILABLE_RESOURCE  + DOT + P_WORKPLACE, P_WORKPLACE);
+        }
+        if (StringUtils.isNotBlank(searchCriteria.getDoctorId())) {
             criteria.add(Restrictions.eq(P_DOCTOR + DOT + P_ID, searchCriteria.getDoctorId()));
+        }
+        if (StringUtils.isNotBlank(searchCriteria.getWorkplaceId())) {
+            criteria.add(Restrictions.eq(P_WORKPLACE + DOT + P_ID, searchCriteria.getWorkplaceId()));
         }
         if (CollectionUtils.isNotEmpty(searchCriteria.getTypes())) {
             criteria.add(Restrictions.in(Quota.P_QUOTA_TYPE, searchCriteria.getTypes()));
