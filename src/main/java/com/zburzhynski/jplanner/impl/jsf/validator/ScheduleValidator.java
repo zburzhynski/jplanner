@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.impl.jsf.validator;
 
 import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
+import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
 import org.apache.commons.collections.CollectionUtils;
@@ -27,9 +28,13 @@ public class ScheduleValidator extends BaseValidator {
     private static final String TIME_NOT_AVAILABLE = "scheduleValidator.timeNotAvailable";
     private static final String DOCTOR_NOT_AVAILABLE = "scheduleValidator.doctorNotAvailable";
     private static final String PATIENT_NOT_AVAILABLE = "scheduleValidator.patientNotAvailable";
+    private static final String EVENT_NOT_IN_WORK_TIME = "scheduleValidator.eventNotInWorkTime";
 
     @Autowired
     private IScheduleService scheduleService;
+
+    @Autowired
+    private IQuotaService quotaService;
 
     /**
      * Validates schedule event.
@@ -53,7 +58,7 @@ public class ScheduleValidator extends BaseValidator {
      */
     public boolean validateAvailability(Schedule schedule) {
         if (checkIsTimeAvailable(schedule) && checkIsPatientAvailable(schedule)
-            && checkIsDoctorAvailable(schedule)) {
+            && checkIsDoctorAvailable(schedule) && validateQuotaPeriod(schedule)) {
             return true;
         }
         return false;
@@ -131,6 +136,15 @@ public class ScheduleValidator extends BaseValidator {
             }
         }
         return true;
+    }
+
+    private boolean validateQuotaPeriod(Schedule schedule) {
+        if (quotaService.isWorkPeriod(schedule.getStartDate(), schedule.getEndDate(), schedule.getDoctor().getId())) {
+            return true;
+        } else {
+            addMessage(EVENT_NOT_IN_WORK_TIME);
+            return false;
+        }
     }
 
 }
