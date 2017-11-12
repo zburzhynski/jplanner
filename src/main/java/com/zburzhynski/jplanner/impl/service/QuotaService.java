@@ -2,10 +2,12 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,6 +31,9 @@ public class QuotaService implements IQuotaService<String, Quota> {
 
     @Autowired
     private IQuotaRepository quotaRepository;
+
+    @Autowired
+    private IEmployeeRepository employeeRepository;
 
     @Override
     public Quota getById(String id) {
@@ -58,14 +63,18 @@ public class QuotaService implements IQuotaService<String, Quota> {
     }
 
     @Override
-    public boolean isWorkPeriod(Date startDate, Date endDate, String doctorId) {
+    public Quota getWorkPeriod(Date startDate, Date endDate, String doctorId, String workplaceId) {
         IntersectedQuotaSearchCriteria searchCriteria = new IntersectedQuotaSearchCriteria();
         searchCriteria.setStartDate(startDate);
         searchCriteria.setEndDate(endDate);
         searchCriteria.setTypes(Arrays.asList(QuotaType.WORK_TIME));
         searchCriteria.setDoctorId(doctorId);
+        searchCriteria.setWorkplaceId(workplaceId);
         List<Quota> quotas = quotaRepository.findIntersecting(searchCriteria);
-        return containsPeriod(quotas, startDate, endDate);
+        if (sameDoctorAndWorkplace(quotas)) {
+            return mergePeriod(quotas, startDate, endDate);
+        }
+        return null;
     }
 
     @Override
@@ -73,7 +82,24 @@ public class QuotaService implements IQuotaService<String, Quota> {
         return quotaRepository.findAll();
     }
 
-    private boolean containsPeriod(List<Quota> quotas, Date startDate, Date endDate) {
+    private boolean sameDoctorAndWorkplace(List<Quota> quotas) {
+        if (CollectionUtils.isEmpty(quotas)) {
+            return false;
+        }
+        String doctorId = quotas.get(0).getTimetable().getAvailableResource().getDoctor().getId();
+        String workplaceId = quotas.get(0).getTimetable().getAvailableResource().getWorkplace().getId();
+        for (Quota quota : quotas) {
+            if (!quota.getTimetable().getAvailableResource().getDoctor().getId().equals(doctorId) ||
+                !quota.getTimetable().getAvailableResource().getWorkplace().getId().equals(workplaceId)) {
+                return false;
+            }
+            doctorId = quota.getTimetable().getAvailableResource().getDoctor().getId();
+            workplaceId = quota.getTimetable().getAvailableResource().getWorkplace().getId();
+        }
+        return true;
+    }
+
+    private Quota mergePeriod(List<Quota> quotas, Date startDate, Date endDate) {
         Set<Range> ranges = new TreeSet<>();
         for (Quota quota : quotas) {
             ranges.add(new Range(quota.getStartDate(), 1));
@@ -89,14 +115,18 @@ public class QuotaService implements IQuotaService<String, Quota> {
             if (counter == 0) {
                 if (DateUtils.beforeOrEquals(startRange.getDate(), startDate) &&
                     DateUtils.afterOrEquals(range.getDate(), endDate)) {
-                    return true;
+                    Quota quota = new Quota();
+                    quota.setStartDate(startRange.getDate());
+                    quota.setEndDate(range.getDate());
+                    quota.setQuotaType(QuotaType.WORK_TIME);
+                    quota.setTimetable(quotas.get(0).getTimetable());
+                    return quota;
                 }
                 startRange = null;
             }
         }
-        return false;
+        return null;
     }
-
 
     private static class Range implements Comparable<Range> {
 

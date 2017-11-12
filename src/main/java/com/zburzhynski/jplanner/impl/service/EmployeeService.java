@@ -86,6 +86,7 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
         IntersectedQuotaSearchCriteria quotaSearchCriteria = new IntersectedQuotaSearchCriteria();
         quotaSearchCriteria.setStartDate(searchCriteria.getStartDate());
         quotaSearchCriteria.setEndDate(searchCriteria.getEndDate());
+        quotaSearchCriteria.setWorkplaceId(searchCriteria.getWorkplaceId());
         List<Quota> intersectingQuotas = quotaRepository.findIntersecting(quotaSearchCriteria);
         if (CollectionUtils.isEmpty(intersectingQuotas)) {
             return new ArrayList<>();

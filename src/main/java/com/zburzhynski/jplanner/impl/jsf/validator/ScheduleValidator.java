@@ -139,7 +139,8 @@ public class ScheduleValidator extends BaseValidator {
     }
 
     private boolean validateQuotaPeriod(Schedule schedule) {
-        if (quotaService.isWorkPeriod(schedule.getStartDate(), schedule.getEndDate(), schedule.getDoctor().getId())) {
+        if (quotaService.getWorkPeriod(schedule.getStartDate(), schedule.getEndDate(),
+            schedule.getDoctor().getId(), null) != null) {
             return true;
         } else {
             addMessage(EVENT_NOT_IN_WORK_TIME);
