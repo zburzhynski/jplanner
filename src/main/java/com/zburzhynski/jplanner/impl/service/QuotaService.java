@@ -7,7 +7,6 @@ import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
-import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +16,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 /**
  * Implementation of {@link IQuotaService} interface.
@@ -83,20 +83,11 @@ public class QuotaService implements IQuotaService<String, Quota> {
     }
 
     private boolean sameDoctorAndWorkplace(List<Quota> quotas) {
-        if (CollectionUtils.isEmpty(quotas)) {
-            return false;
-        }
-        String doctorId = quotas.get(0).getTimetable().getAvailableResource().getDoctor().getId();
-        String workplaceId = quotas.get(0).getTimetable().getAvailableResource().getWorkplace().getId();
-        for (Quota quota : quotas) {
-            if (!quota.getTimetable().getAvailableResource().getDoctor().getId().equals(doctorId) ||
-                !quota.getTimetable().getAvailableResource().getWorkplace().getId().equals(workplaceId)) {
-                return false;
-            }
-            doctorId = quota.getTimetable().getAvailableResource().getDoctor().getId();
-            workplaceId = quota.getTimetable().getAvailableResource().getWorkplace().getId();
-        }
-        return true;
+        Set<String> doctorIds = quotas.stream().map(quota -> quota.getTimetable().getAvailableResource()
+            .getDoctor().getId()).collect(Collectors.toSet());
+        Set<String> workplaceIds = quotas.stream().map(quota -> quota.getTimetable().getAvailableResource()
+            .getWorkplace().getId()).collect(Collectors.toSet());
+        return quotas.size() == doctorIds.size() && quotas.size() == workplaceIds.size();
     }
 
     private Quota mergePeriod(List<Quota> quotas, Date startDate, Date endDate) {
