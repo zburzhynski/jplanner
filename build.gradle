@@ -130,6 +130,7 @@ task unitTestJar(type: Jar) {
 
 /* ---------------- checkstyle setup ---------------- */
 checkstyle {
+    toolVersion = "6.0"
     configProperties.suppressionsFile = configFile.getParent() + '\\suppressions.xml'
 }
 
