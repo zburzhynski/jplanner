@@ -9,6 +9,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -139,7 +140,8 @@ public class ScheduleValidator extends BaseValidator {
     }
 
     private boolean validateQuotaPeriod(Schedule schedule) {
-        if (quotaService.getWorkPeriod(schedule.getStartDate(), schedule.getEndDate(),
+        if (quotaService.getWorkPeriod(new Timestamp(schedule.getStartDate().getTime()),
+            new Timestamp(schedule.getEndDate().getTime()),
             schedule.getDoctor().getId(), null) != null) {
             return true;
         } else {
