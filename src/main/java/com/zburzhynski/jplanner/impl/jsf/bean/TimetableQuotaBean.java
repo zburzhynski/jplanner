@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.RESOURCE_ID_PARAM;
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_ID_PARAM;
+import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
@@ -34,6 +35,10 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class TimetableQuotaBean implements Serializable {
 
+    private static final String WORK_TIME_STYLE_CLASS = "editableWorkTime";
+
+    private static final String OFF_TIME_STYLE_CLASS = "editableOffTime";
+
     private String resourceId;
 
     private ScheduleModel eventModel;
@@ -59,8 +64,11 @@ public class TimetableQuotaBean implements Serializable {
         if (CollectionUtils.isNotEmpty(timetable.getQuotas())) {
             for (Quota quota : timetable.getQuotas()) {
                 String quotaType = propertyReader.readProperty(quota.getQuotaType().getValue());
-                ScheduleEvent event = new DefaultScheduleEvent(quotaType,
-                    quota.getStartDate(), quota.getEndDate());
+                ScheduleEvent event = new DefaultScheduleEvent(
+                    quotaType,
+                    quota.getStartDate(),
+                    quota.getEndDate(),
+                    QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? WORK_TIME_STYLE_CLASS : OFF_TIME_STYLE_CLASS);
                 event.setId(quota.getId());
                 eventModel.getEvents().add(event);
             }
