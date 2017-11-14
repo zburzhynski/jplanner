@@ -738,6 +738,7 @@ public class ScheduleBean implements Serializable {
         scheduleEvent.setId(quota.getId());
         scheduleEvent.setData(StringUtils.EMPTY);
         scheduleEvent.setEditable(false);
+        scheduleEvent.setDescription(propertyReader.readProperty(quota.getQuotaType().getValue()));
         return scheduleEvent;
     }
 
