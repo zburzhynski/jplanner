@@ -48,6 +48,7 @@ import com.zburzhynski.jplanner.impl.util.MessageHelper;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.primefaces.context.RequestContext;
 import org.primefaces.event.ScheduleEntryMoveEvent;
 import org.primefaces.event.ScheduleEntryResizeEvent;
 import org.primefaces.event.SelectEvent;
@@ -218,6 +219,10 @@ public class ScheduleBean implements Serializable {
         initialDate = scheduleEvent.getStartDate();
         firstHour = DateUtils.extractHour(initialDate);
         event = (Schedule) scheduleService.getById(scheduleEvent.getId());
+        if (event != null) {
+            RequestContext context = RequestContext.getCurrentInstance();
+            context.execute("PF('menu').show();");
+        }
     }
 
     /**
