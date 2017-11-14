@@ -84,7 +84,7 @@
                             maxTime="#{organizationTimetableBean.maxTime}"
                             tooltip="true">
                     <p:ajax event="dateSelect" listener="#{scheduleBean.createEvent}" update="messages" />
-                    <p:ajax event="eventSelect" listener="#{scheduleBean.selectEvent}" update="eventMenu" oncomplete="PF('menu').show();" />
+                    <p:ajax event="eventSelect" listener="#{scheduleBean.selectEvent}" update="eventMenu" />
                     <p:ajax event="eventMove" listener="#{scheduleBean.moveEvent}" update="messages,scheduler" />
                     <p:ajax event="eventResize" listener="#{scheduleBean.resizeEvent}" update="messages,scheduler" />
                     <p:ajax event="viewChange" listener="#{scheduleBean.selectViewListener}" />
