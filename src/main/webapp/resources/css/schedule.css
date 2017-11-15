@@ -35,6 +35,12 @@
 .offTime .fc-time {
     visibility: hidden;
 }
+.editableWorkTime {
+    background: green;
+}
+.editableOffTime {
+    background: brown;
+}
 .cabinetLabel {
     width: 10%;
     text-align: right;
