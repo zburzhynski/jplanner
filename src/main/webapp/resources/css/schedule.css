@@ -35,11 +35,11 @@
 .offTime .fc-time {
     visibility: hidden;
 }
-.editableWorkTime {
+.quotaWorkTime {
     background: green;
 }
-.editableOffTime {
-    background: brown;
+.quotaOffTime {
+    background: red;
 }
 .cabinetLabel {
     width: 10%;

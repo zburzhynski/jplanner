@@ -35,9 +35,9 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class TimetableQuotaBean implements Serializable {
 
-    private static final String WORK_TIME_STYLE_CLASS = "editableWorkTime";
+    private static final String QUOTA_WORK_TIME_CLASS = "quotaWorkTime";
 
-    private static final String OFF_TIME_STYLE_CLASS = "editableOffTime";
+    private static final String QUOTA_OFF_TIME_CLASS = "quotaOffTime";
 
     private String resourceId;
 
@@ -68,7 +68,7 @@ public class TimetableQuotaBean implements Serializable {
                     quotaType,
                     quota.getStartDate(),
                     quota.getEndDate(),
-                    QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? WORK_TIME_STYLE_CLASS : OFF_TIME_STYLE_CLASS);
+                    QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? QUOTA_WORK_TIME_CLASS : QUOTA_OFF_TIME_CLASS);
                 event.setId(quota.getId());
                 eventModel.getEvents().add(event);
             }
