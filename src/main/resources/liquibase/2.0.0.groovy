@@ -171,4 +171,13 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-11-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added column to resource_timetable table it contains timetable status")
+        addColumn(schemaName: 'jplanner', tableName: 'resource_timetable') {
+            column(name: 'status', type: 'VARCHAR(8)', remarks: 'Timetable status') {
+                constraints(nullable: false)
+            }
+        }
+    }
+
 }

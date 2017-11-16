@@ -43,6 +43,17 @@
                                 locale="ru"
                                 required="true" />
                     <p:message for="endDate" />
+                    <h:outputLabel for="status" value="#{msgs['timetable.status']}:" />
+                    <p:selectOneMenu id="status"
+                                     value="#{timetableBean.timetable.status}"
+                                     label="#{msgs['timetable.status']}"
+                                     required="true"
+                                     style="width: 75%">
+                        <f:selectItems value="#{timetableStatusListBean.statuses}" var="status"
+                                       itemValue="#{status}"
+                                       itemLabel="#{msgs[status.value]}" />
+                    </p:selectOneMenu>
+                    <p:message for="status" />
                     <h:outputLabel for="description" value="#{msgs['timetable.description']}:" />
                     <p:inputTextarea id="description"
                                      value="#{timetableBean.timetable.description}"

@@ -2,6 +2,7 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.domain.TimetableStatus;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
@@ -70,6 +71,7 @@ public class QuotaService implements IQuotaService<String, Quota> {
         searchCriteria.setTypes(Arrays.asList(QuotaType.WORK_TIME));
         searchCriteria.setDoctorId(doctorId);
         searchCriteria.setWorkplaceId(workplaceId);
+        searchCriteria.setTimetableStatuses(Arrays.asList(TimetableStatus.APPROVED));
         List<Quota> quotas = quotaRepository.findIntersecting(searchCriteria);
         if (sameDoctorAndWorkplace(quotas)) {
             return mergePeriod(quotas, startDate, endDate);
