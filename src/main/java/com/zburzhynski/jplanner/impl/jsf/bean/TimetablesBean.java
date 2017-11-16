@@ -4,6 +4,7 @@ import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
+import com.zburzhynski.jplanner.impl.jsf.validator.TimetableRemoveValidator;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -38,6 +39,9 @@ public class TimetablesBean implements Serializable {
 
     @ManagedProperty(value = "#{availableResourceService}")
     private IAvailableResourceService resourceService;
+
+    @ManagedProperty(value = "#{timetableRemoveValidator}")
+    private TimetableRemoveValidator timetableRemoveValidator;
 
     /**
      * Inits bean state.
@@ -87,6 +91,10 @@ public class TimetablesBean implements Serializable {
      * @param removedTimetable timetable to remove
      */
     public void removeTimetable(ResourceTimetable removedTimetable) {
+        boolean valid = timetableRemoveValidator.validate(removedTimetable);
+        if (!valid) {
+            return;
+        }
         resource.removeTimetable(removedTimetable);
         resourceService.saveOrUpdate(resource);
     }
@@ -141,6 +149,10 @@ public class TimetablesBean implements Serializable {
 
     public void setResourceService(IAvailableResourceService resourceService) {
         this.resourceService = resourceService;
+    }
+
+    public void setTimetableRemoveValidator(TimetableRemoveValidator timetableRemoveValidator) {
+        this.timetableRemoveValidator = timetableRemoveValidator;
     }
 
 }

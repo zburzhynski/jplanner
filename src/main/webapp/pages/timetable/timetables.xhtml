@@ -19,6 +19,7 @@
                 }
             </style>
             <h:form id="timetablesForm">
+                <p:growl id="messages" showDetail="true" />
                 <h4>#{msgs['timetables.header']}</h4>
                 <h:panelGrid columns="2" columnClasses="res-label,res-value" width="50%">
                     <h:outputLabel for="resource" value="#{msgs['timetables.resource']}:" />
@@ -64,7 +65,7 @@
                             <p:commandButton action="#{timetablesBean.removeTimetable(timetable)}"
                                              title="#{msgs['button.remove']}"
                                              icon="ui-icon-trash"
-                                             update="timetables">
+                                             update="timetables, timetablesForm:messages">
                                 <p:confirm header="#{msgs['removeTimetableConfirm.header']}"
                                            message="#{msgs['removeTimetableConfirm.message']}?"
                                            icon="ui-icon-alert" />
