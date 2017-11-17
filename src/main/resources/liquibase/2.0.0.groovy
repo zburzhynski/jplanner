@@ -53,6 +53,9 @@ databaseChangeLog {
             column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'End date of resource timetable') {
                 constraints(nullable: false)
             }
+            column(name: 'status', type: 'VARCHAR(10)', remarks: 'Status of resource timetable') {
+                constraints(nullable: false)
+            }
             column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The resource timetable description')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'resource_timetable', tablespace: 'jplanner_index',
@@ -168,15 +171,6 @@ databaseChangeLog {
             column(name: 'type', value: 'INTEGER')
             column(name: 'description', value: 'Количество доступных ресурсов на странице')
             column(name: 'sort_order', value: '5')
-        }
-    }
-
-    changeSet(id: '2017-11-16-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
-        comment("Added column to resource_timetable table it contains timetable status")
-        addColumn(schemaName: 'jplanner', tableName: 'resource_timetable') {
-            column(name: 'status', type: 'VARCHAR(8)', remarks: 'Timetable status') {
-                constraints(nullable: false)
-            }
         }
     }
 
