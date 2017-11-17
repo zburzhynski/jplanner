@@ -19,6 +19,7 @@ import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.domain.ScheduleStatus;
 import com.zburzhynski.jplanner.api.domain.ScheduleViewType;
+import com.zburzhynski.jplanner.api.domain.TimetableStatus;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
@@ -722,8 +723,10 @@ public class ScheduleBean implements Serializable {
         List<AvailableResource> resources = resourceService.getByCriteria(resourceCriteria);
         for (AvailableResource resource : resources) {
             for (ResourceTimetable timetable : resource.getTimetables()) {
-                for (Quota quota : timetable.getQuotas()) {
-                    eventModel.getEvents().add(createScheduleEvent(quota));
+                if (TimetableStatus.APPROVED.equals(timetable.getStatus())) {
+                    for (Quota quota : timetable.getQuotas()) {
+                        eventModel.getEvents().add(createScheduleEvent(quota));
+                    }
                 }
             }
         }

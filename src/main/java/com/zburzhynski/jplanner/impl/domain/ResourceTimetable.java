@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.domain;
 
+import com.zburzhynski.jplanner.api.domain.TimetableStatus;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -10,6 +11,8 @@ import java.util.TreeSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -28,6 +31,7 @@ import javax.persistence.Table;
 public class ResourceTimetable extends Domain implements Comparable<ResourceTimetable> {
 
     public static final String P_AVAILABLE_RESOURCE = "availableResource";
+    public static final String P_TIMETABLE_STATUS = "status";
     public static final String P_QUOTAS = "quotas";
     public static final String P_QUOTA = "quota";
 
@@ -40,6 +44,10 @@ public class ResourceTimetable extends Domain implements Comparable<ResourceTime
 
     @Column(name = "end_date")
     private Date endDate;
+
+    @Column(name = "status")
+    @Enumerated(value = EnumType.STRING)
+    private TimetableStatus status = TimetableStatus.DRAFT;
 
     @Column(name = "description")
     private String description;
@@ -69,6 +77,14 @@ public class ResourceTimetable extends Domain implements Comparable<ResourceTime
 
     public void setEndDate(Date endDate) {
         this.endDate = endDate;
+    }
+
+    public TimetableStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(TimetableStatus status) {
+        this.status = status;
     }
 
     public String getDescription() {
@@ -139,6 +155,7 @@ public class ResourceTimetable extends Domain implements Comparable<ResourceTime
             .appendSuper(super.equals(o))
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
+            .append(status, that.status)
             .append(description, that.description)
             .isEquals();
     }
@@ -149,6 +166,7 @@ public class ResourceTimetable extends Domain implements Comparable<ResourceTime
             .appendSuper(super.hashCode())
             .append(startDate)
             .append(endDate)
+            .append(status)
             .append(description)
             .toHashCode();
     }
@@ -159,6 +177,7 @@ public class ResourceTimetable extends Domain implements Comparable<ResourceTime
             .appendSuper(super.toString())
             .append("startDate", startDate)
             .append("endDate", endDate)
+            .append("status", status)
             .append("description", description)
             .toString();
     }

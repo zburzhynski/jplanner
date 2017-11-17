@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.api.criteria;
 
 import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.domain.TimetableStatus;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -22,6 +23,8 @@ public class IntersectedQuotaSearchCriteria implements Serializable {
     private String doctorId;
 
     private String workplaceId;
+
+    private List<TimetableStatus> timetableStatuses;
 
     private List<QuotaType> types;
 
@@ -55,6 +58,14 @@ public class IntersectedQuotaSearchCriteria implements Serializable {
 
     public void setWorkplaceId(String workplaceId) {
         this.workplaceId = workplaceId;
+    }
+
+    public List<TimetableStatus> getTimetableStatuses() {
+        return timetableStatuses;
+    }
+
+    public void setTimetableStatuses(List<TimetableStatus> timetableStatuses) {
+        this.timetableStatuses = timetableStatuses;
     }
 
     public List<QuotaType> getTypes() {
