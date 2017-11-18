@@ -47,7 +47,10 @@
                             <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msgs['quota.description']}" width="49%">
+                    <p:column headerText="#{msgs['timetable.status']}" width="13%">
+                        <h:outputText value="#{msgs[timetable.status.value]}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['quota.description']}" width="36%">
                         <h:outputText value="#{timetable.description}" />
                     </p:column>
                     <p:column width="19%">

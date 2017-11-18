@@ -53,6 +53,9 @@ databaseChangeLog {
             column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'End date of resource timetable') {
                 constraints(nullable: false)
             }
+            column(name: 'status', type: 'VARCHAR(10)', remarks: 'Status of resource timetable') {
+                constraints(nullable: false)
+            }
             column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The resource timetable description')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'resource_timetable', tablespace: 'jplanner_index',

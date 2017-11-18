@@ -6,6 +6,7 @@ import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_TIMETABLE
 import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_WORKPLACE;
 import static com.zburzhynski.jplanner.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_AVAILABLE_RESOURCE;
+import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_TIMETABLE_STATUS;
 import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.impl.domain.Quota;
@@ -34,11 +35,12 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
     @Override
     public List<Quota> findIntersecting(IntersectedQuotaSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.createAlias(P_TIMETABLE, P_TIMETABLE);
         criteria.add(Restrictions.gt(Quota.P_END_DATE, searchCriteria.getStartDate()));
         criteria.add(Restrictions.lt(Quota.P_START_DATE, searchCriteria.getEndDate()));
         if (StringUtils.isNotBlank(searchCriteria.getDoctorId()) ||
-            StringUtils.isNotBlank(searchCriteria.getWorkplaceId())) {
-            criteria.createAlias(P_TIMETABLE, P_TIMETABLE);
+            StringUtils.isNotBlank(searchCriteria.getWorkplaceId()) ||
+            CollectionUtils.isNotEmpty(searchCriteria.getTimetableStatuses())) {
             criteria.createAlias(P_TIMETABLE + DOT + P_AVAILABLE_RESOURCE, P_AVAILABLE_RESOURCE);
             criteria.createAlias(P_AVAILABLE_RESOURCE  + DOT + P_DOCTOR, P_DOCTOR);
             criteria.createAlias(P_AVAILABLE_RESOURCE  + DOT + P_WORKPLACE, P_WORKPLACE);
@@ -48,6 +50,10 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
         }
         if (StringUtils.isNotBlank(searchCriteria.getWorkplaceId())) {
             criteria.add(Restrictions.eq(P_WORKPLACE + DOT + P_ID, searchCriteria.getWorkplaceId()));
+        }
+        if (CollectionUtils.isNotEmpty(searchCriteria.getTimetableStatuses())) {
+            criteria.add(Restrictions.in(P_TIMETABLE + DOT + P_TIMETABLE_STATUS,
+                searchCriteria.getTimetableStatuses()));
         }
         if (CollectionUtils.isNotEmpty(searchCriteria.getTypes())) {
             criteria.add(Restrictions.in(Quota.P_QUOTA_TYPE, searchCriteria.getTypes()));
