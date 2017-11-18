@@ -3,6 +3,8 @@ package com.zburzhynski.jplanner.impl.repository;
 import static com.zburzhynski.jplanner.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_QUOTA;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_QUOTAS;
+import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_TIMETABLE_STATUS;
+import com.zburzhynski.jplanner.api.criteria.TimetableSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IResourceTimetableRepository;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import org.hibernate.Criteria;
@@ -11,6 +13,7 @@ import org.hibernate.sql.JoinType;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -30,6 +33,15 @@ public class ResourceTimetableRepository extends AbstractBaseRepository<String, 
         criteria.createAlias(P_QUOTAS, P_QUOTA, JoinType.LEFT_OUTER_JOIN);
         criteria.add(Restrictions.eq(P_ID, id));
         return (ResourceTimetable) criteria.uniqueResult();
+    }
+
+    @Override
+    public List<ResourceTimetable> findByCriteria(TimetableSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        if (searchCriteria.getStatus() != null) {
+            criteria.add(Restrictions.eq(P_TIMETABLE_STATUS, searchCriteria.getStatus()));
+        }
+        return criteria.list();
     }
 
     @Override

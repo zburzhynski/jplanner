@@ -6,6 +6,7 @@ import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
+import com.zburzhynski.jplanner.impl.jsf.validator.TimetableValidator;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
@@ -32,6 +33,9 @@ public class TimetableBean implements Serializable {
     @ManagedProperty(value = "#{resourceTimetableService}")
     private IResourceTimetableService timetableService;
 
+    @ManagedProperty(value = "#{timetableValidator}")
+    private TimetableValidator timetableValidator;
+
     /**
      * Inits bean state.
      */
@@ -54,6 +58,10 @@ public class TimetableBean implements Serializable {
      * @return path for navigating
      */
     public String saveTimetable() {
+        boolean valid = timetableValidator.validate(timetable);
+        if (!valid) {
+            return null;
+        }
         JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
         timetableService.saveOrUpdate(timetable);
         return View.TIMETABLES.getPath();
@@ -79,6 +87,10 @@ public class TimetableBean implements Serializable {
 
     public void setTimetableService(IResourceTimetableService timetableService) {
         this.timetableService = timetableService;
+    }
+
+    public void setTimetableValidator(TimetableValidator timetableValidator) {
+        this.timetableValidator = timetableValidator;
     }
 
 }
