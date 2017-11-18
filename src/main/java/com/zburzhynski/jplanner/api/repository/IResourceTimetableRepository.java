@@ -1,7 +1,6 @@
 package com.zburzhynski.jplanner.api.repository;
 
 import com.zburzhynski.jplanner.api.domain.IDomain;
-import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 
 /**
  * Available resource timetable service.
@@ -13,13 +12,5 @@ import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
  * @author Vladimir Zburzhynski
  */
 public interface IResourceTimetableRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
-
-    /**
-     * Checks schedules of timetable.
-     *
-     * @param timetable timetable to check
-     * @return true if has schedules, else false
-     */
-    boolean hasSchedules(ResourceTimetable timetable);
 
 }

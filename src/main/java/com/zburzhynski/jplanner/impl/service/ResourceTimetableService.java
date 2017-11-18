@@ -66,11 +66,6 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
     }
 
     @Override
-    public boolean hasSchedules(ResourceTimetable timetable) {
-        return timetableRepository.hasSchedules(timetable);
-    }
-
-    @Override
     @Transactional(readOnly = false)
     public void delete(ResourceTimetable timetable) {
         timetableRepository.delete(timetable);
