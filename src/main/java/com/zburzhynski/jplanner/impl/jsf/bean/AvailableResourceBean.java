@@ -4,6 +4,7 @@ import static com.zburzhynski.jplanner.impl.jsf.bean.AvailableResourcesBean.AVAI
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
+import com.zburzhynski.jplanner.impl.jsf.validator.AvailableResourceValidator;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -29,6 +30,9 @@ public class AvailableResourceBean implements Serializable {
     @ManagedProperty(value = "#{availableResourceService}")
     private IAvailableResourceService resourceService;
 
+    @ManagedProperty(value = "#{availableResourceValidator}")
+    private AvailableResourceValidator resourceValidator;
+
     /**
      * Inits bean state.
      */
@@ -48,6 +52,10 @@ public class AvailableResourceBean implements Serializable {
      * @return path for navigating
      */
     public String saveResource() {
+        boolean valid = resourceValidator.validate(resource);
+        if (!valid) {
+            return null;
+        }
         resourceService.saveOrUpdate(resource);
         return View.AVAILABLE_RESOURCES.getPath();
     }
@@ -62,6 +70,10 @@ public class AvailableResourceBean implements Serializable {
 
     public void setResourceService(IAvailableResourceService resourceService) {
         this.resourceService = resourceService;
+    }
+
+    public void setResourceValidator(AvailableResourceValidator resourceValidator) {
+        this.resourceValidator = resourceValidator;
     }
 
 }

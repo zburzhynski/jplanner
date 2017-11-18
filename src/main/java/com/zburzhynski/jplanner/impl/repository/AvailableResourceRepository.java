@@ -99,6 +99,9 @@ public class AvailableResourceRepository extends AbstractBaseRepository<String, 
         if (CollectionUtils.isNotEmpty(searchCriteria.getQuotaIds())) {
             criteria.add(Restrictions.in(P_QUOTA + DOT + P_ID, searchCriteria.getQuotaIds()));
         }
+        if (CollectionUtils.isNotEmpty(searchCriteria.getExcludedIds())) {
+            criteria.add(Restrictions.not(Restrictions.in(P_ID, searchCriteria.getExcludedIds())));
+        }
         return criteria;
     }
 
