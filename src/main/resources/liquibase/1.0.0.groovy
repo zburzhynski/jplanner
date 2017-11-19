@@ -12,13 +12,13 @@ databaseChangeLog {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of cabinet') {
                 constraints(nullable: false)
             }
-            column(name: 'number', type: 'VARCHAR(20)', defaultValue: '', remarks: 'The number of cabinet') {
+            column(name: 'number', type: 'VARCHAR(20)', remarks: 'The number of cabinet') {
                 constraints(nullable: false)
             }
-            column(name: 'name', type: 'VARCHAR(100)', defaultValue: '', remarks: 'The cabinet name') {
+            column(name: 'name', type: 'VARCHAR(100)', remarks: 'The cabinet name') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The cabinet description')
+            column(name: 'description', type: 'VARCHAR(500)', remarks: 'The cabinet description')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'cabinet', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_cabinet')
@@ -32,10 +32,10 @@ databaseChangeLog {
             column(name: 'cabinet_id', type: 'VARCHAR(128)', remarks: 'The reference to the cabinet table') {
                 constraints(nullable: false)
             }
-            column(name: 'name', type: 'VARCHAR(100)', defaultValue: '', remarks: 'The workplace name') {
+            column(name: 'name', type: 'VARCHAR(100)', remarks: 'The workplace name') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The workplace description')
+            column(name: 'description', type: 'VARCHAR(500)', remarks: 'The workplace description')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'workplace', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_workplace')
@@ -52,19 +52,19 @@ databaseChangeLog {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of person') {
                 constraints(nullable: false)
             }
-            column(name: 'name', type: 'VARCHAR(50)', defaultValue: '', remarks: 'The person name') {
+            column(name: 'name', type: 'VARCHAR(50)', remarks: 'The person name') {
                 constraints(nullable: false)
             }
-            column(name: 'surname', type: 'VARCHAR(50)', defaultValue: '', remarks: 'The person surname') {
+            column(name: 'surname', type: 'VARCHAR(50)', remarks: 'The person surname') {
                 constraints(nullable: false)
             }
-            column(name: 'patronymic', type: 'VARCHAR(50)', defaultValue: '', remarks: 'The person patronymic') {
+            column(name: 'patronymic', type: 'VARCHAR(50)', remarks: 'The person patronymic') {
                 constraints(nullable: false)
             }
-            column(name: 'birthday', type: 'DATE', defaultValue: 'now()', remarks: 'The person birthday') {
+            column(name: 'birthday', type: 'DATE', remarks: 'The person birthday') {
                 constraints(nullable: false)
             }
-            column(name: 'gender', type: 'CHAR(1)', defaultValue: '', remarks: 'The person sex') {
+            column(name: 'gender', type: 'CHAR(1)', remarks: 'The person sex') {
                 constraints(nullable: false)
             }
         }
@@ -77,10 +77,10 @@ databaseChangeLog {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of job position') {
                 constraints(nullable: false)
             }
-            column(name: 'name', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The job position name') {
+            column(name: 'name', type: 'VARCHAR(500)', remarks: 'The job position name') {
                 constraints(nullable: false)
             }
-            column(name: 'position_type', type: 'VARCHAR(20)', defaultValue: '', remarks: 'The job position type')
+            column(name: 'position_type', type: 'VARCHAR(20)', remarks: 'The job position type')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'job_position', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_job_position')
@@ -97,8 +97,8 @@ databaseChangeLog {
             column(name: 'job_position_id', type: 'VARCHAR(128)', remarks: 'The reference to the job position table') {
                 constraints(nullable: false)
             }
-            column(name: 'email', type: 'VARCHAR(50)', defaultValue: '', remarks: 'The employee email')
-            column(name: 'additional_info', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The additional information')
+            column(name: 'email', type: 'VARCHAR(50)', remarks: 'The employee email')
+            column(name: 'additional_info', type: 'VARCHAR(500)', remarks: 'The additional information')
 
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'employee', tablespace: 'jplanner_index',
@@ -126,8 +126,8 @@ databaseChangeLog {
             column(name: 'person_id', type: 'VARCHAR(128)', remarks: 'The reference to the person table') {
                 constraints(nullable: false)
             }
-            column(name: 'reason', type: 'VARCHAR(1000)', defaultValue: '', remarks: 'Reason of client')
-            column(name: 'additional_info', type: 'VARCHAR(1000)', defaultValue: '', remarks: 'Additional information of schedule event')
+            column(name: 'reason', type: 'VARCHAR(1000)', remarks: 'Reason of client')
+            column(name: 'additional_info', type: 'VARCHAR(1000)', remarks: 'Additional information of schedule event')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'client', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_client')
@@ -150,19 +150,19 @@ databaseChangeLog {
             column(name: 'client_id', type: 'VARCHAR(128)', remarks: 'The reference to the client table') {
                 constraints(nullable: false)
             }
-            column(name: 'schedule_status', type: 'VARCHAR(10)', defaultValue: '', remarks: 'Schedule status') {
+            column(name: 'schedule_status', type: 'VARCHAR(10)', remarks: 'Schedule status') {
                 constraints(nullable: false)
             }
             column(name: 'doctor_id', type: 'VARCHAR(128)', remarks: 'The reference to the employee table') {
                 constraints(nullable: false)
             }
-            column(name: 'start_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of schedule event') {
+            column(name: 'start_date', type: 'TIMESTAMP', remarks: 'Start date of schedule event') {
                 constraints(nullable: false)
             }
-            column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of schedule event') {
+            column(name: 'end_date', type: 'TIMESTAMP'                                                                        , remarks: 'Start date of schedule event') {
                 constraints(nullable: false)
             }
-            column(name: 'title', type: 'VARCHAR(1100)', defaultValue: '', remarks: 'Title of schedule event') {
+            column(name: 'title', type: 'VARCHAR(1100)', remarks: 'Title of schedule event') {
                 constraints(nullable: false)
             }
         }
