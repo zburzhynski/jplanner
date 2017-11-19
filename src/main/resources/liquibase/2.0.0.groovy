@@ -5,7 +5,7 @@ databaseChangeLog {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of available resource') {
                 constraints(nullable: false)
             }
-            column(name: 'name', type: 'VARCHAR(100)', defaultValue: '', remarks: 'The available resource name') {
+            column(name: 'name', type: 'VARCHAR(100)', remarks: 'The available resource name') {
                 constraints(nullable: false)
             }
             column(name: 'doctor_id', type: 'VARCHAR(128)', remarks: 'The reference to the employee table') {
@@ -15,7 +15,7 @@ databaseChangeLog {
             column(name: 'workplace_id', type: 'VARCHAR(128)', remarks: 'The reference to the workplace table') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The available resource description')
+            column(name: 'description', type: 'VARCHAR(500)', remarks: 'The available resource description')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'available_resource', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_available_resource')
@@ -47,16 +47,16 @@ databaseChangeLog {
             column(name: 'available_resource_id', type: 'VARCHAR(128)', remarks: 'The reference to the available resource table') {
                 constraints(nullable: false)
             }
-            column(name: 'start_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of resource timetable') {
+            column(name: 'start_date', type: 'TIMESTAMP', remarks: 'Start date of resource timetable') {
                 constraints(nullable: false)
             }
-            column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'End date of resource timetable') {
+            column(name: 'end_date', type: 'TIMESTAMP', remarks: 'End date of resource timetable') {
                 constraints(nullable: false)
             }
             column(name: 'status', type: 'VARCHAR(10)', remarks: 'Status of resource timetable') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The resource timetable description')
+            column(name: 'description', type: 'VARCHAR(500)', remarks: 'The resource timetable description')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'resource_timetable', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_resource_timetable')
@@ -76,16 +76,16 @@ databaseChangeLog {
             column(name: 'resource_timetable_id', type: 'VARCHAR(128)', remarks: 'The reference to the resource timetable table') {
                 constraints(nullable: false)
             }
-            column(name: 'start_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'Start date of quota') {
+            column(name: 'start_date', type: 'TIMESTAMP', remarks: 'Start date of quota') {
                 constraints(nullable: false)
             }
-            column(name: 'end_date', type: 'TIMESTAMP', defaultValue: 'now()', remarks: 'End date of quota') {
+            column(name: 'end_date', type: 'TIMESTAMP', remarks: 'End date of quota') {
                 constraints(nullable: false)
             }
-            column(name: 'quota_type', type: 'VARCHAR(15)', defaultValue: '', remarks: 'The quota type') {
+            column(name: 'quota_type', type: 'VARCHAR(15)', remarks: 'The quota type') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'The quota description')
+            column(name: 'description', type: 'VARCHAR(500)', remarks: 'The quota description')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'quota', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_quota')
@@ -102,16 +102,16 @@ databaseChangeLog {
             column(name: 'id', type: 'VARCHAR(128)', remarks: 'The unique identifier of organization timetable') {
                 constraints(nullable: false)
             }
-            column(name: 'day_of_week', type: 'VARCHAR(10)', defaultValue: '', remarks: 'Day of week') {
+            column(name: 'day_of_week', type: 'VARCHAR(10)', remarks: 'Day of week') {
                 constraints(nullable: false)
             }
-            column(name: 'start_time', type: 'TIMESTAMP', defaultValue: '1970.01.01 00:00:00', remarks: 'Start time of day') {
+            column(name: 'start_time', type: 'TIMESTAMP', remarks: 'Start time of day') {
                 constraints(nullable: false)
             }
-            column(name: 'end_time', type: 'TIMESTAMP', defaultValue: '1970.01.01 00:00:00', remarks: 'End time of day') {
+            column(name: 'end_time', type: 'TIMESTAMP', remarks: 'End time of day') {
                 constraints(nullable: false)
             }
-            column(name: 'description', type: 'VARCHAR(500)', defaultValue: '', remarks: 'Description of timetable')
+            column(name: 'description', type: 'VARCHAR(500)', remarks: 'Description of timetable')
         }
         addPrimaryKey(schemaName: 'jplanner', tableName: 'organization_timetable', tablespace: 'jplanner_index',
                 columnNames: 'id', constraintName: 'PK_organization_timetable')
