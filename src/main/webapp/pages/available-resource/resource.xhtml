@@ -23,6 +23,7 @@
         <p:panel>
             <h:form id="resourceForm">
                 <p:focus />
+                <p:messages id="messages" autoUpdate="true" closable="true" />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="70%">
                     <h:outputLabel for="name" value="#{msgs['availableResource.name']}:" />
                     <p:inputTextarea id="name" value="#{availableResourceBean.resource.name}"

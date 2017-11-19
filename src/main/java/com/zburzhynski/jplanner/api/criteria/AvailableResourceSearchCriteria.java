@@ -3,6 +3,7 @@ package com.zburzhynski.jplanner.api.criteria;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +31,8 @@ public class AvailableResourceSearchCriteria {
     private Long start;
 
     private Long end;
+
+    private List<String> excludedIds;
 
     public Workplace getWorkplace() {
         return workplace;
@@ -93,6 +96,22 @@ public class AvailableResourceSearchCriteria {
 
     public void setEnd(Long end) {
         this.end = end;
+    }
+
+    /**
+     * Gets excluded available resource ids.
+     *
+     * @return excluded available resource ids
+     */
+    public List<String> getExcludedIds() {
+        if (excludedIds == null) {
+            excludedIds = new ArrayList<>();
+        }
+        return excludedIds;
+    }
+
+    public void setExcludedIds(List<String> excludedIds) {
+        this.excludedIds = excludedIds;
     }
 
 }
