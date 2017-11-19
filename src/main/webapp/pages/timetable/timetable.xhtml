@@ -22,6 +22,7 @@
                 }
             </style>
             <h:form id="timetableForm">
+                <p:messages id="messages" autoUpdate="true" closable="true" />
                 <h:panelGrid columns="3" columnClasses="name,val,msg" width="60%">
                     <h:outputLabel for="startDate" value="#{msgs['timetable.startDate']}:" />
                     <p:calendar id="startDate"

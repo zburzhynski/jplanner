@@ -9,6 +9,7 @@ import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.DAY_OF_WEEK;
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.EVEN_DAY;
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
 import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
+import com.zburzhynski.jplanner.api.criteria.TimetableSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
@@ -74,6 +75,16 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
     @Override
     public List<ResourceTimetable> getAll() {
         return timetableRepository.findAll();
+    }
+
+    @Override
+    public List<ResourceTimetable> getByCriteria(TimetableSearchCriteria searchCriteria) {
+        return timetableRepository.findByCriteria(searchCriteria);
+    }
+
+    @Override
+    public Integer countByCriteria(TimetableSearchCriteria searchCriteria) {
+        return timetableRepository.countByCriteria(searchCriteria);
     }
 
     @Override
