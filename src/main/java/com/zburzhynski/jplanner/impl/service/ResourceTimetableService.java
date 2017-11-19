@@ -83,6 +83,11 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
     }
 
     @Override
+    public Integer countByCriteria(TimetableSearchCriteria searchCriteria) {
+        return timetableRepository.countByCriteria(searchCriteria);
+    }
+
+    @Override
     @Transactional(readOnly = false)
     public void createQuota(QuotaCreateCriteria criteria) {
         Date startDate = criteria.getStartDate();

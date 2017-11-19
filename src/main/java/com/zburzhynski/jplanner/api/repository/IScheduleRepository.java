@@ -26,6 +26,14 @@ public interface IScheduleRepository<ID, T extends IDomain> extends IBaseReposit
     List<T> findByCriteria(ScheduleSearchCriteria searchCriteria);
 
     /**
+     * Finds count schedule events by search criteria.
+     *
+     * @param searchCriteria {@link ScheduleSearchCriteria} to find
+     * @return count of schedule events
+     */
+    Integer countByCriteria(ScheduleSearchCriteria searchCriteria);
+
+    /**
      * Finds schedule events contained in the range.
      *
      * @param containCriteria {@link ScheduleSearchCriteria} to find

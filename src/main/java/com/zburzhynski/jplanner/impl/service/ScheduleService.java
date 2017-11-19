@@ -58,6 +58,11 @@ public class ScheduleService implements IScheduleService<String, Schedule> {
     }
 
     @Override
+    public Integer countByCriteria(ScheduleSearchCriteria searchCriteria) {
+        return scheduleRepository.countByCriteria(searchCriteria);
+    }
+
+    @Override
     public List<Schedule> containByCriteria(ScheduleSearchCriteria containCriteria) {
         return scheduleRepository.containByCriteria(containCriteria);
     }

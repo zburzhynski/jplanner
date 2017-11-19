@@ -25,6 +25,14 @@ public interface IScheduleService<ID, T extends IDomain> extends IBaseService<ID
     List<T> getByCriteria(ScheduleSearchCriteria searchCriteria);
 
     /**
+     * Gets count schedule events by search criteria.
+     *
+     * @param searchCriteria {@link ScheduleSearchCriteria} to find
+     * @return count of schedule events
+     */
+    Integer countByCriteria(ScheduleSearchCriteria searchCriteria);
+
+    /**
      * Finds schedule events contained in the range.
      *
      * @param containCriteria {@link ScheduleSearchCriteria} to find

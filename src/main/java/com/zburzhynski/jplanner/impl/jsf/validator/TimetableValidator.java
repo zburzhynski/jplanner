@@ -2,17 +2,12 @@ package com.zburzhynski.jplanner.impl.jsf.validator;
 
 import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.TimetableSearchCriteria;
-import com.zburzhynski.jplanner.api.domain.TimetableStatus;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
-import com.zburzhynski.jplanner.impl.util.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
 
 /**
  * Timetable validator.
@@ -41,24 +36,37 @@ public class TimetableValidator extends BaseValidator {
      * @return true if valid, else false
      */
     public boolean validate(ResourceTimetable timetable) {
-        Set<Boolean> result = new HashSet<>();
-        result.add(checkSchedules(timetable));
-        result.add(checkPeriod(timetable));
-        return !result.contains(false);
+        //TODO: Add quota validation
+        return checkPeriod(timetable) && checkSchedules(timetable);
+    }
+
+    private boolean checkPeriod(ResourceTimetable timetable) {
+        TimetableSearchCriteria searchCriteria = new TimetableSearchCriteria();
+        searchCriteria.setStartDate(timetable.getStartDate());
+        searchCriteria.setEndDate(timetable.getEndDate());
+        searchCriteria.setResourceId(timetable.getAvailableResource().getId());
+        searchCriteria.setIntersectingPeriod(true);
+        if (StringUtils.isNotEmpty(timetable.getId())) {
+            searchCriteria.getExcludedIds().add(timetable.getId());
+        }
+        if (timetableService.countByCriteria(searchCriteria) > 0) {
+            addMessage(TIMETABLE_TIME_OVERLAPPED);
+            return false;
+        }
+        return true;
     }
 
     private boolean checkSchedules(ResourceTimetable timetable) {
-        if (!isStatusChanged(timetable)) {
-            return true;
-        }
-        ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
-        searchCriteria.setStartDate(timetable.getStartDate());
-        searchCriteria.setEndDate(timetable.getEndDate());
-        searchCriteria.setDoctor(timetable.getAvailableResource().getDoctor());
-        searchCriteria.setWorkplace(timetable.getAvailableResource().getWorkplace());
-        if (scheduleService.countByCriteria(searchCriteria) > 0) {
-            addMessage(TIMETABLE_HAS_SCHEDULES);
-            return false;
+        if (isStatusChanged(timetable)) {
+            ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
+            searchCriteria.setStartDate(timetable.getStartDate());
+            searchCriteria.setEndDate(timetable.getEndDate());
+            searchCriteria.setDoctor(timetable.getAvailableResource().getDoctor());
+            searchCriteria.setWorkplace(timetable.getAvailableResource().getWorkplace());
+            if (scheduleService.countByCriteria(searchCriteria) > 0) {
+                addMessage(TIMETABLE_HAS_SCHEDULES);
+                return false;
+            }
         }
         return true;
     }
@@ -71,24 +79,6 @@ public class TimetableValidator extends BaseValidator {
             }
         }
         return false;
-    }
-
-    private boolean checkPeriod(ResourceTimetable timetable) {
-        if (TimetableStatus.APPROVED.equals(timetable.getStatus())) {
-            TimetableSearchCriteria searchCriteria = new TimetableSearchCriteria();
-            searchCriteria.setStatus(TimetableStatus.APPROVED);
-            List<ResourceTimetable> timetables = timetableService.getByCriteria(searchCriteria);
-            for (ResourceTimetable resourceTimetable : timetables) {
-                if (!resourceTimetable.getId().equals(timetable.getDescription())) {
-                    if (DateUtils.beforeOrEquals(timetable.getStartDate(), resourceTimetable.getEndDate()) &&
-                        DateUtils.afterOrEquals(timetable.getEndDate(), resourceTimetable.getStartDate())) {
-                        addMessage(TIMETABLE_TIME_OVERLAPPED);
-                        return false;
-                    }
-                }
-            }
-        }
-        return true;
     }
 
 

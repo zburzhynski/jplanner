@@ -26,6 +26,14 @@ public interface IResourceTimetableService<ID, T extends IDomain> extends IBaseS
     List<T> getByCriteria(TimetableSearchCriteria searchCriteria);
 
     /**
+     * Gets count by search criteria.
+     *
+     * @param searchCriteria {@link TimetableSearchCriteria} to find
+     * @return count of timetables
+     */
+    Integer countByCriteria(TimetableSearchCriteria searchCriteria);
+
+    /**
      * Creates timetable quotas.
      *
      * @param createCriteria {@link QuotaCreateCriteria} quota create criteria

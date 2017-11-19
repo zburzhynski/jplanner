@@ -24,4 +24,12 @@ public interface IResourceTimetableRepository<ID, T extends IDomain> extends IBa
      */
     List<T> findByCriteria(TimetableSearchCriteria searchCriteria);
 
+    /**
+     * Finds count by search criteria.
+     *
+     * @param searchCriteria {@link TimetableSearchCriteria} to find
+     * @return count of timetables
+     */
+    Integer countByCriteria(TimetableSearchCriteria searchCriteria);
+
 }
