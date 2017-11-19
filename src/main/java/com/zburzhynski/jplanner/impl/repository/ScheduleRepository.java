@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Repository;
 
@@ -46,26 +47,17 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
 
     @Override
     public List<Schedule> findByCriteria(ScheduleSearchCriteria searchCriteria) {
-        Criteria criteria = getSession().createCriteria(getDomainClass());
-        if (searchCriteria.getStartDate() != null) {
-            criteria.add(Restrictions.ge(P_START_DATE, searchCriteria.getStartDate()));
-        }
-        if (searchCriteria.getEndDate() != null) {
-            criteria.add(Restrictions.le(P_END_DATE, searchCriteria.getEndDate()));
-        }
-        if (searchCriteria.getWorkplace() != null) {
-            criteria.add(Restrictions.eq(P_WORKPLACE, searchCriteria.getWorkplace()));
-        }
-        if (searchCriteria.getDoctor() != null) {
-            criteria.add(Restrictions.eq(P_DOCTOR, searchCriteria.getDoctor()));
-        }
-        if (StringUtils.isNotBlank(searchCriteria.getPatientId())) {
-            criteria.createAlias(P_CLIENT, P_CLIENT);
-            criteria.add(Restrictions.eq(P_CLIENT + DOT + P_JDENT_PATIENT_ID, searchCriteria.getPatientId()));
-        }
+        Criteria criteria = buildSearchCriteria(searchCriteria);
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 
+    @Override
+    public Integer countByCriteria(ScheduleSearchCriteria searchCriteria) {
+        Criteria criteria = buildSearchCriteria(searchCriteria);
+        criteria.setProjection(Projections.rowCount());
+        Object uniqueResult = criteria.uniqueResult();
+        return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();
+    }
     @Override
     public List<Schedule> containByCriteria(ScheduleSearchCriteria containCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
@@ -106,6 +98,27 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
     @Override
     protected Map<String, Boolean> getDefaultSorting() {
         return null;
+    }
+
+    private Criteria buildSearchCriteria(ScheduleSearchCriteria searchCriteria) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        if (searchCriteria.getStartDate() != null) {
+            criteria.add(Restrictions.ge(P_START_DATE, searchCriteria.getStartDate()));
+        }
+        if (searchCriteria.getEndDate() != null) {
+            criteria.add(Restrictions.le(P_END_DATE, searchCriteria.getEndDate()));
+        }
+        if (searchCriteria.getWorkplace() != null) {
+            criteria.add(Restrictions.eq(P_WORKPLACE, searchCriteria.getWorkplace()));
+        }
+        if (searchCriteria.getDoctor() != null) {
+            criteria.add(Restrictions.eq(P_DOCTOR, searchCriteria.getDoctor()));
+        }
+        if (StringUtils.isNotBlank(searchCriteria.getPatientId())) {
+            criteria.createAlias(P_CLIENT, P_CLIENT);
+            criteria.add(Restrictions.eq(P_CLIENT + DOT + P_JDENT_PATIENT_ID, searchCriteria.getPatientId()));
+        }
+        return criteria;
     }
 
 }

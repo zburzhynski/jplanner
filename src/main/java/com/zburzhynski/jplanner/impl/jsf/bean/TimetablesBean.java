@@ -1,19 +1,25 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
+import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
+import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
+import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import com.zburzhynski.jplanner.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.Serializable;
 import java.util.List;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  * Timetables bean.
@@ -26,6 +32,7 @@ import javax.faces.bean.ViewScoped;
 @ViewScoped
 public class TimetablesBean implements Serializable {
 
+    private static final String TIMETABLE_HAS_SCHEDULES = "timetableRemoveValidator.timetableHasSchedules";
     public static final String RESOURCE_ID_PARAM = "resourceId";
     public static final String TIMETABLE_ID_PARAM = "timetableId";
     public static final String TIMETABLE_PARAM = "timetable";
@@ -38,6 +45,12 @@ public class TimetablesBean implements Serializable {
 
     @ManagedProperty(value = "#{availableResourceService}")
     private IAvailableResourceService resourceService;
+
+    @ManagedProperty(value = "#{scheduleService}")
+    private IScheduleService scheduleService;
+
+    @ManagedProperty(value = "#{propertyReader}")
+    private PropertyReader propertyReader;
 
     /**
      * Inits bean state.
@@ -87,6 +100,15 @@ public class TimetablesBean implements Serializable {
      * @param removedTimetable timetable to remove
      */
     public void removeTimetable(ResourceTimetable removedTimetable) {
+        ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
+        searchCriteria.setStartDate(removedTimetable.getStartDate());
+        searchCriteria.setEndDate(removedTimetable.getEndDate());
+        searchCriteria.setDoctor(removedTimetable.getAvailableResource().getDoctor());
+        searchCriteria.setWorkplace(removedTimetable.getAvailableResource().getWorkplace());
+        if (scheduleService.countByCriteria(searchCriteria) > 0) {
+            addMessage(TIMETABLE_HAS_SCHEDULES);
+            return;
+        }
         resource.removeTimetable(removedTimetable);
         resourceService.saveOrUpdate(resource);
     }
@@ -141,6 +163,21 @@ public class TimetablesBean implements Serializable {
 
     public void setResourceService(IAvailableResourceService resourceService) {
         this.resourceService = resourceService;
+    }
+
+    public void setScheduleService(IScheduleService scheduleService) {
+        this.scheduleService = scheduleService;
+    }
+
+    public void setPropertyReader(PropertyReader propertyReader) {
+        this.propertyReader = propertyReader;
+    }
+
+    private void addMessage(String message) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage = new FacesMessage(propertyReader.readProperty(message), StringUtils.EMPTY);
+        facesMessage.setSeverity(SEVERITY_ERROR);
+        context.addMessage(null, facesMessage);
     }
 
 }
