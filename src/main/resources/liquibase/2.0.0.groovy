@@ -174,4 +174,88 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2017-11-19-01', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to available_resource table assistant_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'available_resource', tablespace: 'jplanner_index', indexName: 'IDX_available_resource_assistant_id') {
+            column(name: 'assistant_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-02', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to available_resource table doctor_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'available_resource', tablespace: 'jplanner_index', indexName: 'IDX_available_resource_doctor_id') {
+            column(name: 'doctor_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-03', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to available_resource table workplace_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'available_resource', tablespace: 'jplanner_index', indexName: 'IDX_available_resource_workplace_id') {
+            column(name: 'workplace_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-04', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to client table person_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'client', tablespace: 'jplanner_index', indexName: 'IDX_client_person_id') {
+            column(name: 'person_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-05', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to employee table job_position_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'employee', tablespace: 'jplanner_index', indexName: 'IDX_employee_job_position_id') {
+            column(name: 'job_position_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-06', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to employee table person_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'employee', tablespace: 'jplanner_index', indexName: 'IDX_employee_person_id') {
+            column(name: 'person_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-07', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to quota table resource_timetable_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'quota', tablespace: 'jplanner_index', indexName: 'IDX_quota_resource_timetable_id') {
+            column(name: 'resource_timetable_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-08', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to resource_timetable table available_resource_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'resource_timetable', tablespace: 'jplanner_index', indexName: 'IDX_resource_timetable_available_resource_id') {
+            column(name: 'available_resource_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-09', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to schedule table client_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'schedule', tablespace: 'jplanner_index', indexName: 'IDX_schedule_client_id') {
+            column(name: 'client_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-10', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to schedule table doctor_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'schedule', tablespace: 'jplanner_index', indexName: 'IDX_schedule_doctor_id') {
+            column(name: 'doctor_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-11', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to schedule table workplace_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'schedule', tablespace: 'jplanner_index', indexName: 'IDX_schedule_workplace_id') {
+            column(name: 'workplace_id')
+        }
+    }
+
+    changeSet(id: '2017-11-19-12', author: 'Nikita Shevtsov <shevtsou@gmail.com>') {
+        comment("Added index to workplace table cabinet_id column")
+        createIndex(schemaName: 'jplanner', tableName: 'workplace', tablespace: 'jplanner_index', indexName: 'IDX_workplace_cabinet_id') {
+            column(name: 'cabinet_id')
+        }
+    }
+
 }
