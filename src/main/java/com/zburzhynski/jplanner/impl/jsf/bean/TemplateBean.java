@@ -11,6 +11,7 @@ import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
 import com.zburzhynski.jplanner.api.domain.View;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
+import com.zburzhynski.jplanner.impl.jsf.validator.QuotaTemplateValidator;
 import com.zburzhynski.jplanner.impl.jsf.validator.QuotaValidator;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
@@ -75,6 +76,9 @@ public class TemplateBean implements Serializable {
     @ManagedProperty(value = "#{quotaValidator}")
     private QuotaValidator quotaValidator;
 
+    @ManagedProperty(value = "#{quotaTemplateValidator}")
+    private QuotaTemplateValidator templateValidator;
+
     /**
      * Inits bean state.
      */
@@ -91,6 +95,10 @@ public class TemplateBean implements Serializable {
      */
     public String generate() {
         QuotaCreateCriteria createCriteria = buildQuotaCreateCriteria();
+        boolean valid = templateValidator.validate(createCriteria);
+        if (!valid) {
+            return null;
+        }
         timetableService.createQuota(createCriteria);
         JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
         return View.TIMETABLES.getPath();
@@ -290,6 +298,10 @@ public class TemplateBean implements Serializable {
 
     public void setQuotaValidator(QuotaValidator quotaValidator) {
         this.quotaValidator = quotaValidator;
+    }
+
+    public void setTemplateValidator(QuotaTemplateValidator templateValidator) {
+        this.templateValidator = templateValidator;
     }
 
     private QuotaCreateCriteria buildQuotaCreateCriteria() {
