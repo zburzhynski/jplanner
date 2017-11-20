@@ -67,8 +67,8 @@ public class ResourceTimetableRepository extends AbstractBaseRepository<String, 
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_AVAILABLE_RESOURCE, P_AVAILABLE_RESOURCE);
         if (searchCriteria.isIntersectingPeriod()) {
-            criteria.add(Restrictions.le(ResourceTimetable.P_START_DATE, searchCriteria.getEndDate()));
-            criteria.add(Restrictions.ge(ResourceTimetable.P_END_DATE, searchCriteria.getStartDate()));
+            criteria.add(Restrictions.lt(ResourceTimetable.P_START_DATE, searchCriteria.getEndDate()));
+            criteria.add(Restrictions.gt(ResourceTimetable.P_END_DATE, searchCriteria.getStartDate()));
         } else {
             criteria.add(Restrictions.ge(ResourceTimetable.P_START_DATE, searchCriteria.getStartDate()));
             criteria.add(Restrictions.le(ResourceTimetable.P_END_DATE, searchCriteria.getEndDate()));
