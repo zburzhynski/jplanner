@@ -3,6 +3,7 @@ package com.zburzhynski.jplanner.api.service;
 import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.criteria.TimetableSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
+import com.zburzhynski.jplanner.api.dto.response.CreateQuotaResponse;
 
 import java.util.List;
 
@@ -37,7 +38,8 @@ public interface IResourceTimetableService<ID, T extends IDomain> extends IBaseS
      * Creates timetable quotas.
      *
      * @param createCriteria {@link QuotaCreateCriteria} quota create criteria
+     * @return create quota response
      */
-    void createQuota(QuotaCreateCriteria createCriteria);
+    CreateQuotaResponse createQuota(QuotaCreateCriteria createCriteria);
 
 }

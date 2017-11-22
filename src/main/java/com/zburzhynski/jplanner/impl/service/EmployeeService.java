@@ -2,7 +2,7 @@ package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
-import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
+import com.zburzhynski.jplanner.api.criteria.QuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
@@ -83,11 +83,12 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
 
     @Override
     public List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria) {
-        IntersectedQuotaSearchCriteria quotaSearchCriteria = new IntersectedQuotaSearchCriteria();
+        QuotaSearchCriteria quotaSearchCriteria = new QuotaSearchCriteria();
         quotaSearchCriteria.setStartDate(searchCriteria.getStartDate());
         quotaSearchCriteria.setEndDate(searchCriteria.getEndDate());
         quotaSearchCriteria.setWorkplaceId(searchCriteria.getWorkplaceId());
-        List<Quota> intersectingQuotas = quotaRepository.findIntersecting(quotaSearchCriteria);
+        quotaSearchCriteria.setIntersectingPeriod(true);
+        List<Quota> intersectingQuotas = quotaRepository.findByCriteria(quotaSearchCriteria);
         if (CollectionUtils.isEmpty(intersectingQuotas)) {
             return new ArrayList<>();
         }

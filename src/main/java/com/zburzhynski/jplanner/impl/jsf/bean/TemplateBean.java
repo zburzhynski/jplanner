@@ -4,17 +4,21 @@ import static com.zburzhynski.jplanner.api.domain.ModificationMode.CREATE;
 import static com.zburzhynski.jplanner.api.domain.ModificationMode.EDIT;
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.RESOURCE_ID_PARAM;
 import static com.zburzhynski.jplanner.impl.jsf.bean.TimetablesBean.TIMETABLE_ID_PARAM;
+import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.domain.CommonConstant;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
 import com.zburzhynski.jplanner.api.domain.TimetableTemplate;
 import com.zburzhynski.jplanner.api.domain.View;
+import com.zburzhynski.jplanner.api.dto.response.CreateQuotaResponse;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.jsf.validator.QuotaTemplateValidator;
 import com.zburzhynski.jplanner.impl.jsf.validator.QuotaValidator;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
+import com.zburzhynski.jplanner.impl.util.PropertyReader;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
 
@@ -25,9 +29,11 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 import javax.annotation.PostConstruct;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /**
  * Timetable template bean.
@@ -41,6 +47,8 @@ import javax.faces.bean.ViewScoped;
 public class TemplateBean implements Serializable {
 
     private static final String HIDE_QUOTA_DIALOG = "PF('quota').hide();";
+
+    private static final String SOME_QUOTAS_NOT_CREATED = "quotaValidator.someQuotasNotCreated";
 
     private Date startDate;
 
@@ -79,6 +87,9 @@ public class TemplateBean implements Serializable {
     @ManagedProperty(value = "#{quotaTemplateValidator}")
     private QuotaTemplateValidator templateValidator;
 
+    @ManagedProperty(value = "#{propertyReader}")
+    private PropertyReader propertyReader;
+
     /**
      * Inits bean state.
      */
@@ -98,6 +109,10 @@ public class TemplateBean implements Serializable {
         boolean valid = templateValidator.validate(createCriteria);
         if (!valid) {
             return null;
+        }
+        CreateQuotaResponse response = timetableService.createQuota(createCriteria);
+        if (CollectionUtils.isNotEmpty(response.getUncreatedQuotas())) {
+            addMessage(SOME_QUOTAS_NOT_CREATED);
         }
         timetableService.createQuota(createCriteria);
         JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
@@ -304,6 +319,10 @@ public class TemplateBean implements Serializable {
         this.templateValidator = templateValidator;
     }
 
+    public void setPropertyReader(PropertyReader propertyReader) {
+        this.propertyReader = propertyReader;
+    }
+
     private QuotaCreateCriteria buildQuotaCreateCriteria() {
         QuotaCreateCriteria criteria = new QuotaCreateCriteria();
         criteria.setTimetableId(timetableId);
@@ -318,6 +337,14 @@ public class TemplateBean implements Serializable {
         criteria.setQuotas(quotas);
         criteria.setDescription(description);
         return criteria;
+    }
+
+    private void addMessage(String message) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage facesMessage = new FacesMessage(propertyReader.readProperty(message), StringUtils.EMPTY);
+        facesMessage.setSeverity(SEVERITY_ERROR);
+        context.addMessage(null, facesMessage);
+        FacesContext.getCurrentInstance().getExternalContext().getFlash().setKeepMessages(true);
     }
 
 }
