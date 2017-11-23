@@ -11,6 +11,7 @@
         <h:outputStylesheet name="schedule.css" library="css" />
         <p:panel>
             <h:form id="quotaForm">
+                <p:growl id="messages" showDetail="true" />
                 <h4>#{msgs['timetable.header']}</h4>
                 <p:schedule id="scheduler"
                             value="#{timetableQuotaBean.eventModel}"
@@ -25,8 +26,8 @@
                             view="#{scheduleBean.view}"
                             initialDate="#{scheduleBean.initialDate}"
                             tooltip="true">
-                    <p:ajax event="eventMove" listener="#{timetableQuotaBean.moveEvent}" update="scheduler" />
-                    <p:ajax event="eventResize" listener="#{timetableQuotaBean.resizeEvent}" update="scheduler" />
+                    <p:ajax event="eventMove" listener="#{timetableQuotaBean.moveEvent}" update="messages,scheduler" />
+                    <p:ajax event="eventResize" listener="#{timetableQuotaBean.resizeEvent}" update="messages,scheduler" />
                 </p:schedule>
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
                 <br />

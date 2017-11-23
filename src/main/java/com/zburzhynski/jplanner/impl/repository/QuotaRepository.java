@@ -33,6 +33,17 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
     implements IQuotaRepository<String, Quota> {
 
     @Override
+    public Quota findById(String id) {
+        Criteria criteria = getSession().createCriteria(getDomainClass());
+        criteria.createAlias(P_TIMETABLE, P_TIMETABLE);
+        criteria.createAlias(P_TIMETABLE + DOT + P_AVAILABLE_RESOURCE, P_AVAILABLE_RESOURCE);
+        criteria.createAlias(P_AVAILABLE_RESOURCE + DOT + P_DOCTOR, P_DOCTOR);
+        criteria.createAlias(P_AVAILABLE_RESOURCE + DOT + P_WORKPLACE, P_WORKPLACE);
+        criteria.add(Restrictions.eq(P_ID, id));
+        return (Quota) criteria.uniqueResult();
+    }
+
+    @Override
     public List<Quota> findIntersecting(IntersectedQuotaSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_TIMETABLE, P_TIMETABLE);
