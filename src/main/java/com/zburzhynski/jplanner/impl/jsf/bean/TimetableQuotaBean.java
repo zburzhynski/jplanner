@@ -8,6 +8,7 @@ import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
+import com.zburzhynski.jplanner.impl.jsf.validator.TimetableQuotaValidator;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.PropertyReader;
 import org.apache.commons.collections.CollectionUtils;
@@ -19,6 +20,7 @@ import org.primefaces.model.ScheduleEvent;
 import org.primefaces.model.ScheduleModel;
 
 import java.io.Serializable;
+import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
@@ -49,6 +51,9 @@ public class TimetableQuotaBean implements Serializable {
     @ManagedProperty(value = "#{quotaService}")
     private IQuotaService quotaService;
 
+    @ManagedProperty(value = "#{timetableQuotaValidator}")
+    private TimetableQuotaValidator quotaValidator;
+
     @ManagedProperty(value = "#{propertyReader}")
     private PropertyReader propertyReader;
 
@@ -63,14 +68,7 @@ public class TimetableQuotaBean implements Serializable {
         eventModel = new DefaultScheduleModel();
         if (CollectionUtils.isNotEmpty(timetable.getQuotas())) {
             for (Quota quota : timetable.getQuotas()) {
-                String quotaType = propertyReader.readProperty(quota.getQuotaType().getValue());
-                ScheduleEvent event = new DefaultScheduleEvent(
-                    quotaType,
-                    quota.getStartDate(),
-                    quota.getEndDate(),
-                    QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? QUOTA_WORK_TIME_CLASS : QUOTA_OFF_TIME_CLASS);
-                event.setId(quota.getId());
-                eventModel.getEvents().add(event);
+                eventModel.getEvents().add(createQuotaEvent(quota));
             }
         }
     }
@@ -83,8 +81,17 @@ public class TimetableQuotaBean implements Serializable {
     public void moveEvent(ScheduleEntryMoveEvent moveEvent) {
         ScheduleEvent scheduleEvent = moveEvent.getScheduleEvent();
         Quota quota = (Quota) quotaService.getById(scheduleEvent.getId());
+        Date originalStartDate = quota.getStartDate();
+        Date originalEndDate = quota.getEndDate();
         quota.setStartDate(scheduleEvent.getStartDate());
         quota.setEndDate(scheduleEvent.getEndDate());
+        boolean valid = quotaValidator.validate(quota);
+        if (!valid) {
+            quota.setStartDate(originalStartDate);
+            quota.setEndDate(originalEndDate);
+            eventModel.updateEvent(createQuotaEvent(quota));
+            return;
+        }
         quotaService.saveOrUpdate(quota);
     }
 
@@ -96,7 +103,11 @@ public class TimetableQuotaBean implements Serializable {
     public void resizeEvent(ScheduleEntryResizeEvent resizeEvent) {
         ScheduleEvent scheduleEvent = resizeEvent.getScheduleEvent();
         Quota quota = (Quota) quotaService.getById(scheduleEvent.getId());
+        boolean valid = quotaValidator.validate(quota);
         quota.setEndDate(scheduleEvent.getEndDate());
+        if (!valid) {
+            return;
+        }
         quotaService.saveOrUpdate(quota);
     }
 
@@ -126,8 +137,23 @@ public class TimetableQuotaBean implements Serializable {
         this.quotaService = quotaService;
     }
 
+    public void setQuotaValidator(TimetableQuotaValidator quotaValidator) {
+        this.quotaValidator = quotaValidator;
+    }
+
     public void setPropertyReader(PropertyReader propertyReader) {
         this.propertyReader = propertyReader;
+    }
+
+    private ScheduleEvent createQuotaEvent(Quota quota) {
+        String quotaType = propertyReader.readProperty(quota.getQuotaType().getValue());
+        ScheduleEvent event = new DefaultScheduleEvent(
+            quotaType,
+            quota.getStartDate(),
+            quota.getEndDate(),
+            QuotaType.WORK_TIME.equals(quota.getQuotaType()) ? QUOTA_WORK_TIME_CLASS : QUOTA_OFF_TIME_CLASS);
+        event.setId(quota.getId());
+        return event;
     }
 
 }
