@@ -14,7 +14,7 @@ import java.util.List;
  *
  * @author Vladimir Zburzhynski
  */
-public class IntersectedQuotaSearchCriteria implements Serializable {
+public class QuotaSearchCriteria implements Serializable {
 
     private Date startDate;
 
@@ -27,6 +27,10 @@ public class IntersectedQuotaSearchCriteria implements Serializable {
     private List<TimetableStatus> timetableStatuses;
 
     private List<QuotaType> types;
+
+    private List<String> excludedResourceIds;
+
+    private boolean intersectingPeriod;
 
     public Date getStartDate() {
         return startDate;
@@ -74,6 +78,22 @@ public class IntersectedQuotaSearchCriteria implements Serializable {
 
     public void setTypes(List<QuotaType> types) {
         this.types = types;
+    }
+
+    public List<String> getExcludedResourceIds() {
+        return excludedResourceIds;
+    }
+
+    public void setExcludedResourceIds(List<String> excludedResourceIds) {
+        this.excludedResourceIds = excludedResourceIds;
+    }
+
+    public boolean isIntersectingPeriod() {
+        return intersectingPeriod;
+    }
+
+    public void setIntersectingPeriod(boolean intersectingPeriod) {
+        this.intersectingPeriod = intersectingPeriod;
     }
 
 }

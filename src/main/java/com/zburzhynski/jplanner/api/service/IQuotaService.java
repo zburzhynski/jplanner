@@ -1,6 +1,6 @@
 package com.zburzhynski.jplanner.api.service;
 
-import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
+import com.zburzhynski.jplanner.api.criteria.QuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 
@@ -19,12 +19,20 @@ import java.util.List;
 public interface IQuotaService<ID, T extends IDomain> extends IBaseService<ID, T> {
 
     /**
-     * Gets intersecting of quotas.
+     * Gets quotas by search criteria.
      *
-     * @param searchCriteria {@link IntersectedQuotaSearchCriteria}
-     * @return intersecting of quotas
+     * @param searchCriteria {@link QuotaSearchCriteria}
+     * @return quotas
      */
-    List<T> getIntersecting(IntersectedQuotaSearchCriteria searchCriteria);
+    List<T> getByCriteria(QuotaSearchCriteria searchCriteria);
+
+    /**
+     * Gets count by search criteria.
+     *
+     * @param searchCriteria {@link QuotaSearchCriteria}
+     * @return count of quotas
+     */
+    Integer countByCriteria(QuotaSearchCriteria searchCriteria);
 
     /**
      * Gets work period from interval.

@@ -1,6 +1,6 @@
 package com.zburzhynski.jplanner.impl.service;
 
-import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
+import com.zburzhynski.jplanner.api.criteria.QuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
 import com.zburzhynski.jplanner.api.domain.TimetableStatus;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
@@ -59,20 +59,26 @@ public class QuotaService implements IQuotaService<String, Quota> {
     }
 
     @Override
-    public List<Quota> getIntersecting(IntersectedQuotaSearchCriteria searchCriteria) {
-        return quotaRepository.findIntersecting(searchCriteria);
+    public List<Quota> getByCriteria(QuotaSearchCriteria searchCriteria) {
+        return quotaRepository.findByCriteria(searchCriteria);
+    }
+
+    @Override
+    public Integer countByCriteria(QuotaSearchCriteria searchCriteria) {
+        return quotaRepository.countByCriteria(searchCriteria);
     }
 
     @Override
     public Quota getWorkPeriod(Date startDate, Date endDate, String doctorId, String workplaceId) {
-        IntersectedQuotaSearchCriteria searchCriteria = new IntersectedQuotaSearchCriteria();
+        QuotaSearchCriteria searchCriteria = new QuotaSearchCriteria();
         searchCriteria.setStartDate(startDate);
         searchCriteria.setEndDate(endDate);
         searchCriteria.setTypes(Arrays.asList(QuotaType.WORK_TIME));
         searchCriteria.setDoctorId(doctorId);
         searchCriteria.setWorkplaceId(workplaceId);
         searchCriteria.setTimetableStatuses(Arrays.asList(TimetableStatus.APPROVED));
-        List<Quota> quotas = quotaRepository.findIntersecting(searchCriteria);
+        searchCriteria.setIntersectingPeriod(true);
+        List<Quota> quotas = quotaRepository.findByCriteria(searchCriteria);
         if (sameDoctorAndWorkplace(quotas)) {
             return mergePeriod(quotas, startDate, endDate);
         }

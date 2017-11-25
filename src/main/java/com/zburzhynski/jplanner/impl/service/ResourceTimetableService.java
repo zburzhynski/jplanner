@@ -9,10 +9,13 @@ import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.DAY_OF_WEEK;
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.EVEN_DAY;
 import static com.zburzhynski.jplanner.api.domain.TimetableTemplate.ODD_DAY;
 import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
+import com.zburzhynski.jplanner.api.criteria.QuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.TimetableSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.DayOfMonth;
 import com.zburzhynski.jplanner.api.domain.DayOfWeek;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.dto.response.CreateQuotaResponse;
+import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.repository.IResourceTimetableRepository;
 import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.Quota;
@@ -25,6 +28,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +48,9 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
 
     @Autowired
     private IResourceTimetableRepository timetableRepository;
+
+    @Autowired
+    private IQuotaRepository quotaRepository;
 
     @Override
     public ResourceTimetable getById(String id) {
@@ -89,7 +96,8 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
 
     @Override
     @Transactional(readOnly = false)
-    public void createQuota(QuotaCreateCriteria criteria) {
+    public CreateQuotaResponse createQuota(QuotaCreateCriteria criteria) {
+        CreateQuotaResponse response = new CreateQuotaResponse();
         Date startDate = criteria.getStartDate();
         Date endDate = criteria.getEndDate();
         SortedSet<Quota> quotas = new TreeSet<>();
@@ -102,16 +110,17 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
             startDate = DateUtils.addDayToDate(startDate, 1);
         }
         if (CollectionUtils.isEmpty(quotas)) {
-            return;
+            return response;
         }
         ResourceTimetable timetable = (ResourceTimetable) timetableRepository.findById(criteria.getTimetableId());
         if (timetable == null) {
-            return;
+            return response;
         }
         timetable.setStartDate(quotas.first().getStartDate());
         timetable.setEndDate(quotas.last().getEndDate());
         timetable.setDescription(criteria.getDescription());
-        saveQuotas(timetable, quotas);
+        saveQuotas(timetable, quotas, response);
+        return response;
     }
 
     private void createDayOfWeekQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
@@ -154,13 +163,18 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         }
     }
 
-    private void saveQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd) {
+    private CreateQuotaResponse saveQuotas(ResourceTimetable timetable, Set<Quota> quotasToAdd,
+                                           CreateQuotaResponse response) {
         List<Quota> quotaList = new ArrayList<>();
         quotaList.addAll(timetable.getQuotas());
         quotaList.addAll(quotasToAdd);
         timetable.getQuotas().clear();
         Set<Range> ranges = new TreeSet<>();
         for (Quota quota : quotaList) {
+            if (!checkQuotaPeriodOnAvailability(timetable, quota)) {
+                response.addUncreatedQuota(quota);
+                continue;
+            }
             ranges.add(new Range(quota.getStartDate(), 1, quota.getQuotaType()));
             ranges.add(new Range(quota.getEndDate(), -1, quota.getQuotaType()));
         }
@@ -191,6 +205,7 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
             }
         }
         timetableRepository.saveOrUpdate(timetable);
+        return response;
     }
 
     private List<Quota> createQuotas(Date currentDate, QuotaCreateCriteria createCriteria) {
@@ -302,4 +317,23 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         }
 
     }
+
+    private boolean checkQuotaPeriodOnAvailability(ResourceTimetable timetable, Quota quota) {
+        QuotaSearchCriteria searchCriteria = new QuotaSearchCriteria();
+        searchCriteria.setStartDate(quota.getStartDate());
+        searchCriteria.setEndDate(quota.getEndDate());
+        searchCriteria.setDoctorId(timetable.getAvailableResource().getDoctor().getId());
+        searchCriteria.setExcludedResourceIds(Arrays.asList(timetable.getAvailableResource().getId()));
+        searchCriteria.setIntersectingPeriod(true);
+        if (quotaRepository.countByCriteria(searchCriteria) > 0) {
+            return false;
+        }
+        searchCriteria.setDoctorId(null);
+        searchCriteria.setWorkplaceId(timetable.getAvailableResource().getWorkplace().getId());
+        if (quotaRepository.countByCriteria(searchCriteria) > 0) {
+            return false;
+        }
+        return true;
+    }
+
 }

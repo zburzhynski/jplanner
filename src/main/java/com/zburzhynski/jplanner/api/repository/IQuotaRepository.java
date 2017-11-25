@@ -1,6 +1,6 @@
 package com.zburzhynski.jplanner.api.repository;
 
-import com.zburzhynski.jplanner.api.criteria.IntersectedQuotaSearchCriteria;
+import com.zburzhynski.jplanner.api.criteria.QuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 
 import java.util.List;
@@ -17,11 +17,18 @@ import java.util.List;
 public interface IQuotaRepository<ID, T extends IDomain> extends IBaseRepository<ID, T> {
 
     /**
-     * Finds intersecting of quotas.
+     * Finds quotas by search criteria.
      *
-     * @param searchCriteria {@link IntersectedQuotaSearchCriteria}
-     * @return intersecting of quotas
+     * @param searchCriteria {@link QuotaSearchCriteria}
+     * @return quotas
      */
-    List<T> findIntersecting(IntersectedQuotaSearchCriteria searchCriteria);
+    List<T> findByCriteria(QuotaSearchCriteria searchCriteria);
 
+    /**
+     * Finds count by search criteria.
+     *
+     * @param searchCriteria {@link QuotaSearchCriteria}
+     * @return count of quotas
+     */
+    Integer countByCriteria(QuotaSearchCriteria searchCriteria);
 }
