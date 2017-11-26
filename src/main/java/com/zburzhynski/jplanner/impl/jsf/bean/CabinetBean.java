@@ -7,10 +7,11 @@ import static com.zburzhynski.jplanner.api.domain.View.CABINETS;
 import static com.zburzhynski.jplanner.api.domain.View.WORKPLACE;
 import com.zburzhynski.jplanner.api.criteria.CabinetSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
+import com.zburzhynski.jplanner.api.exception.LinkedWorkplaceExistException;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
-import com.zburzhynski.jplanner.impl.jsf.validator.CabinetValidator;
+import com.zburzhynski.jplanner.impl.util.MessageHelper;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -33,6 +34,8 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class CabinetBean implements Serializable {
 
+    public static final String LINKED_WORKPLACE_EXIST = "cabinet.linkedWorkplaceExist";
+
     private Cabinet cabinet;
 
     private Workplace workplace;
@@ -44,8 +47,8 @@ public class CabinetBean implements Serializable {
     @ManagedProperty(value = "#{cabinetService}")
     private ICabinetService cabinetService;
 
-    @ManagedProperty(value = "#{cabinetValidator}")
-    private CabinetValidator cabinetValidator;
+    @ManagedProperty(value = "#{messageHelper}")
+    private MessageHelper messageHelper;
 
     @ManagedProperty(value = "#{configBean}")
     private ConfigBean configBean;
@@ -97,10 +100,6 @@ public class CabinetBean implements Serializable {
      * @return path for navigating
      */
     public String saveCabinet() {
-        boolean valid = cabinetValidator.validate(cabinet);
-        if (!valid) {
-            return null;
-        }
         cabinetService.saveOrUpdate(cabinet);
         return CABINETS.getPath();
     }
@@ -111,7 +110,12 @@ public class CabinetBean implements Serializable {
      * @return path for navigating
      */
     public String removeCabinet() {
-        cabinetService.delete(cabinet);
+        try {
+            cabinetService.delete(cabinet);
+        } catch (LinkedWorkplaceExistException e) {
+            messageHelper.addMessage(LINKED_WORKPLACE_EXIST);
+            return null;
+        }
         return CABINETS.getPath();
     }
 
@@ -187,8 +191,8 @@ public class CabinetBean implements Serializable {
         this.cabinetService = cabinetService;
     }
 
-    public void setCabinetValidator(CabinetValidator cabinetValidator) {
-        this.cabinetValidator = cabinetValidator;
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
     }
 
     public void setConfigBean(ConfigBean configBean) {

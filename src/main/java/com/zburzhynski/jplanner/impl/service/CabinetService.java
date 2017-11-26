@@ -1,9 +1,11 @@
 package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.CabinetSearchCriteria;
+import com.zburzhynski.jplanner.api.exception.LinkedWorkplaceExistException;
 import com.zburzhynski.jplanner.api.repository.ICabinetRepository;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,7 +44,11 @@ public class CabinetService implements ICabinetService<String, Cabinet> {
 
     @Override
     @Transactional(readOnly = false)
-    public void delete(Cabinet cabinet) {
+    public void delete(Cabinet cabinet) throws LinkedWorkplaceExistException {
+        cabinet = (Cabinet) cabinetRepository.findById(cabinet.getId());
+        if (CollectionUtils.isNotEmpty(cabinet.getWorkplaces())) {
+            throw new LinkedWorkplaceExistException();
+        }
         cabinetRepository.delete(cabinet);
     }
 
