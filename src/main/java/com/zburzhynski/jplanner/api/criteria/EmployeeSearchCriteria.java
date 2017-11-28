@@ -13,6 +13,8 @@ public class EmployeeSearchCriteria {
 
     private Long end;
 
+    private String positionId;
+
     public Long getStart() {
         return start;
     }
@@ -27,6 +29,14 @@ public class EmployeeSearchCriteria {
 
     public void setEnd(Long end) {
         this.end = end;
+    }
+
+    public String getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
     }
 
 }

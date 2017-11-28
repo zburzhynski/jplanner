@@ -1,6 +1,9 @@
 package com.zburzhynski.jplanner.impl.service;
 
+import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.PositionSearchCriteria;
+import com.zburzhynski.jplanner.api.exception.LinkedEmployeeExistException;
+import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.repository.IPositionRepository;
 import com.zburzhynski.jplanner.api.service.IPositionService;
 import com.zburzhynski.jplanner.impl.domain.Position;
@@ -23,6 +26,9 @@ public class PositionService implements IPositionService<String, Position> {
 
     @Autowired
     private IPositionRepository positionRepository;
+
+    @Autowired
+    private IEmployeeRepository employeeRepository;
 
     @Override
     public Position getById(String id) {
@@ -48,7 +54,12 @@ public class PositionService implements IPositionService<String, Position> {
 
     @Override
     @Transactional(readOnly = false)
-    public void delete(Position position) {
+    public void delete(Position position) throws LinkedEmployeeExistException {
+        EmployeeSearchCriteria searchCriteria = new EmployeeSearchCriteria();
+        searchCriteria.setPositionId(position.getId());
+        if (employeeRepository.countByCriteria(searchCriteria) > 0) {
+            throw new LinkedEmployeeExistException();
+        }
         positionRepository.delete(position);
     }
 
