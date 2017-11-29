@@ -2,7 +2,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.View;
-import com.zburzhynski.jplanner.api.exception.LinkedTimetablesExistException;
+import com.zburzhynski.jplanner.api.exception.LinkedTimetableExistException;
 import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
@@ -30,7 +30,7 @@ import javax.faces.bean.ViewScoped;
 public class AvailableResourcesBean implements Serializable {
 
     public static final String AVAILABLE_RESOURCE_ID_PARAM = "availableResourceId";
-    public static final String LINKED_TIMETABLES_EXIST = "availableResource.linkedTimetablesExist";
+    public static final String LINKED_TIMETABLE_EXIST = "availableResource.linkedTimetableExist";
 
     private LazyDataModel<AvailableResource> resourceModel;
 
@@ -91,8 +91,8 @@ public class AvailableResourcesBean implements Serializable {
     public void removeResource(AvailableResource removedResource) {
         try {
             resourceService.delete(removedResource);
-        } catch (LinkedTimetablesExistException e) {
-            messageHelper.addMessage(LINKED_TIMETABLES_EXIST);
+        } catch (LinkedTimetableExistException e) {
+            messageHelper.addMessage(LINKED_TIMETABLE_EXIST);
         }
     }
 
