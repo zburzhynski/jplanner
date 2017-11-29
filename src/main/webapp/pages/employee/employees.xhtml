@@ -9,6 +9,7 @@
     <ui:define name="content">
         <p:panel>
             <h:form id="employeesForm">
+                <p:growl id="messages" showDetail="true" />
                 <h4>#{msgs['employees.header']}</h4>
                 <p:dataTable value="#{employeeBean.employeeModel}"
                              var="employee"
@@ -43,7 +44,7 @@
                                 <f:setPropertyActionListener
                                         target="#{employeeBean.employee}" value="#{employee}" />
                             </p:commandLink>
-                            <p:commandLink action="#{employeeBean.removeEmployee}">
+                            <p:commandLink action="#{employeeBean.removeEmployee}" update="employeesForm:messages">
                                 <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
                                 <p:confirm header="#{msgs['removeEmployeeConfirm.header']}"
                                            message="#{msgs['removeEmployeeConfirm.message']}?"
