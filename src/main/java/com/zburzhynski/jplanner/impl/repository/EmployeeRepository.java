@@ -22,6 +22,7 @@ import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.CriteriaAlias;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.Criteria;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
@@ -104,6 +105,9 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_PERSON, P_PERSON);
         criteria.createAlias(P_POSITION, P_POSITION);
+        if (StringUtils.isNotEmpty(searchCriteria.getPositionId())) {
+            criteria.add(Restrictions.eq(P_POSITION + DOT + P_ID, searchCriteria.getPositionId()));
+        }
         CriteriaHelper.addPagination(criteria, searchCriteria.getStart(), searchCriteria.getEnd());
         criteria.addOrder(Order.asc(P_PERSON + DOT + P_SURNAME));
         criteria.addOrder(Order.asc(P_PERSON + DOT + P_NAME));
@@ -114,6 +118,10 @@ public class EmployeeRepository extends AbstractBaseRepository<String, Employee>
     @Override
     public int countByCriteria(EmployeeSearchCriteria searchCriteria) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
+        if (StringUtils.isNotEmpty(searchCriteria.getPositionId())) {
+            criteria.createAlias(P_POSITION, P_POSITION);
+            criteria.add(Restrictions.eq(P_POSITION + DOT + P_ID, searchCriteria.getPositionId()));
+        }
         criteria.setProjection(Projections.rowCount());
         Object uniqueResult = criteria.uniqueResult();
         return uniqueResult == null ? 0 : ((Number) uniqueResult).intValue();

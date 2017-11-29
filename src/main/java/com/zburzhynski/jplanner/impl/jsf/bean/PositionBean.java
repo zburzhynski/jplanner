@@ -3,8 +3,10 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static com.zburzhynski.jplanner.api.domain.View.POSITION;
 import static com.zburzhynski.jplanner.api.domain.View.POSITIONS;
 import com.zburzhynski.jplanner.api.criteria.PositionSearchCriteria;
+import com.zburzhynski.jplanner.api.exception.LinkedEmployeeExistException;
 import com.zburzhynski.jplanner.api.service.IPositionService;
 import com.zburzhynski.jplanner.impl.domain.Position;
+import com.zburzhynski.jplanner.impl.util.MessageHelper;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -27,12 +29,17 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class PositionBean implements Serializable {
 
+    private static final String LINKED_EMPLOYEE_EXIST = "position.linkedEmployeeExist";
+
     private Position position;
 
     private LazyDataModel<Position> positionModel;
 
     @ManagedProperty(value = "#{positionService}")
     private IPositionService positionService;
+
+    @ManagedProperty(value = "#{messageHelper}")
+    private MessageHelper messageHelper;
 
     @ManagedProperty(value = "#{configBean}")
     private ConfigBean configBean;
@@ -92,7 +99,12 @@ public class PositionBean implements Serializable {
      * @return path for navigating
      */
     public String removePosition() {
-        positionService.delete(position);
+        try {
+            positionService.delete(position);
+        } catch (LinkedEmployeeExistException e) {
+            messageHelper.addMessage(LINKED_EMPLOYEE_EXIST);
+            return null;
+        }
         return POSITIONS.getPath();
     }
 
@@ -114,6 +126,10 @@ public class PositionBean implements Serializable {
 
     public void setPositionService(IPositionService positionService) {
         this.positionService = positionService;
+    }
+
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
     }
 
     public void setConfigBean(ConfigBean configBean) {
