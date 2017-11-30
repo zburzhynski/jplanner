@@ -17,9 +17,11 @@ import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.util.CriteriaHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.hibernate.Criteria;
+import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.Subqueries;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -85,8 +87,6 @@ public class AvailableResourceRepository extends AbstractBaseRepository<String, 
         criteria.createAlias(P_DOCTOR, P_DOCTOR);
         criteria.createAlias(P_WORKPLACE, P_WORKPLACE);
         criteria.createAlias(P_ASSISTANT, P_ASSISTANT, LEFT_OUTER_JOIN);
-        criteria.createAlias(P_TIMETABLES, P_TIMETABLE, LEFT_OUTER_JOIN);
-        criteria.createAlias(P_TIMETABLE + DOT + P_QUOTAS, P_QUOTA, LEFT_OUTER_JOIN);
         if (searchCriteria.getWorkplace() != null) {
             criteria.add(Restrictions.eq(P_WORKPLACE, searchCriteria.getWorkplace()));
         }
@@ -97,12 +97,21 @@ public class AvailableResourceRepository extends AbstractBaseRepository<String, 
             criteria.add(Restrictions.eq(P_ASSISTANT, searchCriteria.getAssistant()));
         }
         if (CollectionUtils.isNotEmpty(searchCriteria.getQuotaIds())) {
-            criteria.add(Restrictions.in(P_QUOTA + DOT + P_ID, searchCriteria.getQuotaIds()));
+            criteria.add(Subqueries.in(P_ID, buildQuotaCriteria(searchCriteria)));
         }
         if (CollectionUtils.isNotEmpty(searchCriteria.getExcludedIds())) {
             criteria.add(Restrictions.not(Restrictions.in(P_ID, searchCriteria.getExcludedIds())));
         }
         return criteria;
+    }
+
+    private DetachedCriteria buildQuotaCriteria(AvailableResourceSearchCriteria searchCriteria) {
+        DetachedCriteria quotaCriteria = DetachedCriteria.forClass(getDomainClass());
+        quotaCriteria.createAlias(P_TIMETABLES, P_TIMETABLE, LEFT_OUTER_JOIN);
+        quotaCriteria.createAlias(P_TIMETABLE + DOT + P_QUOTAS, P_QUOTA, LEFT_OUTER_JOIN);
+        quotaCriteria.add(Restrictions.in(P_QUOTA + DOT + P_ID, searchCriteria.getQuotaIds()));
+        quotaCriteria.setProjection(Projections.property(P_ID));
+        return quotaCriteria;
     }
 
 }
