@@ -4,6 +4,7 @@ import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.api.domain.PositionType;
+import com.zburzhynski.jplanner.api.exception.LinkedAvailableResourceExistException;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 
 import java.util.List;
@@ -17,7 +18,54 @@ import java.util.List;
  * @param <T>  The type of model object.
  * @author Vladimir Zburzhynski
  */
-public interface IEmployeeService<ID, T extends IDomain> extends IBaseService<ID, T> {
+public interface IEmployeeService<ID, T extends IDomain> {
+
+    /**
+     * Gets employee by id.
+     *
+     * @param id unique identifier of employee
+     * @return object
+     */
+    T getById(ID id);
+
+    /**
+     * Saves or updates employee.
+     *
+     * @param employee employee to save or update
+     * @return true if success, false otherwise
+     */
+    boolean saveOrUpdate(T employee);
+
+    /**
+     * Deletes employee.
+     *
+     * @param resource employee to delete
+     * @throws LinkedAvailableResourceExistException if employee has linked available resource
+     */
+    void delete(T resource) throws LinkedAvailableResourceExistException;
+
+    /**
+     * Gets employees by criteria.
+     *
+     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
+     * @return employees
+     */
+    List<T> getByCriteria(EmployeeSearchCriteria searchCriteria);
+
+    /**
+     * Counts employees by criteria.
+     *
+     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
+     * @return employees count
+     */
+    int countByCriteria(EmployeeSearchCriteria searchCriteria);
+
+    /**
+     * Gets all employees.
+     *
+     * @return employees
+     */
+    List<T> getAll();
 
     /**
      * Replicates employee.
@@ -49,22 +97,6 @@ public interface IEmployeeService<ID, T extends IDomain> extends IBaseService<ID
      * @return employees
      */
     List<Employee> getAvailable(AvailableEmployeeSearchCriteria searchCriteria);
-
-    /**
-     * Gets employees by criteria.
-     *
-     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
-     * @return employees
-     */
-    List<T> getByCriteria(EmployeeSearchCriteria searchCriteria);
-
-    /**
-     * Counts employees by criteria.
-     *
-     * @param searchCriteria {@link EmployeeSearchCriteria} employee search criteria
-     * @return employees count
-     */
-    int countByCriteria(EmployeeSearchCriteria searchCriteria);
 
     /**
      * Checks is employee used anywhere.

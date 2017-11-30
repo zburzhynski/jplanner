@@ -4,6 +4,7 @@ import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEE;
 import static com.zburzhynski.jplanner.api.domain.View.EMPLOYEES;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.Gender;
+import com.zburzhynski.jplanner.api.exception.LinkedAvailableResourceExistException;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.api.service.IPositionService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
@@ -13,6 +14,7 @@ import com.zburzhynski.jplanner.impl.rest.domain.EmployeeDto;
 import com.zburzhynski.jplanner.impl.rest.domain.JobPosition;
 import com.zburzhynski.jplanner.impl.rest.domain.PositionDto;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchEmployeeResponse;
+import com.zburzhynski.jplanner.impl.util.MessageHelper;
 import org.apache.commons.collections.CollectionUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -37,6 +39,8 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class EmployeeBean implements Serializable {
 
+    private static final String LINKED_AVAILABLE_RESOURCE_EXIST = "employee.linkedAvailableResourceExist";
+
     private Employee employee;
 
     private LazyDataModel<Employee> employeeModel;
@@ -49,6 +53,9 @@ public class EmployeeBean implements Serializable {
 
     @ManagedProperty(value = "#{positionService}")
     private IPositionService positionService;
+
+    @ManagedProperty(value = "#{messageHelper}")
+    private MessageHelper messageHelper;
 
     @ManagedProperty(value = "#{configBean}")
     private ConfigBean configBean;
@@ -108,7 +115,12 @@ public class EmployeeBean implements Serializable {
      * @return path for navigating
      */
     public String removeEmployee() {
-        employeeService.delete(employee);
+        try {
+            employeeService.delete(employee);
+        } catch (LinkedAvailableResourceExistException e) {
+            messageHelper.addErrorMessage(LINKED_AVAILABLE_RESOURCE_EXIST);
+            return null;
+        }
         return EMPLOYEES.getPath();
     }
 
@@ -177,6 +189,10 @@ public class EmployeeBean implements Serializable {
 
     public void setConfigBean(ConfigBean configBean) {
         this.configBean = configBean;
+    }
+
+    public void setMessageHelper(MessageHelper messageHelper) {
+        this.messageHelper = messageHelper;
     }
 
     private void updatePosition(Position positionSrc, PositionDto positionDto) {

@@ -1,10 +1,13 @@
 package com.zburzhynski.jplanner.impl.service;
 
 import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
+import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.EmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.QuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.PositionType;
 import com.zburzhynski.jplanner.api.domain.QuotaType;
+import com.zburzhynski.jplanner.api.exception.LinkedAvailableResourceExistException;
+import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
 import com.zburzhynski.jplanner.api.repository.IEmployeeRepository;
 import com.zburzhynski.jplanner.api.repository.IQuotaRepository;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
@@ -38,6 +41,9 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
     @Autowired
     private IQuotaRepository quotaRepository;
 
+    @Autowired
+    private IAvailableResourceRepository availableResourceRepository;
+
     @Override
     public Employee getById(String id) {
         return (Employee) employeeRepository.findById(id);
@@ -67,7 +73,17 @@ public class EmployeeService implements IEmployeeService<String, Employee> {
 
     @Override
     @Transactional(readOnly = false)
-    public void delete(Employee employee) {
+    public void delete(Employee employee)  throws LinkedAvailableResourceExistException {
+        AvailableResourceSearchCriteria doctorSearchCriteria = new AvailableResourceSearchCriteria();
+        doctorSearchCriteria.setDoctor(employee);
+        if (availableResourceRepository.countByCriteria(doctorSearchCriteria) > 0) {
+            throw new LinkedAvailableResourceExistException();
+        }
+        AvailableResourceSearchCriteria assistantSearchCriteria = new AvailableResourceSearchCriteria();
+        assistantSearchCriteria.setAssistant(employee);
+        if (availableResourceRepository.countByCriteria(assistantSearchCriteria) > 0) {
+            throw new LinkedAvailableResourceExistException();
+        }
         employeeRepository.delete(employee);
     }
 
