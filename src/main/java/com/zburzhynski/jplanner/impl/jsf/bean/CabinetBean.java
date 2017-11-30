@@ -5,13 +5,16 @@ import static com.zburzhynski.jplanner.api.domain.ModificationMode.EDIT;
 import static com.zburzhynski.jplanner.api.domain.View.CABINET;
 import static com.zburzhynski.jplanner.api.domain.View.CABINETS;
 import static com.zburzhynski.jplanner.api.domain.View.WORKPLACE;
+import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.CabinetSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.ModificationMode;
+import com.zburzhynski.jplanner.api.service.IAvailableResourceService;
 import com.zburzhynski.jplanner.api.exception.LinkedWorkplaceExistException;
 import com.zburzhynski.jplanner.api.service.ICabinetService;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.util.MessageHelper;
+import org.apache.commons.lang3.StringUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -36,6 +39,8 @@ public class CabinetBean implements Serializable {
 
     public static final String LINKED_WORKPLACE_EXIST = "cabinet.linkedWorkplaceExist";
 
+    private static final String LINKED_AVAILABLE_RESOURCE_EXIST = "workplace.linkedAvailableResourceExist";
+
     private Cabinet cabinet;
 
     private Workplace workplace;
@@ -46,6 +51,9 @@ public class CabinetBean implements Serializable {
 
     @ManagedProperty(value = "#{cabinetService}")
     private ICabinetService cabinetService;
+
+    @ManagedProperty(value = "#{availableResourceService}")
+    private IAvailableResourceService availableResourceService;
 
     @ManagedProperty(value = "#{messageHelper}")
     private MessageHelper messageHelper;
@@ -159,6 +167,14 @@ public class CabinetBean implements Serializable {
      * @return path for navigating
      */
     public String removeWorkplace() {
+        if (StringUtils.isNotEmpty(workplace.getId())) {
+            AvailableResourceSearchCriteria searchCriteria = new AvailableResourceSearchCriteria();
+            searchCriteria.setWorkplace(workplace);
+            if (availableResourceService.countByCriteria(searchCriteria) > 0) {
+                messageHelper.addErrorMessage(LINKED_AVAILABLE_RESOURCE_EXIST);
+                return null;
+            }
+        }
         cabinet.removeWorkplace(workplace);
         return CABINET.getPath();
     }
@@ -193,6 +209,10 @@ public class CabinetBean implements Serializable {
 
     public void setMessageHelper(MessageHelper messageHelper) {
         this.messageHelper = messageHelper;
+    }
+
+    public void setAvailableResourceService(IAvailableResourceService availableResourceService) {
+        this.availableResourceService = availableResourceService;
     }
 
     public void setConfigBean(ConfigBean configBean) {

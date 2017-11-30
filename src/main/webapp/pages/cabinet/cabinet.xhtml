@@ -63,7 +63,7 @@
                                     <f:setPropertyActionListener
                                             target="#{cabinetBean.workplace}" value="#{workplace}" />
                                 </p:commandLink>
-                                <p:commandLink action="#{cabinetBean.removeWorkplace}">
+                                <p:commandLink action="#{cabinetBean.removeWorkplace}" update="cabinetForm:messages">
                                     <p:graphicImage url="/resources/css/css-images/delete.png" title="#{msgs['button.remove']}" />
                                     <p:confirm header="#{msgs['removeWorkplaceConfirm.header']}"
                                                message="#{msgs['removeWorkplaceConfirm.message']}?"

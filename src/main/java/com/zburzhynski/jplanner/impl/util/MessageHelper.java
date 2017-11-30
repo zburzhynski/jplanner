@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.util;
 
+import static javax.faces.application.FacesMessage.SEVERITY_ERROR;
 import static javax.faces.application.FacesMessage.SEVERITY_INFO;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +44,18 @@ public class MessageHelper {
         FacesContext context = FacesContext.getCurrentInstance();
         FacesMessage message = new FacesMessage(reader.readProperty(localisationMessage, params), StringUtils.EMPTY);
         message.setSeverity(SEVERITY_INFO);
+        context.addMessage(null, message);
+    }
+
+    /**
+     * Adds error localisation message to context.
+     *
+     * @param localisationMessage error localisation message
+     */
+    public void addErrorMessage(String localisationMessage) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        FacesMessage message = new FacesMessage(reader.readProperty(localisationMessage), StringUtils.EMPTY);
+        message.setSeverity(SEVERITY_ERROR);
         context.addMessage(null, message);
     }
 
