@@ -722,6 +722,7 @@ public class ScheduleBean implements Serializable {
         }
         List<AvailableResource> resources = resourceService.getByCriteria(resourceCriteria);
         for (AvailableResource resource : resources) {
+            resource = (AvailableResource) resourceService.getById(resource.getId());
             for (ResourceTimetable timetable : resource.getTimetables()) {
                 if (TimetableStatus.APPROVED.equals(timetable.getStatus())) {
                     for (Quota quota : timetable.getQuotas()) {
