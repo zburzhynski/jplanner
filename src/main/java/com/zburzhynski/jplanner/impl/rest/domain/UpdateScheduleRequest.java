@@ -4,14 +4,14 @@ import java.io.Serializable;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Update patient request.
+ * Update schedule request.
  * <p/>
  * Date: 04.12.2017
  *
  * @author Nikita Shevtsov
  */
 @XmlRootElement
-public class UpdatePatientRequest implements Serializable {
+public class UpdateScheduleRequest implements Serializable {
 
     private String scheduleId;
 

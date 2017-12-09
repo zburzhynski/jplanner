@@ -2,7 +2,8 @@ package com.zburzhynski.jplanner.impl.rest.facade;
 
 import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
-import com.zburzhynski.jplanner.impl.rest.domain.UpdatePatientRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.UpdateScheduleRequest;
+import com.zburzhynski.jplanner.impl.rest.exception.ScheduleNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -21,11 +22,14 @@ public class ScheduleFacade implements IScheduleFacade {
     private IScheduleService scheduleService;
 
     @Override
-    public void updatePatientId(UpdatePatientRequest request) {
+    public void updateSchedule(UpdateScheduleRequest request) throws ScheduleNotFoundException {
         if (StringUtils.isBlank(request.getScheduleId())) {
             throw new IllegalArgumentException();
         }
         Schedule schedule = (Schedule) scheduleService.getById(request.getScheduleId());
+        if (schedule == null) {
+            throw new ScheduleNotFoundException();
+        }
         if (StringUtils.isNotBlank(request.getPatientId())) {
             schedule.getClient().setJdentPatientId(request.getPatientId());
         }

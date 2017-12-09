@@ -1,6 +1,7 @@
 package com.zburzhynski.jplanner.impl.rest.facade;
 
-import com.zburzhynski.jplanner.impl.rest.domain.UpdatePatientRequest;
+import com.zburzhynski.jplanner.impl.rest.domain.UpdateScheduleRequest;
+import com.zburzhynski.jplanner.impl.rest.exception.ScheduleNotFoundException;
 
 /**
  * Schedule facade interface.
@@ -12,10 +13,11 @@ import com.zburzhynski.jplanner.impl.rest.domain.UpdatePatientRequest;
 public interface IScheduleFacade {
 
     /**
-     * Update schedule patient id.
+     * Update schedule.
      *
-     * @param request {@link UpdatePatientRequest}
+     * @param request {@link UpdateScheduleRequest}
+     * @throws ScheduleNotFoundException if any
      */
-    void updatePatientId(UpdatePatientRequest request);
+    void updateSchedule(UpdateScheduleRequest request) throws ScheduleNotFoundException;
 
 }
