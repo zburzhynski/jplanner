@@ -3,9 +3,7 @@ package com.zburzhynski.jplanner.impl.jsf.bean;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.COLON;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.NEWLINE;
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.SPACE;
-import static com.zburzhynski.jplanner.api.domain.Error.EMPLOYEE_NOT_FOUND_EXCEPTION;
 import static com.zburzhynski.jplanner.api.domain.Error.JDENT_UNAVAILABLE_EXCEPTION;
-import static com.zburzhynski.jplanner.api.domain.Error.PATIENT_NOT_FOUND_EXCEPTION;
 import static com.zburzhynski.jplanner.api.domain.Error.SCHEDULE_EVENT_ALREADY_EXIST_EXCEPTION;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENT;
 import static com.zburzhynski.jplanner.api.domain.View.SCHEDULE_EVENTS;
@@ -35,14 +33,9 @@ import com.zburzhynski.jplanner.impl.domain.Schedule;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
 import com.zburzhynski.jplanner.impl.jsf.validator.ScheduleValidator;
 import com.zburzhynski.jplanner.impl.rest.client.IVisitRestClient;
-import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitRequest;
-import com.zburzhynski.jplanner.impl.rest.domain.CreateVisitResponse;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchPatientRequest;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchVisitResponse;
-import com.zburzhynski.jplanner.impl.rest.exception.EmployeeNotFoundException;
 import com.zburzhynski.jplanner.impl.rest.exception.JdentUnavailableException;
-import com.zburzhynski.jplanner.impl.rest.exception.PatientNotFoundException;
-import com.zburzhynski.jplanner.impl.rest.exception.ScheduleEventAlreadyExistException;
 import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 import com.zburzhynski.jplanner.impl.util.MessageHelper;
@@ -87,9 +80,27 @@ public class ScheduleBean implements Serializable {
 
     public static final String END_DATE_PARAM = "endDate";
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd HH:mm:ss";
+
     private static final String SCHEDULE_ID_PARAM = "scheduleId";
 
     private static final String PATIENT_ID_PARAM = "patientId";
+
+    private static final String PATIENT_SURNAME_PARAM = "patientSurname";
+
+    private static final String PATIENT_NAME_PARAM = "patientName";
+
+    private static final String PATIENT_PATRONYMIC_PARAM = "patientPatronymic";
+
+    private static final String PATIENT_BIRTHDAY_PARAM = "patientBirthday";
+
+    private static final String PATIENT_GENDER_PARAM = "patientGender";
+
+    private static final String VISIT_DATE_PARAM = "visitDate";
+
+    private static final String VISIT_DOCTOR_ID_PARAM = "visitDoctorId";
+
+    private static final String VISIT_COMPLAINT_PARAM = "visitComplaint";
 
     private static final int FIRTH_HOUR = 8;
 
@@ -300,39 +311,21 @@ public class ScheduleBean implements Serializable {
      */
     public void startEvent() {
         if (configBean.isJdentIntegrationEnabled()) {
-            CreateVisitRequest request = new CreateVisitRequest();
-            request.setScheduleId(event.getId());
-            request.getPatient().setId(event.getClient().getJdentPatientId());
-            request.getPatient().setSurname(event.getClient().getPerson().getSurname());
-            request.getPatient().setName(event.getClient().getPerson().getName());
-            request.getPatient().setPatronymic(event.getClient().getPerson().getPatronymic());
-            request.getPatient().setBirthday(event.getClient().getPerson().getBirthday());
-            request.getPatient().setGender(event.getClient().getPerson().getGender().name());
-            request.setDoctorId(event.getDoctor().getId());
-            request.setVisitDate(event.getStartDate());
-            request.setComplaint(event.getClient().getReason());
             String jdentUrl = configBean.getJdentUrl();
-            try {
-                CreateVisitResponse response = visitRestClient.createVisit(request, jdentUrl);
-                if (response != null) {
-                    event.getClient().setJdentPatientId(response.getPatientId());
-                    event.setStatus(ScheduleStatus.STARTED);
-                    saveModel();
-                    Map<String, Object> params = new HashMap<>();
-                    params.put(SCHEDULE_ID_PARAM, event.getId());
-                    params.put(PATIENT_ID_PARAM, event.getClient().getJdentPatientId());
-                    String url = JsfUtils.buildUrl(jdentUrl + START_DENTAL_VISIT_URL, params);
-                    JsfUtils.externalRedirect(url);
-                }
-            } catch (PatientNotFoundException e) {
-                messageHelper.addMessage(PATIENT_NOT_FOUND_EXCEPTION.getMessage());
-            } catch (ScheduleEventAlreadyExistException e) {
-                messageHelper.addMessage(SCHEDULE_EVENT_ALREADY_EXIST_EXCEPTION.getMessage());
-            } catch (EmployeeNotFoundException e) {
-                messageHelper.addMessage(EMPLOYEE_NOT_FOUND_EXCEPTION.getMessage());
-            } catch (JdentUnavailableException e) {
-                messageHelper.addMessage(JDENT_UNAVAILABLE_EXCEPTION.getMessage());
-            }
+            Map<String, Object> params = new HashMap<>();
+            addParam(params, SCHEDULE_ID_PARAM, event.getId());
+            addParam(params, PATIENT_ID_PARAM, event.getClient().getJdentPatientId());
+            addParam(params, PATIENT_SURNAME_PARAM, event.getClient().getPerson().getSurname());
+            addParam(params, PATIENT_NAME_PARAM, event.getClient().getPerson().getName());
+            addParam(params, PATIENT_PATRONYMIC_PARAM, event.getClient().getPerson().getPatronymic());
+            addParam(params, PATIENT_BIRTHDAY_PARAM, DateUtils.formatDate(
+                event.getClient().getPerson().getBirthday(), DATE_FORMAT));
+            addParam(params, PATIENT_GENDER_PARAM, event.getClient().getPerson().getGender().name());
+            addParam(params, VISIT_DATE_PARAM, DateUtils.formatDate(event.getStartDate(), DATE_FORMAT));
+            addParam(params, VISIT_DOCTOR_ID_PARAM, event.getDoctor().getId());
+            addParam(params, VISIT_COMPLAINT_PARAM, event.getClient().getReason());
+            String url = JsfUtils.buildUrl(jdentUrl + START_DENTAL_VISIT_URL, params);
+            JsfUtils.externalRedirect(url);
         } else {
             event.setStatus(ScheduleStatus.STARTED);
             saveModel();
@@ -744,6 +737,12 @@ public class ScheduleBean implements Serializable {
         scheduleEvent.setEditable(false);
         scheduleEvent.setDescription(propertyReader.readProperty(quota.getQuotaType().getValue()));
         return scheduleEvent;
+    }
+
+    private void addParam(Map<String, Object> params, String key, Object value) {
+        if (value != null) {
+            params.put(key, value);
+        }
     }
 
 }
