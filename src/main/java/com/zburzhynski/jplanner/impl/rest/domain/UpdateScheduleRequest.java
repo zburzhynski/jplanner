@@ -17,6 +17,8 @@ public class UpdateScheduleRequest implements Serializable {
 
     private String patientId;
 
+    private String scheduleStatus;
+
     public String getScheduleId() {
         return scheduleId;
     }
@@ -31,6 +33,14 @@ public class UpdateScheduleRequest implements Serializable {
 
     public void setPatientId(String patientId) {
         this.patientId = patientId;
+    }
+
+    public String getScheduleStatus() {
+        return scheduleStatus;
+    }
+
+    public void setScheduleStatus(String scheduleStatus) {
+        this.scheduleStatus = scheduleStatus;
     }
 
 }

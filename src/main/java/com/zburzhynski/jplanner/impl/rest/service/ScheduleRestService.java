@@ -31,6 +31,7 @@ public class ScheduleRestService {
      * Updates schedule.
      *
      * @param request {@link UpdateScheduleRequest} request
+     * @return response
      */
     @POST
     @Path("/update-schedule")
