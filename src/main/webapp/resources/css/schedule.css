@@ -68,6 +68,12 @@
 .eventMenuButton {
     width: 100%;
 }
+.quotaMenu {
+    width: 18%;
+}
+quotaMenuButton {
+    width: 100%;
+}
 .workplaceViewType {
     width: 30%;
 }

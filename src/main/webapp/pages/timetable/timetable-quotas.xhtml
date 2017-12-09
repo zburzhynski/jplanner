@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/pages/template/layout_template.xhtml">
+
+    <ui:define name="content">
+        <h:outputStylesheet name="schedule.css" library="css" />
+        <p:panel>
+            <h:form id="quotasForm">
+                <p:growl id="messages" showDetail="true" />
+                <h4>#{msgs['timetable.header']}</h4>
+                <p:schedule id="scheduler"
+                            value="#{timetableQuotaBean.eventModel}"
+                            slotMinutes="#{configBean.schedulerPrecision}"
+                            locale="ru"
+                            axisFormat="H:mm"
+                            timeFormat="H:mm"
+                            showWeekends="true"
+                            firstHour="#{scheduleBean.firstHour}"
+                            allDaySlot="false"
+                            timeZone="#{scheduleBean.timeZone}"
+                            view="#{scheduleBean.view}"
+                            initialDate="#{scheduleBean.initialDate}"
+                            tooltip="true">
+                    <p:ajax event="dateSelect" listener="#{timetableQuotaBean.createEvent}" update="messages" />
+                    <p:ajax event="eventSelect" listener="#{timetableQuotaBean.selectEvent}" update="quotaMenu" />
+                    <p:ajax event="eventMove" listener="#{timetableQuotaBean.moveEvent}" update="messages,scheduler" />
+                    <p:ajax event="eventResize" listener="#{timetableQuotaBean.resizeEvent}" update="messages,scheduler" />
+                </p:schedule>
+                <p:dialog id="quotaMenu"
+                          widgetVar="menu"
+                          header="#{msgs['quotaMenu.title']}"
+                          resizable="false"
+                          closeOnEscape="true"
+                          modal="true"
+                          styleClass="quotaMenu">
+                    <p:focus for="quotaMenu" />
+                    <h:panelGrid>
+                        <p:commandButton value="#{msgs['quotaMenu.editQuota']}"
+                                         action="#{timetableQuotaBean.editQuota}"
+                                         update="messages"
+                                         oncomplete="PF('menu').hide();"
+                                         style="width: 100%" />
+                        <p:commandButton value="#{msgs['quotaMenu.removeQuota']}"
+                                         action="#{timetableQuotaBean.removeQuota}"
+                                         update="messages"
+                                         onstart="PF('menu').hide();"
+                                         style="width: 100%">
+                            <p:confirm header="#{msgs['removeQuotaConfirm.header']}"
+                                       message="#{msgs['removeQuotaConfirm.message']}?"
+                                       icon="ui-icon-alert" />
+                        </p:commandButton>
+                    </h:panelGrid>
+                </p:dialog>
+                <p:confirmDialog global="true" closeOnEscape="true">
+                    <p:commandButton value="#{msgs['button.ok']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-yes"
+                                     icon="ui-icon-check" />
+                    <p:commandButton value="#{msgs['button.cancel']}"
+                                     type="button"
+                                     styleClass="ui-confirmdialog-no"
+                                     icon="ui-icon-close" />
+                </p:confirmDialog>
+                <ui:include src="/pages/localization/calendar-localization.xhtml" />
+                <br />
+                <p:commandButton id="back"
+                                 value="#{msgs['timetableQuota.button.back']}"
+                                 action="#{timetableQuotaBean.back}" />
+            </h:form>
+        </p:panel>
+    </ui:define>
+
+</ui:composition>
