@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class QuotaSearchCriteria implements Serializable {
 
+    private String timetableId;
+
     private Date startDate;
 
     private Date endDate;
@@ -31,6 +33,14 @@ public class QuotaSearchCriteria implements Serializable {
     private List<String> excludedResourceIds;
 
     private boolean intersectingPeriod;
+
+    public String getTimetableId() {
+        return timetableId;
+    }
+
+    public void setTimetableId(String timetableId) {
+        this.timetableId = timetableId;
+    }
 
     public Date getStartDate() {
         return startDate;
