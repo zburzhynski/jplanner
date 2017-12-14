@@ -8,32 +8,53 @@
                 template="/pages/template/layout_template.xhtml">
 
     <ui:define name="content">
-        <h:outputStylesheet name="schedule.css" library="css" />
         <p:panel>
             <h:form id="quotaForm">
-                <p:growl id="messages" showDetail="true" />
-                <h4>#{msgs['timetable.header']}</h4>
-                <p:schedule id="scheduler"
-                            value="#{timetableQuotaBean.eventModel}"
-                            slotMinutes="#{configBean.schedulerPrecision}"
-                            locale="ru"
-                            axisFormat="H:mm"
-                            timeFormat="H:mm"
-                            showWeekends="true"
-                            firstHour="#{scheduleBean.firstHour}"
-                            allDaySlot="false"
-                            timeZone="#{scheduleBean.timeZone}"
-                            view="#{scheduleBean.view}"
-                            initialDate="#{scheduleBean.initialDate}"
-                            tooltip="true">
-                    <p:ajax event="eventMove" listener="#{timetableQuotaBean.moveEvent}" update="messages,scheduler" />
-                    <p:ajax event="eventResize" listener="#{timetableQuotaBean.resizeEvent}" update="messages,scheduler" />
-                </p:schedule>
+                <p:focus />
+                <p:messages id="messages" />
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="from" value="#{msgs['quota.from']}" />
+                    <p:calendar id="from" value="#{timetableQuotaBean.quota.startDate}"
+                                pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
+                                showButtonPanel="true"
+                                locale="ru"
+                                required="true"/>
+                    <p:message for="from" />
+                    <p:outputLabel for="from" value="#{msgs['quota.to']}" />
+                    <p:calendar id="to" value="#{timetableQuotaBean.quota.endDate}"
+                                pattern="dd/MM/yyyy HH:mm"
+                                navigator="true"
+                                showButtonPanel="true"
+                                locale="ru"
+                                required="true"/>
+                    <p:message for="to" />
+                    <h:outputLabel for="quotaType" value="#{msgs['quota.type']}:" />
+                    <p:selectOneMenu id="quotaType"
+                                     value="#{timetableQuotaBean.quota.quotaType}"
+                                     required="true"
+                                     style="width: 99%">
+                        <f:selectItems value="#{quotaTypeBean.quotaTypes}" var="type" itemValue="#{type}"
+                                       itemLabel="#{msgs[type.value]}" />
+                    </p:selectOneMenu>
+                    <p:message for="quotaType" />
+                    <p:outputLabel for="decription" value="#{msgs['quota.description']}" />
+                    <p:inputTextarea id="decription" value="#{timetableQuotaBean.quota.description}" style="width: 96%" />
+                    <p:message for="decription" />
+                </h:panelGrid>
+                <h:panelGrid columns="2">
+                    <p:commandButton id="save"
+                                     value="#{msgs['button.save']}"
+                                     action="#{timetableQuotaBean.saveQuota}"
+                                     update="messages"
+                                     icon="ui-icon-disk" />
+                    <p:commandButton id="cancel"
+                                     value="#{msgs['button.cancel']}"
+                                     action="#{timetableQuotaBean.cancelUpdateQuota}"
+                                     immediate="true"
+                                     icon="ui-icon-cancel" />
+                </h:panelGrid>
                 <ui:include src="/pages/localization/calendar-localization.xhtml" />
-                <br />
-                <p:commandButton id="back"
-                                 value="#{msgs['timetableQuota.button.back']}"
-                                 action="#{timetableQuotaBean.back}" />
             </h:form>
         </p:panel>
     </ui:define>

@@ -4,6 +4,8 @@ import com.zburzhynski.jplanner.api.criteria.QuotaCreateCriteria;
 import com.zburzhynski.jplanner.api.criteria.TimetableSearchCriteria;
 import com.zburzhynski.jplanner.api.domain.IDomain;
 import com.zburzhynski.jplanner.api.dto.response.CreateQuotaResponse;
+import com.zburzhynski.jplanner.impl.domain.Quota;
+import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 
 import java.util.List;
 
@@ -42,4 +44,12 @@ public interface IResourceTimetableService<ID, T extends IDomain> extends IBaseS
      */
     CreateQuotaResponse createQuota(QuotaCreateCriteria createCriteria);
 
+    /**
+     * Check quota period on availability.
+     *
+     * @param timetable quota timetable
+     * @param quota     quota
+     * @return true if period available, else false
+     */
+    boolean isQuotaPeriodAvailable(ResourceTimetable timetable, Quota quota);
 }

@@ -134,7 +134,11 @@ public class TimetablesBean implements Serializable {
     public String editQuota(ResourceTimetable timetable) {
         JsfUtils.setFlashAttribute(RESOURCE_ID_PARAM, resourceId);
         JsfUtils.setFlashAttribute(TIMETABLE_ID_PARAM, timetable.getId());
-        return View.TIMETABLE_QUOTA.getPath();
+        TimetableQuotaBean timetableBean = JsfUtils.getSessionBean("timetableQuotaBean");
+        if (timetableBean != null) {
+            timetableBean.init();
+        }
+        return View.TIMETABLE_QUOTAS.getPath();
     }
 
     /**

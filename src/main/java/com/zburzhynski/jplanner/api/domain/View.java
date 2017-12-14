@@ -22,6 +22,7 @@ public enum View {
     TIMETABLES("/pages/timetable/timetables?faces-redirect=true"),
     TIMETABLE("/pages/timetable/timetable?faces-redirect=true"),
     TIMETABLE_TEMPLATE("/pages/timetable/timetable-template?faces-redirect=true"),
+    TIMETABLE_QUOTAS("/pages/timetable/timetable-quotas?faces-redirect=true"),
     TIMETABLE_QUOTA("/pages/timetable/timetable-quota?faces-redirect=true"),
     AVAILABLE_RESOURCES("/pages/available-resource/resources?faces-redirect=true"),
     AVAILABLE_RESOURCE("/pages/available-resource/resource?faces-redirect=true"),

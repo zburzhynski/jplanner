@@ -123,6 +123,25 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         return response;
     }
 
+    @Override
+    public boolean isQuotaPeriodAvailable(ResourceTimetable timetable, Quota quota) {
+        QuotaSearchCriteria searchCriteria = new QuotaSearchCriteria();
+        searchCriteria.setStartDate(quota.getStartDate());
+        searchCriteria.setEndDate(quota.getEndDate());
+        searchCriteria.setDoctorId(timetable.getAvailableResource().getDoctor().getId());
+        searchCriteria.setExcludedResourceIds(Arrays.asList(timetable.getAvailableResource().getId()));
+        searchCriteria.setIntersectingPeriod(true);
+        if (quotaRepository.countByCriteria(searchCriteria) > 0) {
+            return false;
+        }
+        searchCriteria.setDoctorId(null);
+        searchCriteria.setWorkplaceId(timetable.getAvailableResource().getWorkplace().getId());
+        if (quotaRepository.countByCriteria(searchCriteria) > 0) {
+            return false;
+        }
+        return true;
+    }
+
     private void createDayOfWeekQuotas(Date date, QuotaCreateCriteria criteria, Set<Quota> quotas) {
         if (DAY_OF_WEEK.equals(criteria.getTemplate())) {
             if (!isDateExcluded(date, criteria) && isDayInWeek(date, criteria.getSelectedDayOfWeek())) {
@@ -171,7 +190,7 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         timetable.getQuotas().clear();
         Set<Range> ranges = new TreeSet<>();
         for (Quota quota : quotaList) {
-            if (!checkQuotaPeriodOnAvailability(timetable, quota)) {
+            if (!isQuotaPeriodAvailable(timetable, quota)) {
                 response.addUncreatedQuota(quota);
                 continue;
             }
@@ -318,22 +337,5 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
 
     }
 
-    private boolean checkQuotaPeriodOnAvailability(ResourceTimetable timetable, Quota quota) {
-        QuotaSearchCriteria searchCriteria = new QuotaSearchCriteria();
-        searchCriteria.setStartDate(quota.getStartDate());
-        searchCriteria.setEndDate(quota.getEndDate());
-        searchCriteria.setDoctorId(timetable.getAvailableResource().getDoctor().getId());
-        searchCriteria.setExcludedResourceIds(Arrays.asList(timetable.getAvailableResource().getId()));
-        searchCriteria.setIntersectingPeriod(true);
-        if (quotaRepository.countByCriteria(searchCriteria) > 0) {
-            return false;
-        }
-        searchCriteria.setDoctorId(null);
-        searchCriteria.setWorkplaceId(timetable.getAvailableResource().getWorkplace().getId());
-        if (quotaRepository.countByCriteria(searchCriteria) > 0) {
-            return false;
-        }
-        return true;
-    }
 
 }

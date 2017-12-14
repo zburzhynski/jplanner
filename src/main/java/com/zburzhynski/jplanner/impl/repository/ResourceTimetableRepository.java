@@ -1,6 +1,8 @@
 package com.zburzhynski.jplanner.impl.repository;
 
 import static com.zburzhynski.jplanner.api.domain.CommonConstant.DOT;
+import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_DOCTOR;
+import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_WORKPLACE;
 import static com.zburzhynski.jplanner.impl.domain.Domain.P_ID;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_AVAILABLE_RESOURCE;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_QUOTA;
@@ -35,6 +37,9 @@ public class ResourceTimetableRepository extends AbstractBaseRepository<String, 
     public ResourceTimetable findById(String id) {
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_QUOTAS, P_QUOTA, JoinType.LEFT_OUTER_JOIN);
+        criteria.createAlias(P_AVAILABLE_RESOURCE, P_AVAILABLE_RESOURCE);
+        criteria.createAlias(P_AVAILABLE_RESOURCE + DOT + P_DOCTOR, P_DOCTOR);
+        criteria.createAlias(P_AVAILABLE_RESOURCE + DOT + P_WORKPLACE, P_WORKPLACE);
         criteria.add(Restrictions.eq(P_ID, id));
         return (ResourceTimetable) criteria.uniqueResult();
     }
