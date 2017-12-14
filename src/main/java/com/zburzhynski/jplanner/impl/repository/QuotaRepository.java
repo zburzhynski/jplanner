@@ -87,6 +87,9 @@ public class QuotaRepository extends AbstractBaseRepository<String, Quota>
             criteria.createAlias(P_AVAILABLE_RESOURCE  + DOT + P_DOCTOR, P_DOCTOR);
             criteria.createAlias(P_AVAILABLE_RESOURCE  + DOT + P_WORKPLACE, P_WORKPLACE);
         }
+        if (StringUtils.isNotBlank(searchCriteria.getTimetableId())) {
+            criteria.add(Restrictions.eq(P_TIMETABLE + DOT + P_ID, searchCriteria.getTimetableId()));
+        }
         if (StringUtils.isNotBlank(searchCriteria.getDoctorId())) {
             criteria.add(Restrictions.eq(P_DOCTOR + DOT + P_ID, searchCriteria.getDoctorId()));
         }

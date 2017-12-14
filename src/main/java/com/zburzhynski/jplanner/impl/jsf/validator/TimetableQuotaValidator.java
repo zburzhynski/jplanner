@@ -1,5 +1,6 @@
 package com.zburzhynski.jplanner.impl.jsf.validator;
 
+import com.zburzhynski.jplanner.api.criteria.QuotaSearchCriteria;
 import com.zburzhynski.jplanner.api.criteria.ScheduleSearchCriteria;
 import com.zburzhynski.jplanner.api.service.IQuotaService;
 import com.zburzhynski.jplanner.api.service.IScheduleService;
@@ -22,6 +23,8 @@ public class TimetableQuotaValidator extends BaseValidator {
 
     private static final String QUOTA_HAS_SCHEDULES = "timetableQuotaValidator.quotaHasSchedules";
 
+    private static final String QUOTA_TIME_OVERLAPPED = "timetableQuotaValidator.quotaTimeOverlapped";
+
     @Autowired
     private IScheduleService scheduleService;
 
@@ -35,6 +38,10 @@ public class TimetableQuotaValidator extends BaseValidator {
      * @return true if valid, else false
      */
     public boolean validate(Quota quota) {
+        return checkSchedules(quota) && checkPeriod(quota);
+    }
+
+    private boolean checkSchedules(Quota quota) {
         Quota previousQuota = (Quota) quotaService.getById(quota.getId());
         ScheduleSearchCriteria searchCriteria = new ScheduleSearchCriteria();
         searchCriteria.setStartDate(previousQuota.getStartDate());
@@ -48,6 +55,20 @@ public class TimetableQuotaValidator extends BaseValidator {
                 addMessage(QUOTA_HAS_SCHEDULES);
                 return false;
             }
+        }
+        return true;
+    }
+
+    private boolean checkPeriod(Quota quota) {
+        String timetableId = ((Quota) quotaService.getById(quota.getId())).getTimetable().getId();
+        QuotaSearchCriteria searchCriteria = new QuotaSearchCriteria();
+        searchCriteria.setTimetableId(timetableId);
+        searchCriteria.setStartDate(quota.getStartDate());
+        searchCriteria.setEndDate(quota.getEndDate());
+        searchCriteria.setIntersectingPeriod(true);
+        if (quotaService.countByCriteria(searchCriteria) > 0) {
+            addMessage(QUOTA_TIME_OVERLAPPED);
+            return false;
         }
         return true;
     }
