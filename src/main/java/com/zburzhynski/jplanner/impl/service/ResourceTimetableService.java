@@ -116,9 +116,6 @@ public class ResourceTimetableService implements IResourceTimetableService<Strin
         if (timetable == null) {
             return response;
         }
-        timetable.setStartDate(quotas.first().getStartDate());
-        timetable.setEndDate(quotas.last().getEndDate());
-        timetable.setDescription(criteria.getDescription());
         saveQuotas(timetable, quotas, response);
         return response;
     }

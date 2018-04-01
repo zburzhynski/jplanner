@@ -186,6 +186,18 @@ public final class DateUtils {
     }
 
     /**
+     * Checks is one date before other date truncated field.
+     *
+     * @param checkDate check date
+     * @param endDate   end date
+     * @param truncatedField field from {@link Calendar}.
+     * @return true if one date before other, else false
+     */
+    public static boolean truncatedBefore(Date checkDate, Date endDate, int truncatedField) {
+        return org.apache.commons.lang3.time.DateUtils.truncatedCompareTo(checkDate, endDate, truncatedField) < 0;
+    }
+
+    /**
      * Checks is one date after or equals other date .
      *
      * @param checkDate check date
@@ -194,6 +206,18 @@ public final class DateUtils {
      */
     public static boolean afterOrEquals(Date checkDate, Date startDate) {
         return checkDate.equals(startDate) || checkDate.after(startDate);
+    }
+
+    /**
+     * Checks is one date after other date truncated field.
+     *
+     * @param checkDate check date
+     * @param endDate   end date
+     * @param truncatedField field from {@link Calendar}.
+     * @return true if one date after other, else false
+     */
+    public static boolean truncatedAfter(Date checkDate, Date endDate, int truncatedField) {
+        return org.apache.commons.lang3.time.DateUtils.truncatedCompareTo(checkDate, endDate, truncatedField) > 0;
     }
 
     /**

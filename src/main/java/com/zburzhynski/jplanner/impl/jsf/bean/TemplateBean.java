@@ -327,7 +327,7 @@ public class TemplateBean implements Serializable {
         QuotaCreateCriteria criteria = new QuotaCreateCriteria();
         criteria.setTimetableId(timetableId);
         criteria.setStartDate(startDate);
-        criteria.setEndDate(endDate);
+        criteria.setEndDate(DateUtils.setFinalTime(endDate));
         criteria.setTemplate(template);
         criteria.setSelectedDayOfWeek(selectedDayOfWeek);
         criteria.setSelectedDayOfMonth(selectedDayOfMonth);
