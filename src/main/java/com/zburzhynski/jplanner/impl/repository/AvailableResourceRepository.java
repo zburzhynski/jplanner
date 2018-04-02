@@ -10,6 +10,7 @@ import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_TIMETABLE
 import static com.zburzhynski.jplanner.impl.domain.AvailableResource.P_WORKPLACE;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_QUOTA;
 import static com.zburzhynski.jplanner.impl.domain.ResourceTimetable.P_QUOTAS;
+import static com.zburzhynski.jplanner.impl.domain.Workplace.P_CABINET;
 import static org.hibernate.sql.JoinType.LEFT_OUTER_JOIN;
 import com.zburzhynski.jplanner.api.criteria.AvailableResourceSearchCriteria;
 import com.zburzhynski.jplanner.api.repository.IAvailableResourceRepository;
@@ -86,6 +87,7 @@ public class AvailableResourceRepository extends AbstractBaseRepository<String, 
         Criteria criteria = getSession().createCriteria(getDomainClass());
         criteria.createAlias(P_DOCTOR, P_DOCTOR);
         criteria.createAlias(P_WORKPLACE, P_WORKPLACE);
+        criteria.createAlias(P_WORKPLACE + DOT + P_CABINET, P_CABINET);
         criteria.createAlias(P_ASSISTANT, P_ASSISTANT, LEFT_OUTER_JOIN);
         if (searchCriteria.getWorkplace() != null) {
             criteria.add(Restrictions.eq(P_WORKPLACE, searchCriteria.getWorkplace()));
