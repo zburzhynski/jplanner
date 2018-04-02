@@ -21,10 +21,13 @@
                              lazy="true"
                              emptyMessage="#{msgs['availableResources.empty']}"
                              rows="#{availableResourcesBean.rowCount}">
-                    <p:column headerText="#{msgs['availableResource.name']}" width="30%">
+                    <p:column headerText="#{msgs['availableResource.name']}" width="24%">
                         <h:outputText value="#{availableResource.name}" />
                     </p:column>
-                    <p:column headerText="#{msgs['availableResource.workplace']}" width="24%">
+                    <p:column headerText="#{msgs['availableResource.cabinet']}" width="15%">
+                        <h:outputText value="#{availableResource.workplace.cabinet.name}" />
+                    </p:column>
+                    <p:column headerText="#{msgs['availableResource.workplace']}" width="15%">
                         <h:outputText value="#{availableResource.workplace.name}" />
                     </p:column>
                     <p:column headerText="#{msgs['availableResource.doctor']}" width="20%">
