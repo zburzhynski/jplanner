@@ -61,6 +61,7 @@ public class AvailableResourceService implements IAvailableResourceService<Strin
     @Override
     @Transactional(readOnly = false)
     public void delete(AvailableResource resource) throws LinkedTimetableExistException {
+        resource = getById(resource.getId());
         if (CollectionUtils.isNotEmpty(resource.getTimetables())) {
             throw new LinkedTimetableExistException();
         }
