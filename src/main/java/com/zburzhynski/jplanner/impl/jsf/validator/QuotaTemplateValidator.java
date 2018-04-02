@@ -9,6 +9,8 @@ import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Calendar;
+
 /**
  * Quota template validator.
  * <p/>
@@ -53,8 +55,8 @@ public class QuotaTemplateValidator extends BaseValidator {
             return false;
         }
         ResourceTimetable resourceTimetable = (ResourceTimetable) timetableService.getById(criteria.getTimetableId());
-        if (resourceTimetable.getStartDate().after(criteria.getStartDate()) ||
-            resourceTimetable.getEndDate().before(criteria.getEndDate())) {
+        if (DateUtils.truncatedAfter(resourceTimetable.getStartDate(), criteria.getStartDate(), Calendar.MILLISECOND) ||
+            DateUtils.truncatedBefore(resourceTimetable.getEndDate(), criteria.getEndDate(), Calendar.MILLISECOND)) {
             addMessage(TEMPLATE_DATE_RANGE_INCORRECT,
                 DateUtils.formatDate(resourceTimetable.getStartDate(), RUSSIAN_DATE_FORMAT),
                 DateUtils.formatDate(resourceTimetable.getEndDate(), RUSSIAN_DATE_FORMAT));

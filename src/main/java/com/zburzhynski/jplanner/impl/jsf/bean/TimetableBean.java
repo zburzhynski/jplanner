@@ -7,6 +7,7 @@ import com.zburzhynski.jplanner.api.service.IResourceTimetableService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.jsf.validator.TimetableValidator;
+import com.zburzhynski.jplanner.impl.util.DateUtils;
 import com.zburzhynski.jplanner.impl.util.JsfUtils;
 
 import java.io.Serializable;
@@ -58,6 +59,7 @@ public class TimetableBean implements Serializable {
      * @return path for navigating
      */
     public String saveTimetable() {
+        timetable.setEndDate(DateUtils.setFinalTime(timetable.getEndDate()));
         boolean valid = timetableValidator.validate(timetable);
         if (!valid) {
             return null;

@@ -37,20 +37,20 @@
                 <p:dataTable id="timetables" value="#{timetablesBean.resource.timetables}"
                              var="timetable"
                              emptyMessage="#{msgs['timetables.empty']}" style="width: 100%">
-                    <p:column headerText="#{msgs['timetable.startDate']}" width="16%">
+                    <p:column headerText="#{msgs['timetable.startDate']}" width="13%" style="text-align: center">
                         <h:outputText value="#{timetable.startDate}">
-                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
                         </h:outputText>
                     </p:column>
-                    <p:column headerText="#{msgs['timetable.endDate']}" width="16%">
+                    <p:column headerText="#{msgs['timetable.endDate']}" width="13%" style="text-align: center">
                         <h:outputText value="#{timetable.endDate}">
-                            <f:convertDateTime pattern="dd.MM.yyyy HH:mm" />
+                            <f:convertDateTime pattern="dd.MM.yyyy" />
                         </h:outputText>
                     </p:column>
                     <p:column headerText="#{msgs['timetable.status']}" width="13%">
                         <h:outputText value="#{msgs[timetable.status.value]}" />
                     </p:column>
-                    <p:column headerText="#{msgs['quota.description']}" width="36%">
+                    <p:column headerText="#{msgs['quota.description']}" width="42%">
                         <h:outputText value="#{timetable.description}" />
                     </p:column>
                     <p:column width="19%">
