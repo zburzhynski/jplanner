@@ -36,13 +36,16 @@ public final class DateUtils {
      * @return new date
      */
     public static Date setInitialTime(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        calendar.set(Calendar.MILLISECOND, 0);
-        return calendar.getTime();
+        if (date != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY, 0);
+            calendar.set(Calendar.MINUTE, 0);
+            calendar.set(Calendar.SECOND, 0);
+            calendar.set(Calendar.MILLISECOND, 0);
+            return calendar.getTime();
+        }
+        return null;
     }
 
     /**
@@ -52,13 +55,16 @@ public final class DateUtils {
      * @return new date
      */
     public static Date setFinalTime(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY, LAST_DAY_HOUR);
-        calendar.set(Calendar.MINUTE, LAST_HOUR_MINUTE);
-        calendar.set(Calendar.SECOND, LAST_MINUTE_SECOND);
-        calendar.set(Calendar.MILLISECOND, LAST_MINUTE_MILLISECOND);
-        return calendar.getTime();
+        if (date != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY, LAST_DAY_HOUR);
+            calendar.set(Calendar.MINUTE, LAST_HOUR_MINUTE);
+            calendar.set(Calendar.SECOND, LAST_MINUTE_SECOND);
+            calendar.set(Calendar.MILLISECOND, LAST_MINUTE_MILLISECOND);
+            return calendar.getTime();
+        }
+        return null;
     }
 
     /**
