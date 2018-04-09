@@ -657,7 +657,7 @@ public class ScheduleBean implements Serializable {
     }
 
     private Schedule buildScheduleEvent(SelectEvent selectEvent) {
-        if (doctor != null && workplace != null) {
+        if (doctor != null || workplace != null) {
             Date startDate = new Timestamp(((Date) selectEvent.getObject()).getTime());
             Date endDate = new Timestamp(DateUtils.addMinuteToDate(startDate, configBean.getEventDuration()).getTime());
             String doctorId = ScheduleViewType.EMPLOYEE.equals(viewType) ? doctor.getId() : null;
