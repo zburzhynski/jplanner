@@ -15,7 +15,7 @@ import javax.faces.bean.ManagedBean;
 @ApplicationScoped
 public class VersionBean implements Serializable {
 
-    private String version = "2.1.0";
+    private String version = "2.1.0-snapshot";
 
     private String versionDate = "03.04.2018";
 
