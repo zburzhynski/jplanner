@@ -201,7 +201,7 @@
             <param-name>
                 com.sun.jersey.config.property.packages
             </param-name>
-            <param-value>com.zburzhynski.jdent.impl.rest</param-value>
+            <param-value>com.zburzhynski.jplanner.impl.rest</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
