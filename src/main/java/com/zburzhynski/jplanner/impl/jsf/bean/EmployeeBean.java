@@ -16,6 +16,7 @@ import com.zburzhynski.jplanner.impl.rest.domain.PositionDto;
 import com.zburzhynski.jplanner.impl.rest.domain.SearchEmployeeResponse;
 import com.zburzhynski.jplanner.impl.util.MessageHelper;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang.BooleanUtils;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
 
@@ -131,29 +132,31 @@ public class EmployeeBean implements Serializable {
         SearchEmployeeResponse response = employeeRestClient.getAll(configBean.getJdentUrl());
         if (response != null && CollectionUtils.isNotEmpty(response.getEmployees())) {
             for (EmployeeDto employeeDto : response.getEmployees()) {
-                PositionDto positionDto = employeeDto.getPosition();
-                Position positionSrc = (Position) positionService.getById(positionDto.getId());
-                if (positionSrc == null) {
-                    positionSrc = new Position();
-                    positionSrc.setId(positionDto.getId());
-                    updatePosition(positionSrc, positionDto);
-                    positionService.replicate(positionSrc);
-                } else {
-                    updatePosition(positionSrc, positionDto);
-                    positionService.saveOrUpdate(positionSrc);
-                }
-                Employee employeeSrc = (Employee) employeeService.getById(employeeDto.getId());
-                if (employeeSrc == null) {
-                    employeeSrc = new Employee();
-                    employeeSrc.setId(employeeDto.getId());
-                    employeeSrc.getPerson().setId(UUID.randomUUID().toString());
-                    updateEmployee(employeeSrc, employeeDto);
-                    employeeSrc.setPosition(positionSrc);
-                    employeeService.replicate(employeeSrc);
-                } else {
-                    updateEmployee(employeeSrc, employeeDto);
-                    employeeSrc.setPosition(positionSrc);
-                    employeeService.saveOrUpdate(employeeSrc);
+                if (BooleanUtils.isTrue(employeeDto.getActual())) {
+                    PositionDto positionDto = employeeDto.getPosition();
+                    Position positionSrc = (Position) positionService.getById(positionDto.getId());
+                    if (positionSrc == null) {
+                        positionSrc = new Position();
+                        positionSrc.setId(positionDto.getId());
+                        updatePosition(positionSrc, positionDto);
+                        positionService.replicate(positionSrc);
+                    } else {
+                        updatePosition(positionSrc, positionDto);
+                        positionService.saveOrUpdate(positionSrc);
+                    }
+                    Employee employeeSrc = (Employee) employeeService.getById(employeeDto.getId());
+                    if (employeeSrc == null) {
+                        employeeSrc = new Employee();
+                        employeeSrc.setId(employeeDto.getId());
+                        employeeSrc.getPerson().setId(UUID.randomUUID().toString());
+                        updateEmployee(employeeSrc, employeeDto);
+                        employeeSrc.setPosition(positionSrc);
+                        employeeService.replicate(employeeSrc);
+                    } else {
+                        updateEmployee(employeeSrc, employeeDto);
+                        employeeSrc.setPosition(positionSrc);
+                        employeeService.saveOrUpdate(employeeSrc);
+                    }
                 }
             }
         }

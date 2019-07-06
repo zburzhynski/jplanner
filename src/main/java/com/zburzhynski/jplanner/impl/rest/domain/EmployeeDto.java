@@ -19,6 +19,8 @@ public class EmployeeDto extends PersonDto implements Serializable {
 
     private String additionalInformation;
 
+    private Boolean actual;
+
     public String getId() {
         return id;
     }
@@ -49,6 +51,14 @@ public class EmployeeDto extends PersonDto implements Serializable {
 
     public void setAdditionalInformation(String additionalInformation) {
         this.additionalInformation = additionalInformation;
+    }
+
+    public Boolean getActual() {
+        return actual;
+    }
+
+    public void setActual(Boolean actual) {
+        this.actual = actual;
     }
 
 }
