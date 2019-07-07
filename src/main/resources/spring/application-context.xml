@@ -14,18 +14,6 @@
     com.zburzhynski.jplanner.impl.repository, com.zburzhynski.jplanner.impl.util,
     com.zburzhynski.jplanner.impl.jsf.validator, com.zburzhynski.jplanner.impl.rest" />
 
-    <bean id="log4jInitializer"
-          class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
-        <property name="staticMethod">
-            <value>org.springframework.util.Log4jConfigurer.initLogging</value>
-        </property>
-        <property name="arguments">
-            <list>
-                <value>classpath:config/log4j.properties</value>
-            </list>
-        </property>
-    </bean>
-
     <!-- Internationalization -->
     <bean id="messageSource"
           class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
