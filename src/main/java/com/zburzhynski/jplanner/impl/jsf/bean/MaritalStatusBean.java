@@ -1,6 +1,6 @@
 package com.zburzhynski.jplanner.impl.jsf.bean;
 
-import com.zburzhynski.jplanner.api.domain.SocialStatus;
+import com.zburzhynski.jplanner.api.domain.MaritalStatus;
 
 import java.io.Serializable;
 import javax.faces.bean.ManagedBean;
@@ -15,15 +15,15 @@ import javax.faces.bean.ViewScoped;
  */
 @ManagedBean
 @ViewScoped
-public class SocialStatusBean implements Serializable {
+public class MaritalStatusBean implements Serializable {
 
     /**
-     * Gets social status values.
+     * Gets marital status values.
      *
-     * @return social status values
+     * @return marital status values
      */
-    public SocialStatus[] getSocialStatuses() {
-        return SocialStatus.values();
+    public MaritalStatus[] getMaritalStatuses() {
+        return MaritalStatus.values();
     }
 
 }
