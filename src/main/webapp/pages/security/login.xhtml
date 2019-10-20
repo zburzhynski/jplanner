@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <!--<title>#{msgs['application.title']}</title>-->
+        <!--<link rel="shortcut icon" type="image/x-icon" href="#{request.contextPath}/resources/css/css-images/favicon.png" />-->
+        <h:outputStylesheet library="css" name="main.css" />
+    </h:head>
+    <h:body>
+        <style type="text/css">
+            .centered {
+                width: 300px;
+                height: 120px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                margin-left: -150px;
+                margin-top: -60px;
+            }
+            .clm1 {
+                width: 30%;
+                text-align: center;
+            }
+            .clm2 {
+                width: 70%;
+                text-align: center;
+            }
+        </style>
+        <div class="centered">
+            <form action="#{request.contextPath}/j_spring_security_check" method="post" >
+                <p:panel header="#{msgs['login.header']}" style="width: 110%">
+                    <h:panelGrid columns="2" columnClasses="clm1, clm2" width="100%">
+                        <h:outputLabel for="username" value="#{msgs['login.username']}:" styleClass="b" />
+                        <h:panelGrid width="80%">
+                            <input type="text" id="username" name="username"
+                                   required="required" style="height: 18px; width: 110%" />
+                         </h:panelGrid>
+                        <h:outputLabel for="password" value="#{msgs['login.password']}:" styleClass="b" />
+                        <h:panelGrid width="80%">
+                            <input type="password" id="password" name="password"
+                                   required="required" style="height: 18px; width: 110%" />
+                        </h:panelGrid>
+                        <h:outputText />
+                        <h:panelGrid width="90%">
+                            <h:outputLabel value="#{msgs['login.validation.invalidLoginOrPassword']}"
+                                           rendered="${not empty param.login_error}"
+                                           styleClass="error" />
+                            <h:outputLabel value="#{msgs['login.validation.sessionAuthenticationError']}"
+                                           rendered="${not empty param.session_error}"
+                                           styleClass="error" />
+                            <h:commandButton id="login" value="#{msgs['login.button.login']}"
+                                             style="width: 90%; height: 24px" styleClass="b" />
+                        </h:panelGrid>
+                    </h:panelGrid>
+                </p:panel>
+            </form>
+        </div>
+    </h:body>
+</html>
