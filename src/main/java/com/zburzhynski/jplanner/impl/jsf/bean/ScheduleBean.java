@@ -196,7 +196,8 @@ public class ScheduleBean implements Serializable {
         eventModel = new LazyScheduleModel() {
             @Override
             public void loadEvents(Date start, Date end) {
-                fillQuotas();
+                //TODO: use checkQuotas setting
+                //fillQuotas();
                 ScheduleSearchCriteria searchCriteria = buildScheduleSearchCriteria(start, end);
                 List<Schedule> events = scheduleService.getByCriteria(searchCriteria);
                 eventModel.getEvents().addAll(events);
@@ -660,15 +661,20 @@ public class ScheduleBean implements Serializable {
         if (doctor != null || workplace != null) {
             Date startDate = new Timestamp(((Date) selectEvent.getObject()).getTime());
             Date endDate = new Timestamp(DateUtils.addMinuteToDate(startDate, configBean.getEventDuration()).getTime());
-            String doctorId = ScheduleViewType.EMPLOYEE.equals(viewType) ? doctor.getId() : null;
-            String workplaceId = ScheduleViewType.WORKPLACE.equals(viewType) ? workplace.getId() : null;
-            Quota workPeriod = quotaService.getWorkPeriod(startDate, endDate, doctorId, workplaceId);
-            if (workPeriod != null) {
-                Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
-                scheduleEvent.setDoctor(workPeriod.getTimetable().getAvailableResource().getDoctor());
-                scheduleEvent.setWorkplace(workPeriod.getTimetable().getAvailableResource().getWorkplace());
-                return scheduleEvent;
-            }
+//TODO: use setting checkQuotas = true
+//            String doctorId = ScheduleViewType.EMPLOYEE.equals(viewType) ? doctor.getId() : null;
+//            String workplaceId = ScheduleViewType.WORKPLACE.equals(viewType) ? workplace.getId() : null;
+//            Quota workPeriod = quotaService.getWorkPeriod(startDate, endDate, doctorId, workplaceId);
+//            if (workPeriod != null) {
+//                Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
+//                scheduleEvent.setDoctor(workPeriod.getTimetable().getAvailableResource().getDoctor());
+//                scheduleEvent.setWorkplace(workPeriod.getTimetable().getAvailableResource().getWorkplace());
+//                return scheduleEvent;
+//            }
+            Schedule scheduleEvent = new Schedule(startDate, endDate, EMPTY);
+            scheduleEvent.setDoctor(doctor);
+            scheduleEvent.setWorkplace(workplace);
+            return scheduleEvent;
         }
         return null;
     }

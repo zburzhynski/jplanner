@@ -5,7 +5,6 @@ import static com.zburzhynski.jplanner.api.domain.PositionType.DOCTOR;
 import static com.zburzhynski.jplanner.impl.jsf.bean.ScheduleBean.END_DATE_PARAM;
 import static com.zburzhynski.jplanner.impl.jsf.bean.ScheduleBean.START_DATE_PARAM;
 import static com.zburzhynski.jplanner.impl.jsf.bean.ScheduleBean.WORKPLACE_PARAM;
-import com.zburzhynski.jplanner.api.criteria.AvailableEmployeeSearchCriteria;
 import com.zburzhynski.jplanner.api.service.IEmployeeService;
 import com.zburzhynski.jplanner.impl.domain.Employee;
 import com.zburzhynski.jplanner.impl.domain.Workplace;
@@ -56,19 +55,22 @@ public class EmployeeListBean implements Serializable {
      * @param endDate   end date
      */
     public void init(Workplace workplace, Date startDate, Date endDate) {
-        if (workplace == null || startDate == null || endDate == null) {
-            doctors = employeeService.getByPosition(DOCTOR);
-            assistants = employeeService.getByPosition(ASSISTANT);
-        } else {
-            AvailableEmployeeSearchCriteria availableDoctorCriteria = new AvailableEmployeeSearchCriteria();
-            availableDoctorCriteria.setWorkplaceId(workplace.getId());
-            availableDoctorCriteria.setStartDate(startDate);
-            availableDoctorCriteria.setEndDate(endDate);
-            doctors = employeeService.getAvailable(availableDoctorCriteria);
-
-            AvailableEmployeeSearchCriteria availableAssistantCriteria = new AvailableEmployeeSearchCriteria();
-            assistants = employeeService.getAvailable(availableAssistantCriteria);
-        }
+//TODO: use checkQuotas setting
+//        if (workplace == null || startDate == null || endDate == null) {
+//            doctors = employeeService.getByPosition(DOCTOR);
+//            assistants = employeeService.getByPosition(ASSISTANT);
+//        } else {
+//            AvailableEmployeeSearchCriteria availableDoctorCriteria = new AvailableEmployeeSearchCriteria();
+//            availableDoctorCriteria.setWorkplaceId(workplace.getId());
+//            availableDoctorCriteria.setStartDate(startDate);
+//            availableDoctorCriteria.setEndDate(endDate);
+//            doctors = employeeService.getAvailable(availableDoctorCriteria);
+//
+//            AvailableEmployeeSearchCriteria availableAssistantCriteria = new AvailableEmployeeSearchCriteria();
+//            assistants = employeeService.getAvailable(availableAssistantCriteria);
+//        }
+        doctors = employeeService.getByPosition(DOCTOR);
+        assistants = employeeService.getByPosition(ASSISTANT);
         employees = employeeService.getAll();
     }
 
