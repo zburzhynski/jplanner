@@ -17,7 +17,7 @@ public class VersionBean implements Serializable {
 
     private String version = "2.1.0-snapshot";
 
-    private String versionDate = "03.04.2018";
+    private String versionDate = "09.11.2019";
 
     /**
      * Gets program version.
