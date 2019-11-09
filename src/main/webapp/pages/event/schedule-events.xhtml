@@ -9,6 +9,9 @@
 
     <ui:define name="content">
         <h:outputStylesheet name="schedule.css" library="css" />
+        <style type="text/css">
+            #{scheduleBean.styles}
+        </style>
         <p:panel>
             <h:form id="eventsForm">
                 <p:growl id="messages" showDetail="true" />

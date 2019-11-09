@@ -66,6 +66,9 @@
                                        itemLabel="#{position.name}" />
                     </p:selectOneMenu>
                     <p:message for="position" />
+                    <h:outputLabel for="color" value="#{msgs['employee.color']}:" />
+                    <p:colorPicker id="color" value="#{employeeBean.employee.color}" />
+                    <p:message for="color" />
                 </h:panelGrid>
                 <h:panelGrid columns="2">
                     <h:commandButton id="saveEmployee" value="#{msgs['button.save']}"

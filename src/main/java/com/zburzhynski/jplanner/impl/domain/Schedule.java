@@ -16,6 +16,7 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 /**
  * Schedule event.
@@ -59,6 +60,9 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Column(name = "title")
     private String title;
+
+    @Transient
+    private String styleClass;
 
     /**
      * Default constructor.
@@ -155,7 +159,11 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Override
     public String getStyleClass() {
-        return status.name().toLowerCase();
+        return styleClass;
+    }
+
+    public void setStyleClass(String styleClass) {
+        this.styleClass = styleClass;
     }
 
     @Override

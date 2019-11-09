@@ -48,6 +48,7 @@ public class ScheduleRepository extends AbstractBaseRepository<String, Schedule>
     @Override
     public List<Schedule> findByCriteria(ScheduleSearchCriteria searchCriteria) {
         Criteria criteria = buildSearchCriteria(searchCriteria);
+        criteria.createAlias(P_DOCTOR, P_DOCTOR);
         return criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY).list();
     }
 

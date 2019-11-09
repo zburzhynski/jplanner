@@ -23,6 +23,7 @@ import javax.persistence.Table;
 @Table(name = "employee")
 public class Employee extends Domain {
 
+    public static final String WHITE_COLOR = "f7fcfc";
     public static final String P_PERSON = "person";
     public static final String P_POSITION = "position";
 
@@ -39,6 +40,9 @@ public class Employee extends Domain {
 
     @Column(name = "additional_info")
     private String additionalInfo;
+
+    @Column(name = "color")
+    private String color = WHITE_COLOR;
 
 //    @OneToOne(fetch = FetchType.EAGER, targetEntity = User.class, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "application_user_id")
@@ -76,6 +80,14 @@ public class Employee extends Domain {
         this.additionalInfo = additionalInfo;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
+
     //    public IUser getUser() {
 //        return user;
 //    }
@@ -100,6 +112,7 @@ public class Employee extends Domain {
             .append(person, that.person)
             .append(email, that.email)
             .append(additionalInfo, that.additionalInfo)
+            .append(color, that.color)
 //            .append(user, that.user)
             .isEquals();
     }
@@ -111,6 +124,7 @@ public class Employee extends Domain {
             .append(person)
             .append(email)
             .append(additionalInfo)
+            .append(color)
 //            .append(user)
             .toHashCode();
     }
@@ -122,6 +136,7 @@ public class Employee extends Domain {
             .append("person", person)
             .append("email", email)
             .append("additionalInfo", additionalInfo)
+            .append("color", color)
 //            .append("user", user)
             .toString();
     }

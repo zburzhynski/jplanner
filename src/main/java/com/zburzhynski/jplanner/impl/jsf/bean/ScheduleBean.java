@@ -104,6 +104,8 @@ public class ScheduleBean implements Serializable {
 
     private static final int FIRTH_HOUR = 8;
 
+    private static final String FONT_STYLE_PREFIX = "fc";
+
     private static final String SCHEDULER_COMPONENT = "eventsForm:scheduler";
 
     private static final String EVENT_MOVED = "schedule.eventMoved";
@@ -175,6 +177,25 @@ public class ScheduleBean implements Serializable {
     private ConfigBean configBean;
 
     /**
+     * Gets schedule styles.
+     *
+     * @return schedule styles
+     */
+    public String getStyles() {
+        StringBuilder builder = new StringBuilder();
+        List<Employee> doctors = employeeService.getByPosition(PositionType.DOCTOR);
+        for (int i = 0; i < doctors.size(); i++) {
+            Employee eventDoctor = doctors.get(i);
+            builder.append(String.format(".fc%s {color: #%s !important;}",
+                eventDoctor.getId(), eventDoctor.getColor()));
+            if (i != doctors.size() - 1) {
+                builder.append("\n");
+            }
+        }
+        return builder.toString();
+    }
+
+    /**
      * Inits bean state.
      */
     @PostConstruct
@@ -200,6 +221,10 @@ public class ScheduleBean implements Serializable {
                 //fillQuotas();
                 ScheduleSearchCriteria searchCriteria = buildScheduleSearchCriteria(start, end);
                 List<Schedule> events = scheduleService.getByCriteria(searchCriteria);
+                for (Schedule model : events) {
+                    model.setStyleClass(model.getStatus().name().toLowerCase()
+                        + SPACE + FONT_STYLE_PREFIX + model.getDoctor().getId());
+                }
                 eventModel.getEvents().addAll(events);
             }
         };
