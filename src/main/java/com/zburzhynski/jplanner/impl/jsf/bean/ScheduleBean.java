@@ -186,7 +186,7 @@ public class ScheduleBean implements Serializable {
         List<Employee> doctors = employeeService.getByPosition(PositionType.DOCTOR);
         for (int i = 0; i < doctors.size(); i++) {
             Employee eventDoctor = doctors.get(i);
-            builder.append(String.format(".fc%s {color: #%s !important;}",
+            builder.append(String.format(".fc%s {color: #%s !important; margin-bottom: 1px; line-height: 0.9}",
                 eventDoctor.getId(), eventDoctor.getColor()));
             if (i != doctors.size() - 1) {
                 builder.append("\n");
