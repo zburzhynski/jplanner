@@ -1,21 +1,21 @@
 .planned {
-    left: 10px !important;
-    width: 93%;
+    /*left: 10px !important;*/
+    /*width: 95%;*/
 }
 .started {
     background: #2b802f;
-    left: 10px !important;
-    width: 93%;
+    /*left: 10px !important;*/
+    /*width: 95%;*/
 }
 .finished {
     background: #8b5333;
-    left: 10px !important;
-    width: 93%;
+    /*left: 10px !important;*/
+    /*width: 95%;*/
 }
 .canceled {
     background: #ff4b43;
-    left: 10px !important;
-    width: 93%;
+    /*left: 10px !important;*/
+    /*width: 95%;*/
 }
 .workTime {
     left: 0 !important;
