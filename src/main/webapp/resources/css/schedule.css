@@ -35,6 +35,9 @@
 .offTime .fc-time {
     visibility: hidden;
 }
+.fc-resizer {
+    height: 3px !important;
+}
 .quotaWorkTime {
     background: green;
 }

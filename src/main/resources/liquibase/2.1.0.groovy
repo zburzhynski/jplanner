@@ -9,4 +9,11 @@ databaseChangeLog {
         }
     }
 
+    changeSet(id: '2019-11-09-02', author: 'Vladimir Zburzhynski <zburzhynski@gmail.com>') {
+        comment("Added description column to schedule table")
+        addColumn(schemaName: 'jplanner', tableName: 'schedule') {
+            column(name: 'description', type: 'VARCHAR(1100)', remarks: "Schedule description")
+        }
+    }
+
 }

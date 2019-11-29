@@ -61,6 +61,9 @@ public class Schedule extends Domain implements ScheduleEvent {
     @Column(name = "title")
     private String title;
 
+    @Column(name = "description")
+    private String description;
+
     @Transient
     private String styleClass;
 
@@ -144,7 +147,11 @@ public class Schedule extends Domain implements ScheduleEvent {
 
     @Override
     public String getDescription() {
-        return title;
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     @Override
@@ -191,6 +198,7 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append(startDate, that.startDate)
             .append(endDate, that.endDate)
             .append(title, that.title)
+            .append(description, that.description)
             .isEquals();
     }
 
@@ -205,6 +213,7 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append(startDate)
             .append(endDate)
             .append(title)
+            .append(description)
             .toHashCode();
     }
 
@@ -219,6 +228,7 @@ public class Schedule extends Domain implements ScheduleEvent {
             .append("startDate", startDate)
             .append("endDate", endDate)
             .append("title", title)
+            .append("description", description)
             .toString();
     }
 

@@ -27,6 +27,7 @@ import com.zburzhynski.jplanner.api.service.IScheduleService;
 import com.zburzhynski.jplanner.impl.domain.AvailableResource;
 import com.zburzhynski.jplanner.impl.domain.Cabinet;
 import com.zburzhynski.jplanner.impl.domain.Employee;
+import com.zburzhynski.jplanner.impl.domain.Person;
 import com.zburzhynski.jplanner.impl.domain.Quota;
 import com.zburzhynski.jplanner.impl.domain.ResourceTimetable;
 import com.zburzhynski.jplanner.impl.domain.Schedule;
@@ -117,6 +118,8 @@ public class ScheduleBean implements Serializable {
     private static final String DOCTOR = "schedule.doctor";
 
     private static final String REASON = "schedule.reason";
+
+    private static final String ADDITIONAL_INFO = "schedule.additionalInfo";
 
     private static final String START_DENTAL_VISIT_URL = "pages/integration/visit.xhtml";
 
@@ -318,7 +321,6 @@ public class ScheduleBean implements Serializable {
         if (!valid) {
             return null;
         }
-        prepareScheduleTitle(event);
         saveModel();
         return SCHEDULE_EVENTS.getPath();
     }
@@ -656,6 +658,12 @@ public class ScheduleBean implements Serializable {
     }
 
     private void saveModel() {
+        Person person = event.getClient().getPerson();
+        person.setSurname(StringUtils.capitalize(person.getSurname().trim()));
+        person.setName(StringUtils.capitalize(person.getName().trim()));
+        person.setPatronymic(StringUtils.capitalize(person.getPatronymic().trim()));
+        event.setTitle(event.getClient().getPerson().getFullName());
+        prepareScheduleDescription(event);
         if (isBlank(event.getId())) {
             eventModel.addEvent(event);
         } else {
@@ -664,7 +672,7 @@ public class ScheduleBean implements Serializable {
         scheduleService.saveOrUpdate(event);
     }
 
-    private void prepareScheduleTitle(Schedule schedule) {
+    private void prepareScheduleDescription(Schedule schedule) {
         StringBuilder builder = new StringBuilder();
         builder.append(propertyReader.readProperty(PATIENT));
         builder.append(COLON + SPACE);
@@ -679,7 +687,13 @@ public class ScheduleBean implements Serializable {
             builder.append(COLON + SPACE);
             builder.append(schedule.getClient().getReason());
         }
-        schedule.setTitle(builder.toString());
+        if (StringUtils.isNotBlank(schedule.getClient().getAdditionalInfo())) {
+            builder.append(NEWLINE);
+            builder.append(propertyReader.readProperty(ADDITIONAL_INFO));
+            builder.append(COLON + SPACE);
+            builder.append(schedule.getClient().getAdditionalInfo());
+        }
+        schedule.setDescription(builder.toString());
     }
 
     private Schedule buildScheduleEvent(SelectEvent selectEvent) {
